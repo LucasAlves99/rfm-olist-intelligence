@@ -209,11 +209,6 @@ table fato_rfm_clientes
 
 		annotation SummarizationSetBy = Automatic
 
-	column cum_clientes_pct = DIVIDE(RANKX(ALL(fato_rfm_clientes), fato_rfm_clientes[Monetary], , DESC, Dense), COUNTROWS(ALL(fato_rfm_clientes)))
-		dataType: double
-		formatString: 0.0%
-		lineageTag: 254fa885-b751-493d-a58e-f8ccdb6950a2
-
 	partition fato_rfm_clientes = m
 		mode: import
 		source =
