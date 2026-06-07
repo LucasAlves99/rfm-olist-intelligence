@@ -469,7 +469,7 @@ O dataset Olist está sob a licença CC BY-NC-SA 4.0 e **não está incluído** 
 **Lucas Alves**
 
 - GitHub — [@LucasAlves99](https://github.com/LucasAlves99)
-- LinkedIn — `https://linkedin.com/in/SEU-PERFIL` ← _substituir pela URL real do seu perfil_
+- LinkedIn — [linkedin.com/in/lucasalves99](https://www.linkedin.com/in/lucasalves99/)
 
 ---
 
