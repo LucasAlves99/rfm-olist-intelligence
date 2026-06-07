@@ -8,7 +8,7 @@
 [![Coverage](https://img.shields.io/badge/coverage-94%25-brightgreen?style=flat-square)](./tests)
 [![Python](https://img.shields.io/badge/python-3.13-blue?style=flat-square&logo=python&logoColor=white)](https://www.python.org)
 [![Pandas](https://img.shields.io/badge/pandas-2.2-150458?style=flat-square&logo=pandas&logoColor=white)](https://pandas.pydata.org)
-[![Scikit-Learn](https://img.shields.io/badge/scikit--learn-1.3%2B-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
+[![Scikit-Learn](https://img.shields.io/badge/scikit--learn-1.6-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.32%2B-FF4B4B?style=flat-square&logo=streamlit&logoColor=white)](https://streamlit.io)
 [![Anthropic](https://img.shields.io/badge/Claude-Haiku%204.5-D97757?style=flat-square)](https://www.anthropic.com)
 [![Power BI](https://img.shields.io/badge/Power_BI-F2C811?style=flat-square&logo=power-bi&logoColor=black)](https://powerbi.microsoft.com)
@@ -41,13 +41,15 @@
 
 ## Visão Geral
 
-Este projeto entrega uma solução completa de **inteligência de clientes** sobre a base pública da Olist (e-commerce brasileiro, ~100 mil pedidos), combinando três componentes integrados:
+Este projeto entrega uma solução completa de **inteligência de clientes** sobre a base pública da Olist (e-commerce brasileiro, ~100 mil pedidos), combinando quatro componentes integrados:
 
 1. **Pipeline analítico** — código Python modular que transforma 5 CSVs brutos em 4 datamarts tipados, aplicando segmentação RFM, clusterização KMeans e projeção de Customer Lifetime Value. Validado por 51 testes automatizados.
 
-2. **Dashboard executivo** — interface Power BI dark com Star Schema, ~30 medidas DAX customizadas e 20 visuais distribuídos em duas páginas (Visão Executiva + Análise Detalhada). Visuais avançados (Lorenz, treemap, evolução por cluster) construídos em **Deneb (Vega-Lite)** para acabamento que o visual nativo não alcança.
+2. **Modelos preditivos (ML)** — classificação supervisionada com rigor metodológico (comparação multi-algoritmo, validação cruzada estratificada, diagnóstico de overfit, tuning de threshold e análise de lift, **sem data leakage**). O modelo principal prevê **review ruim** no momento da entrega, habilitando *service recovery* proativo (alavanca de NPS/retenção).
 
-3. **Agente conversacional** — chatbot baseado em Claude Haiku 4.5 com Prompt Caching e Tool Use nativo, capaz de consultar os datamarts em tempo real via DuckDB. Embarcado dentro do dashboard como iframe, eliminando a fricção de mudar de contexto.
+3. **Dashboard executivo** — interface Power BI dark com Star Schema, medidas DAX customizadas e duas páginas (Visão Executiva + Análise Detalhada). Os visuais avançados (Lorenz com Gini, treemap, evolução por cluster, funil) são construídos em **Deneb (Vega-Lite)** para um acabamento que o visual nativo não alcança.
+
+4. **Agente conversacional** — chatbot baseado em Claude Haiku 4.5 com Prompt Caching e Tool Use nativo, capaz de consultar os datamarts em tempo real via DuckDB. Embarcado dentro do dashboard como iframe, eliminando a fricção de mudar de contexto.
 
 O diferencial arquitetural é a **integração híbrida BI + IA generativa**: o usuário navega pelos gráficos e conversa com um analista virtual sem sair da tela, com custo operacional de ~R$ 0,07 por pergunta.
 
@@ -122,15 +124,29 @@ O diferencial arquitetural é a **integração híbrida BI + IA generativa**: o 
 
 Os nomes dos clusters são **derivados automaticamente do perfil R/F/M médio** de cada grupo, garantindo invariância em relação aos IDs aleatórios atribuídos pelo KMeans entre execuções (ver [Decisões Técnicas](#decisões-técnicas)).
 
+### Modelo preditivo de review ruim
+
+Classificação supervisionada para antecipar insatisfação (`review_score ≤ 2`, ~12,8% de positivos) **com features conhecidas só até a entrega** — sem vazamento.
+
+| Métrica | Valor |
+|---|---|
+| Melhor modelo | RandomForest (selecionado por F1-CV penalizando overfit) |
+| F1 (teste) | 0,47 · **ROC-AUC** 0,76 · **PR-AUC** 0,46 (baseline 0,13 → 3,6×) |
+| Lift de negócio | Top 10% de risco captura **~42%** dos reviews ruins (lift 4,2×) |
+| Feature dominante | `atraso_dias` (atraso de entrega) — coerente com o negócio |
+
+Operacionalizado em lote (`score_review_risk.py`) → tabela de **risco por estado** que alimenta o dashboard, fechando o ciclo **previsão → ação** (onde priorizar atendimento).
+
 ---
 
 ## Stack Técnica
 
 | Camada | Tecnologias |
 |---|---|
-| Análise e modelagem | Python 3.13, pandas 2.2, NumPy, scikit-learn 1.3+, joblib, PyYAML |
+| Análise e modelagem | Python 3.13, pandas 2.2, NumPy, scikit-learn 1.6, joblib, PyYAML |
+| Modelos preditivos | scikit-learn (RandomForest, HistGradientBoosting, LogisticRegression), imbalanced-learn (SMOTE) |
 | Qualidade | pytest 8.3 (51 testes), ruff, black |
-| Visualização | Power BI Desktop, DAX, HTML Content visual (AppSource) |
+| Visualização | Power BI (PBIR/TMDL), DAX, Deneb (Vega-Lite), HTML Content visual (AppSource) |
 | Agente conversacional | Streamlit 1.32+, Anthropic SDK 0.40+, Claude Haiku 4.5, DuckDB 1.0+, PyArrow 14+ |
 | Hospedagem | Streamlit Community Cloud (free tier), Power BI Service |
 | Monitoramento | cron-job.org (uptime ping) |
@@ -149,7 +165,7 @@ Os nomes dos clusters são **derivados automaticamente do perfil R/F/M médio** 
 
 ```bash
 # 1. Clone do repositório
-git clone https://github.com/lucas-alves/rfm-olist-intelligence.git
+git clone https://github.com/LucasAlves99/rfm-olist-intelligence.git
 cd rfm-olist-intelligence
 
 # 2. Instalação das dependências
@@ -190,8 +206,9 @@ ls data/powerbi/
 # dim_segmentos.csv
 # dim_calendario.csv
 
-# Importar no Power BI Desktop e seguir o guia em:
-# powerbi/GUIA_DESIGN_DASHBOARD.md
+# Abrir o dashboard pronto no Power BI Desktop:
+#   powerbi/RFM.pbip
+# Detalhes de medidas/tema em: powerbi/GUIA_DESIGN_DASHBOARD.md
 ```
 
 ---
@@ -207,9 +224,9 @@ rfm-olist-intelligence/
 │   ├── raw/                        5 CSVs Olist (gitignored)
 │   └── powerbi/                    4 datamarts CSV tipados
 │
-├── models/
-│   ├── rfm_pipeline.pkl            StandardScaler + KMeans serializados
-│   └── model_metadata.json         Silhouette, K, snapshot, training date
+├── models/                         (.pkl gitignored — gerados pelos scripts)
+│   ├── model_metadata.json         Silhouette, K, snapshot, training date
+│   └── review_model_metrics.json   Métricas do modelo de review (CV + teste)
 │
 ├── src/                            Lógica reutilizável
 │   ├── config.py                   Carregamento do YAML
@@ -228,12 +245,17 @@ rfm-olist-intelligence/
 │   └── test_utils.py               12 testes
 │
 ├── pipeline/
-│   └── run_pipeline.py             Orquestrador end-to-end
+│   ├── run_pipeline.py             Orquestrador RFM end-to-end
+│   ├── train_review_model.py       Modelo de review ruim (sem leakage)
+│   ├── train_repeat_model.py       Estudo de propensão à recompra
+│   └── score_review_risk.py        Scoring em lote → risco por UF
 │
 ├── powerbi/
-│   ├── dashboard_background_dark.png   Background 1920×1080
-│   ├── wireframe_dashboard.html        Protótipo interativo
-│   ├── dashboard_mockup.html           Template com 10 slots numerados
+│   ├── RFM.pbip                        Projeto Power BI (abre no Desktop)
+│   ├── RFM.Report/                     Páginas e visuais (PBIR, versionável)
+│   ├── RFM.SemanticModel/              Modelo + medidas DAX (TMDL, versionável)
+│   ├── wireframe_dashboard.html        Protótipo interativo (referência visual)
+│   ├── background_p1.html / p2.html    Fonte legível dos fundos HTML (medidas)
 │   ├── dicionario_dados.md             Schema dos datamarts
 │   └── GUIA_DESIGN_DASHBOARD.md        DAX + theme JSON
 │
@@ -379,19 +401,17 @@ O footer da aplicação Streamlit exibe o custo da sessão em tempo real, com tr
 - [x] Pipeline RFM modular com 51 testes pytest
 - [x] Cluster naming robusto (derivado do perfil R/F/M)
 - [x] 4 datamarts tipados em CSV (Power BI) e Parquet (Agent)
-- [x] Modelo serializado com metadados (`joblib` + JSON)
-- [x] Agente Streamlit com Claude Haiku 4.5
-- [x] 7 tools DuckDB validadas com dados reais
-- [x] Wireframe HTML interativo e mockup com slots numerados
-- [x] Background PNG do dashboard Power BI
+- [x] Modelos preditivos validados (review ruim + estudo de recompra), sem leakage
+- [x] Dashboard Power BI (PBIP/TMDL) — 2 páginas, visuais em Deneb, tema dark
+- [x] Agente Streamlit com Claude Haiku 4.5 + 7 tools DuckDB validadas
 - [x] Tracking de custo em tempo real
 - [x] Conformidade WCAG AA (focus rings, ARIA, reduced-motion)
+- [x] Repositório publicado no GitHub
 
 ### Em andamento
 
 - [ ] Deploy do agente em Streamlit Community Cloud
-- [ ] Construção do arquivo .pbix no Power BI Desktop
-- [ ] Publicação do dashboard no Power BI Service
+- [ ] Publicação do dashboard no Power BI Service (+ screenshots/GIF no README)
 
 ### Backlog
 
@@ -448,8 +468,8 @@ O dataset Olist está sob a licença CC BY-NC-SA 4.0 e **não está incluído** 
 
 **Lucas Alves**
 
-- LinkedIn — [linkedin.com/in/lucas-alves](https://linkedin.com/in/SEU-PERFIL)
-- GitHub — [@lucas-alves](https://github.com/SEU-USUARIO)
+- GitHub — [@LucasAlves99](https://github.com/LucasAlves99)
+- LinkedIn — `https://linkedin.com/in/SEU-PERFIL` ← _substituir pela URL real do seu perfil_
 
 ---
 
