@@ -842,7 +842,7 @@ table _Background
 			    <div>aquecendo o agente...</div>
 			  </div>
 			  <iframe
-			    src=""https://SEU-APP.streamlit.app/?embed=true""
+			    src=""https://rfm-olist-intelligence.streamlit.app/?embed=true""
 			    allow=""clipboard-write; clipboard-read""
 			    loading=""lazy""
 			    title=""Analista RFM (Claude Haiku 4.5)"">

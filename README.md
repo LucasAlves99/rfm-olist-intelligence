@@ -16,6 +16,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](./LICENSE)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
 
+**🤖 [Experimente o agente de IA ao vivo →](https://rfm-olist-intelligence.streamlit.app)**
+
 [Visão Geral](#visão-geral) · [Arquitetura](#arquitetura) · [Resultados](#resultados) · [Decisões Técnicas](#decisões-técnicas)
 
 </div>
