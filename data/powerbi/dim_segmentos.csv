@@ -1,0 +1,5 @@
+﻿Cluster_Name;Descricao;Cor_Hex;Acao_CRM;Prioridade;Cor_Power_BI
+Campeões;Alta frequência E alto valor — base de elite, recorrência real;#5E6AD2;Programa VIP, ofertas exclusivas, embaixadores da marca;1;Iris
+Big Spenders (Não-Recorrentes);Alto valor de compra mas sem recorrência — clientes premium 'one-shot';#BF6FF8;Conversão para recorrência: ofertas categoria-aderentes, upsell pós-venda;1;Mauve
+Novos / Ocasionais;Compra única recente, valor baixo — maior parte da base Olist;#F2C94C;Incentivo à segunda compra: cupom 'volte logo', cross-sell, onboarding;3;Gold
+Em Risco / Hibernando;Recência alta, sem comprar há muito — alto risco de churn;#E5484D;Win-back urgente: e-mail de reativação, desconto agressivo, pesquisa de churn;2;Radish

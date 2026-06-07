@@ -1,0 +1,35 @@
+{
+  "name": "RFM Olist Dark Executive",
+  "dataColors": [
+    "#5E6AD2",
+    "#BF6FF8",
+    "#F2C94C",
+    "#E5484D",
+    "#A1A1AA",
+    "#08090A"
+  ],
+  "background": "#131418",
+  "foreground": "#F4F4F5",
+  "tableAccent": "#5E6AD2",
+  "good": "#5E6AD2",
+  "neutral": "#F2C94C",
+  "bad": "#E5484D",
+  "maximum": "#5E6AD2",
+  "center": "#F2C94C",
+  "minimum": "#E5484D",
+  "null": "#8B8B92",
+  "textClasses": {
+    "title": { "fontSize": 14, "fontFace": "Segoe UI Semibold", "color": "#F4F4F5" },
+    "label": { "fontSize": 11, "fontFace": "Segoe UI", "color": "#A1A1AA" },
+    "callout": { "fontSize": 28, "fontFace": "Segoe UI Semibold", "color": "#F4F4F5" }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [{ "show": false }],
+        "border": [{ "show": false }],
+        "visualHeader": [{ "show": false }]
+      }
+    }
+  }
+}

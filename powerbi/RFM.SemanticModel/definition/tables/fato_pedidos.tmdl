@@ -1,0 +1,126 @@
+table fato_pedidos
+	lineageTag: 249be1d0-2f76-4054-9dd1-e1a12418eb59
+
+	column order_id
+		dataType: string
+		lineageTag: 158dc292-3ac3-4eb8-a766-ffc1672318ae
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_id
+		dataType: string
+		lineageTag: 2a36fa3f-668c-4234-aa96-1009c1f9a280
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_purchase_timestamp
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 122cf8f9-5481-4ccd-a307-b15f7d3fdec4
+		summarizeBy: none
+		sourceColumn: order_purchase_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column total_items_value
+		dataType: double
+		lineageTag: 9a855470-8a79-40fb-b8d2-735b217b3221
+		summarizeBy: sum
+		sourceColumn: total_items_value
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column n_items
+		dataType: int64
+		formatString: 0
+		lineageTag: 4703a6b8-04a5-4375-984c-abc557017506
+		summarizeBy: sum
+		sourceColumn: n_items
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_payment
+		dataType: double
+		lineageTag: 4352a6a3-132a-4d57-bdca-7a0c607fcf29
+		summarizeBy: sum
+		sourceColumn: total_payment
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column n_payments
+		dataType: int64
+		formatString: 0
+		lineageTag: e671049c-2dd3-4541-91a6-0eeb04f69a76
+		summarizeBy: sum
+		sourceColumn: n_payments
+
+		annotation SummarizationSetBy = Automatic
+
+	column review_score
+		dataType: int64
+		formatString: 0
+		lineageTag: f2f41cfa-7dfb-4769-b434-12dd4ca4e14b
+		summarizeBy: sum
+		sourceColumn: review_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_unique_id
+		dataType: string
+		lineageTag: fa6fb9f5-16a6-456d-b204-10a4c1f19ceb
+		summarizeBy: none
+		sourceColumn: customer_unique_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_state
+		dataType: string
+		lineageTag: da950323-b653-44b4-8b24-fd6991319f3f
+		summarizeBy: none
+		sourceColumn: customer_state
+
+		annotation SummarizationSetBy = Automatic
+
+	column monetary_value
+		dataType: double
+		lineageTag: ec920fdc-cf3d-4ba1-a274-0f88a8d4c84d
+		summarizeBy: sum
+		sourceColumn: monetary_value
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column product_category
+		dataType: string
+		lineageTag: 7c1f0a92-3d54-4e88-9b21-2a6f5c9d1e44
+		summarizeBy: none
+		sourceColumn: product_category
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fato_pedidos = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\Users\Luk\Desktop\RFM-Projeto\data\powerbi\fato_pedidos.csv"),[Delimiter=";", Columns=14, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"order_id", type text}, {"customer_id", type text}, {"order_purchase_timestamp", type date}, {"total_items_value", type number}, {"n_items", Int64.Type}, {"total_payment", type number}, {"n_payments", Int64.Type}, {"review_score", Int64.Type}, {"customer_unique_id", type text}, {"customer_state", type text}, {"monetary_value", type number}, {"product_category", type text}, {"Cluster", Int64.Type}, {"Cluster_Name", type text}}),
+				    #"Colunas Removidas" = Table.RemoveColumns(#"Tipo Alterado",{"Cluster", "Cluster_Name"})
+				in
+				    #"Colunas Removidas"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

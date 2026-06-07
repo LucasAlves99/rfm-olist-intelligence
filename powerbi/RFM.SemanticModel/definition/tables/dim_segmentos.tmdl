@@ -1,0 +1,64 @@
+table dim_segmentos
+	lineageTag: 47283035-6d4c-4f61-8b04-ebd13a5d9bac
+
+	column Cluster_Name
+		dataType: string
+		lineageTag: dd8fa5f2-b5b0-48c9-bfa3-2daad6463631
+		summarizeBy: none
+		sourceColumn: Cluster_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Descricao
+		dataType: string
+		lineageTag: 66993f64-00a9-4b2c-a052-f3c7041a8c1d
+		summarizeBy: none
+		sourceColumn: Descricao
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cor_Hex
+		dataType: string
+		lineageTag: ff62a896-1b15-401e-bf3b-03176f4ec9a1
+		summarizeBy: none
+		sourceColumn: Cor_Hex
+
+		annotation SummarizationSetBy = Automatic
+
+	column Acao_CRM
+		dataType: string
+		lineageTag: a735a16b-dd63-4c29-b74a-a480a0509df4
+		summarizeBy: none
+		sourceColumn: Acao_CRM
+
+		annotation SummarizationSetBy = Automatic
+
+	column Prioridade
+		dataType: int64
+		formatString: 0
+		lineageTag: 2ea9677e-ca77-4230-868d-86baea681c8b
+		summarizeBy: sum
+		sourceColumn: Prioridade
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cor_Power_BI
+		dataType: string
+		lineageTag: 61532416-dd00-434e-b039-1d52d39fafc2
+		summarizeBy: none
+		sourceColumn: Cor_Power_BI
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_segmentos = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\Users\Luk\Desktop\RFM-Projeto\data\powerbi\dim_segmentos.csv"),[Delimiter=";", Columns=6, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"Cluster_Name", type text}, {"Descricao", type text}, {"Cor_Hex", type text}, {"Acao_CRM", type text}, {"Prioridade", Int64.Type}, {"Cor_Power_BI", type text}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,17 @@
+# Secrets — NUNCA commit
+.streamlit/secrets.toml
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+
+# Venv
+.venv/
+venv/
+env/
+
+# IDEs
+.vscode/
+.idea/

@@ -1,0 +1,14 @@
+{
+  "training_date": "2026-05-31T20:50:57.847368",
+  "k_clusters": 4,
+  "random_state": 42,
+  "n_init": 10,
+  "features": [
+    "Recency",
+    "Frequency_log",
+    "Monetary_log"
+  ],
+  "n_samples": 93358,
+  "silhouette_score": 0.3693216739132709,
+  "snapshot_date": "2018-09-04"
+}

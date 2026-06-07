@@ -1,0 +1,104 @@
+table _KPIs
+	lineageTag: 687e49f4-0105-4e79-b7c6-eeb089158329
+
+	measure 'Total Clientes' = DISTINCTCOUNT(fato_rfm_clientes[customer_unique_id])
+		formatString: #,0
+		lineageTag: abc91971-79e1-4870-8d11-e85b612f3524
+
+	measure 'Receita Total' = SUM(fato_rfm_clientes[Monetary])
+		formatString: "R$ "#,0
+		lineageTag: e52fbb38-213b-4f5a-9b16-14efafb310a0
+
+	measure 'Ticket Medio' = DIVIDE([Receita Total], COUNTROWS(fato_pedidos))
+		formatString: "R$ "#,0.00
+		lineageTag: 1732bc8e-fa00-43aa-b471-25f22123242f
+
+	measure 'Recencia Media' = AVERAGE(fato_rfm_clientes[Recency])
+		formatString: #,0" dias"
+		lineageTag: 9c32f642-edb5-47da-96fa-d2dfb1417b58
+
+	measure 'Frequency Media' = AVERAGE(fato_rfm_clientes[Frequency])
+		formatString: 0.00
+		lineageTag: 8289fe8d-f28b-4131-b85d-5566d71b1157
+
+	measure 'CLV Medio' = AVERAGE(fato_rfm_clientes[CLV_12m])
+		formatString: "R$ "#,0.00
+		lineageTag: 54c4f138-91fd-408c-b52f-ce152c2914f2
+
+	measure 'Total Pedidos' = COUNTROWS(fato_pedidos)
+		formatString: #,0
+		lineageTag: 617d55d7-7b63-4726-a0b9-72ec4ea95567
+
+	measure 'Review Medio' = AVERAGE(fato_pedidos[review_score])
+		formatString: 0.00
+		displayFolder: Qualidade
+		lineageTag: 6fcc1240-8205-48a2-ba84-c0c8af5dd03b
+
+	measure 'Receita MoM %' =
+			VAR maxd = MAX(fato_pedidos[order_purchase_timestamp])
+			VAR refDate = IF(maxd < EOMONTH(maxd, 0), EOMONTH(maxd, -1), maxd)
+			VAR y = YEAR(refDate)
+			VAR m = MONTH(refDate)
+			VAR pm = IF(m=1,12,m-1)
+			VAR py = IF(m=1,y-1,y)
+			VAR a = CALCULATE(SUM(fato_pedidos[monetary_value]), FILTER(ALL(dim_calendario), dim_calendario[Ano]=y && dim_calendario[Mes]=m))
+			VAR b = CALCULATE(SUM(fato_pedidos[monetary_value]), FILTER(ALL(dim_calendario), dim_calendario[Ano]=py && dim_calendario[Mes]=pm))
+			RETURN DIVIDE(a-b, b)
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Tendência
+		lineageTag: 3e46bd13-6578-4c8e-831f-7425a118232c
+
+	measure 'Ticket MoM %' =
+			VAR maxd = MAX(fato_pedidos[order_purchase_timestamp])
+			VAR refDate = IF(maxd < EOMONTH(maxd, 0), EOMONTH(maxd, -1), maxd)
+			VAR y = YEAR(refDate)
+			VAR m = MONTH(refDate)
+			VAR pm = IF(m=1,12,m-1)
+			VAR py = IF(m=1,y-1,y)
+			VAR ra = CALCULATE(SUM(fato_pedidos[monetary_value]), FILTER(ALL(dim_calendario), dim_calendario[Ano]=y && dim_calendario[Mes]=m))
+			VAR rb = CALCULATE(SUM(fato_pedidos[monetary_value]), FILTER(ALL(dim_calendario), dim_calendario[Ano]=py && dim_calendario[Mes]=pm))
+			VAR pa = CALCULATE(COUNTROWS(fato_pedidos), FILTER(ALL(dim_calendario), dim_calendario[Ano]=y && dim_calendario[Mes]=m))
+			VAR pb = CALCULATE(COUNTROWS(fato_pedidos), FILTER(ALL(dim_calendario), dim_calendario[Ano]=py && dim_calendario[Mes]=pm))
+			VAR ta = DIVIDE(ra, pa)
+			VAR tb = DIVIDE(rb, pb)
+			RETURN DIVIDE(ta-tb, tb)
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Tendência
+		lineageTag: d470f743-7c45-4284-9dd1-bc4dfddd566a
+
+	measure 'Clientes Ativos MoM %' =
+			VAR maxd = MAX(fato_pedidos[order_purchase_timestamp])
+			VAR refDate = IF(maxd < EOMONTH(maxd, 0), EOMONTH(maxd, -1), maxd)
+			VAR y = YEAR(refDate)
+			VAR m = MONTH(refDate)
+			VAR pm = IF(m=1,12,m-1)
+			VAR py = IF(m=1,y-1,y)
+			VAR a = CALCULATE(DISTINCTCOUNT(fato_pedidos[customer_unique_id]), FILTER(ALL(dim_calendario), dim_calendario[Ano]=y && dim_calendario[Mes]=m))
+			VAR b = CALCULATE(DISTINCTCOUNT(fato_pedidos[customer_unique_id]), FILTER(ALL(dim_calendario), dim_calendario[Ano]=py && dim_calendario[Mes]=pm))
+			RETURN DIVIDE(a-b, b)
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Tendência
+		lineageTag: a4add5b7-47a4-4e0f-952c-c446fd76e061
+
+	measure 'Ticket Medio Cliente' = AVERAGE(fato_rfm_clientes[Avg_Order_Value])
+		formatString: "R$ "#,0.00
+		lineageTag: 54c4f138-0002-408c-b52f-ce152c2914f2
+
+	measure 'Receita Pedidos' = SUM(fato_pedidos[monetary_value])
+		formatString: "R$ "#,0
+		displayFolder: Temporal
+		lineageTag: 54c4f138-0003-408c-b52f-ce152c2914f2
+
+	measure 'Clientes Ativos' = DISTINCTCOUNT(fato_pedidos[customer_unique_id])
+		formatString: #,0
+		displayFolder: Temporal
+		lineageTag: 54c4f138-0004-408c-b52f-ce152c2914f2
+
+	column _
+		lineageTag: 59dbd32a-6823-4319-8cf0-46a109642445
+		sourceColumn: [Value]
+
+	partition _KPIs = calculated
+		mode: import
+		source = { BLANK() }
+

@@ -1,0 +1,228 @@
+table fato_rfm_clientes
+	lineageTag: dee0c838-f9f6-4a5b-be89-ecfb860343c3
+
+	column customer_unique_id
+		dataType: string
+		lineageTag: 380a515b-76b4-4e0f-90d7-e40ffcb1ed6b
+		summarizeBy: none
+		sourceColumn: customer_unique_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Recency
+		dataType: int64
+		formatString: 0
+		lineageTag: 49c30621-7257-41c5-907c-326845c19791
+		summarizeBy: sum
+		sourceColumn: Recency
+
+		annotation SummarizationSetBy = Automatic
+
+	column Frequency
+		dataType: int64
+		formatString: 0
+		lineageTag: 8a8f7fbe-3b39-48dc-a399-c9ad34e8a04c
+		summarizeBy: sum
+		sourceColumn: Frequency
+
+		annotation SummarizationSetBy = Automatic
+
+	column Monetary
+		dataType: double
+		lineageTag: 3eeab705-9486-43c6-a41f-cec9bb09ff17
+		summarizeBy: sum
+		sourceColumn: Monetary
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Avg_Order_Value
+		dataType: double
+		lineageTag: 37cff3b3-ae7f-48c7-8f87-50c554eec143
+		summarizeBy: sum
+		sourceColumn: Avg_Order_Value
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Items
+		dataType: int64
+		formatString: 0
+		lineageTag: 7081c181-51e0-4f5d-87d3-62c0122c2f8b
+		summarizeBy: sum
+		sourceColumn: Items
+
+		annotation SummarizationSetBy = Automatic
+
+	column Avg_Review
+		dataType: double
+		lineageTag: 17cb353e-a1cc-49ee-a4ef-dd72e49e5049
+		summarizeBy: sum
+		sourceColumn: Avg_Review
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column R_score
+		dataType: int64
+		formatString: 0
+		lineageTag: 7203b920-c0bb-455c-9373-e626803f5b60
+		summarizeBy: sum
+		sourceColumn: R_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column F_score
+		dataType: int64
+		formatString: 0
+		lineageTag: 608efa62-9f2f-4a30-93a4-6e9a852f4ee0
+		summarizeBy: sum
+		sourceColumn: F_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column M_score
+		dataType: int64
+		formatString: 0
+		lineageTag: 9eaa8709-b0ec-4bb2-a49f-b7992dd4e949
+		summarizeBy: sum
+		sourceColumn: M_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column RFM_bucket
+		dataType: int64
+		formatString: 0
+		lineageTag: a3064963-022f-4d4a-ba29-e64d8f8b8bbf
+		summarizeBy: sum
+		sourceColumn: RFM_bucket
+
+		annotation SummarizationSetBy = Automatic
+
+	column RFM_score
+		dataType: int64
+		formatString: 0
+		lineageTag: f62ccf9f-87f2-4448-becf-f8279587b311
+		summarizeBy: sum
+		sourceColumn: RFM_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column RFM_segment
+		dataType: string
+		lineageTag: d2bb5671-bb50-47ba-bd42-03e3c52c2a0a
+		summarizeBy: none
+		sourceColumn: RFM_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column cum_revenue_pct
+		dataType: double
+		lineageTag: 10a7dab1-7866-4ef0-87f5-3d7085ef6c79
+		summarizeBy: sum
+		sourceColumn: cum_revenue_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Revenue_segment
+		dataType: string
+		lineageTag: 64bc1514-95c4-4f1d-a02a-fd3ecb3f37e3
+		summarizeBy: none
+		sourceColumn: Revenue_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column Recency_segment
+		dataType: string
+		lineageTag: ca056e63-826d-46cc-94e7-a87f617e08dc
+		summarizeBy: none
+		sourceColumn: Recency_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column Strategic_segment
+		dataType: string
+		lineageTag: 17730a3d-eb9a-4d2d-8518-3e3542003eff
+		summarizeBy: none
+		sourceColumn: Strategic_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cluster
+		dataType: int64
+		formatString: 0
+		lineageTag: 69ac19dc-9ec3-47e2-8972-3f88708581e5
+		summarizeBy: sum
+		sourceColumn: Cluster
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cluster_Name
+		dataType: string
+		lineageTag: 7d7e6aa4-156e-4487-b73f-085548f97a9c
+		summarizeBy: none
+		sourceColumn: Cluster_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Freq_Mensal
+		dataType: double
+		lineageTag: ac8427ab-5e82-44a5-b30a-377e305d0cc7
+		summarizeBy: sum
+		sourceColumn: Freq_Mensal
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CLV_12m
+		dataType: double
+		lineageTag: 59270359-0839-4f7a-96e0-ae125c709341
+		summarizeBy: sum
+		sourceColumn: CLV_12m
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column dt_exportacao
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 0564d9a4-b1bc-4994-8158-04b2be6636fb
+		summarizeBy: none
+		sourceColumn: dt_exportacao
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column versao_modelo
+		dataType: string
+		lineageTag: fd7aac1d-9450-4966-bd14-d4c53f3f3b74
+		summarizeBy: none
+		sourceColumn: versao_modelo
+
+		annotation SummarizationSetBy = Automatic
+
+	column cum_clientes_pct = DIVIDE(RANKX(ALL(fato_rfm_clientes), fato_rfm_clientes[Monetary], , DESC, Dense), COUNTROWS(ALL(fato_rfm_clientes)))
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 254fa885-b751-493d-a58e-f8ccdb6950a2
+
+	partition fato_rfm_clientes = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\Users\Luk\Desktop\RFM-Projeto\data\powerbi\fato_rfm_clientes.csv"),[Delimiter=";", Columns=23, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"customer_unique_id", type text}, {"Recency", Int64.Type}, {"Frequency", Int64.Type}, {"Monetary", type number}, {"Avg_Order_Value", type number}, {"Items", Int64.Type}, {"Avg_Review", type number}, {"R_score", Int64.Type}, {"F_score", Int64.Type}, {"M_score", Int64.Type}, {"RFM_bucket", Int64.Type}, {"RFM_score", Int64.Type}, {"RFM_segment", type text}, {"cum_revenue_pct", type number}, {"Revenue_segment", type text}, {"Recency_segment", type text}, {"Strategic_segment", type text}, {"Cluster", Int64.Type}, {"Cluster_Name", type text}, {"Freq_Mensal", type number}, {"CLV_12m", type number}, {"dt_exportacao", type date}, {"versao_modelo", type text}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_ResultType = Table
+

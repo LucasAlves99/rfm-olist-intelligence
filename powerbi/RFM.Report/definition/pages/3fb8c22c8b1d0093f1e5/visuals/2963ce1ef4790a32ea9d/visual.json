@@ -1,0 +1,282 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.4.0/schema.json",
+  "name": "2963ce1ef4790a32ea9d",
+  "position": {
+    "x": 26,
+    "y": 220,
+    "z": 2000,
+    "height": 232,
+    "width": 894,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "deneb7E15AEF80B9E4D4F8E12924291ECE89A",
+    "query": {
+      "queryState": {
+        "dataset": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_segmentos"
+                    }
+                  },
+                  "Property": "Cluster_Name"
+                }
+              },
+              "queryRef": "dim_segmentos.Cluster_Name",
+              "nativeQueryRef": "Cluster_Name",
+              "active": true
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_KPIs"
+                    }
+                  },
+                  "Property": "Receita Total"
+                }
+              },
+              "queryRef": "_KPIs.Receita Total",
+              "nativeQueryRef": "Receita Total",
+              "active": false,
+              "displayName": "Receita Total"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_KPIs"
+                    }
+                  },
+                  "Property": "Total Clientes"
+                }
+              },
+              "queryRef": "_KPIs.Total Clientes",
+              "nativeQueryRef": "Total Clientes",
+              "active": false,
+              "displayName": "Total Clientes"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "vega": [
+        {
+          "properties": {
+            "provider": {
+              "expr": {
+                "Literal": {
+                  "Value": "'vega'"
+                }
+              }
+            },
+            "jsonSpec": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{\n  \"$schema\": \"https://vega.github.io/schema/vega/v5.json\",\n  \"background\": \"transparent\",\n  \"padding\": 0,\n  \"autosize\": {\n    \"type\": \"none\"\n  },\n  \"signals\": [\n    {\n      \"name\": \"pad\",\n      \"value\": 6\n    }\n  ],\n  \"data\": [\n    {\n      \"name\": \"dataset\"\n    },\n    {\n      \"name\": \"tree\",\n      \"source\": \"dataset\",\n      \"transform\": [\n        {\n          \"type\": \"nest\",\n          \"keys\": [],\n          \"generate\": true\n        },\n        {\n          \"type\": \"treemap\",\n          \"field\": \"Receita Total\",\n          \"sort\": {\n            \"field\": \"value\",\n            \"order\": \"descending\"\n          },\n          \"round\": true,\n          \"method\": \"squarify\",\n          \"ratio\": 1.4,\n          \"size\": [\n            {\n              \"signal\": \"width\"\n            },\n            {\n              \"signal\": \"height\"\n            }\n          ],\n          \"paddingInner\": {\n            \"signal\": \"pad\"\n          },\n          \"as\": [\n            \"x0\",\n            \"y0\",\n            \"x1\",\n            \"y1\",\n            \"depth\",\n            \"children\"\n          ]\n        }\n      ]\n    },\n    {\n      \"name\": \"leaves\",\n      \"source\": \"tree\",\n      \"transform\": [\n        {\n          \"type\": \"filter\",\n          \"expr\": \"datum.depth === 1\"\n        }\n      ]\n    }\n  ],\n  \"scales\": [\n    {\n      \"name\": \"color\",\n      \"type\": \"ordinal\",\n      \"domain\": [\n        \"Campeões\",\n        \"Big Spenders (Não-Recorrentes)\",\n        \"Novos / Ocasionais\",\n        \"Em Risco / Hibernando\"\n      ],\n      \"range\": [\n        \"#5E6AD2\",\n        \"#BF6FF8\",\n        \"#F2C94C\",\n        \"#E5484D\"\n      ]\n    }\n  ],\n  \"marks\": [\n    {\n      \"type\": \"rect\",\n      \"from\": {\n        \"data\": \"leaves\"\n      },\n      \"encode\": {\n        \"enter\": {\n          \"fill\": {\n            \"scale\": \"color\",\n            \"field\": \"Cluster_Name\"\n          },\n          \"fillOpacity\": {\n            \"value\": 0.55\n          },\n          \"stroke\": {\n            \"scale\": \"color\",\n            \"field\": \"Cluster_Name\"\n          },\n          \"strokeWidth\": {\n            \"value\": 1\n          },\n          \"strokeOpacity\": {\n            \"value\": 0.7\n          },\n          \"cornerRadius\": {\n            \"value\": 10\n          }\n        },\n        \"update\": {\n          \"x\": {\n            \"field\": \"x0\"\n          },\n          \"y\": {\n            \"field\": \"y0\"\n          },\n          \"x2\": {\n            \"field\": \"x1\"\n          },\n          \"y2\": {\n            \"field\": \"y1\"\n          },\n          \"fillOpacity\": {\n            \"signal\": \"datum.__selected__ === ''off'' ? 0.12 : 0.55\"\n          },\n          \"strokeOpacity\": {\n            \"signal\": \"datum.__selected__ === ''off'' ? 0.25 : 0.7\"\n          }\n        }\n      }\n    },\n    {\n      \"type\": \"text\",\n      \"from\": {\n        \"data\": \"leaves\"\n      },\n      \"encode\": {\n        \"enter\": {\n          \"fill\": {\n            \"value\": \"#F4F4F5\"\n          },\n          \"font\": {\n            \"value\": \"Segoe UI\"\n          },\n          \"fontSize\": {\n            \"value\": 14\n          },\n          \"fontWeight\": {\n            \"value\": 600\n          },\n          \"text\": {\n            \"field\": \"Cluster_Name\"\n          },\n          \"baseline\": {\n            \"value\": \"top\"\n          }\n        },\n        \"update\": {\n          \"x\": {\n            \"field\": \"x0\",\n            \"offset\": 14\n          },\n          \"y\": {\n            \"field\": \"y0\",\n            \"offset\": 11\n          },\n          \"limit\": {\n            \"signal\": \"datum.x1 - datum.x0 - 16\"\n          },\n          \"fillOpacity\": {\n            \"signal\": \"(datum.y1 - datum.y0) > 32 && (datum.x1 - datum.x0) > 66 ? 1 : 0\"\n          },\n          \"fontSize\": {\n            \"signal\": \"clamp(min((datum.y1 - datum.y0) * 0.26, 14), 11, 14)\"\n          }\n        }\n      }\n    },\n    {\n      \"type\": \"text\",\n      \"from\": {\n        \"data\": \"leaves\"\n      },\n      \"encode\": {\n        \"enter\": {\n          \"fill\": {\n            \"value\": \"#EDEDEF\"\n          },\n          \"font\": {\n            \"value\": \"Segoe UI\"\n          },\n          \"fontSize\": {\n            \"value\": 10\n          },\n          \"text\": {\n            \"signal\": \"replace(format(datum[''Total Clientes''], '',.0f''), '','', ''.'') + '' clientes''\"\n          },\n          \"baseline\": {\n            \"value\": \"top\"\n          },\n          \"fontWeight\": {\n            \"value\": 500\n          }\n        },\n        \"update\": {\n          \"x\": {\n            \"field\": \"x0\",\n            \"offset\": 14\n          },\n          \"y\": {\n            \"field\": \"y0\",\n            \"offset\": 26\n          },\n          \"fillOpacity\": {\n            \"signal\": \"(datum.y1 - datum.y0) > 44 && (datum.x1 - datum.x0) > 78 ? 1 : 0\"\n          },\n          \"limit\": {\n            \"signal\": \"datum.x1 - datum.x0 - 16\"\n          },\n          \"fontSize\": {\n            \"signal\": \"clamp(min((datum.y1 - datum.y0) * 0.16, 9.5), 8, 9.5)\"\n          }\n        }\n      }\n    },\n    {\n      \"type\": \"text\",\n      \"from\": {\n        \"data\": \"leaves\"\n      },\n      \"encode\": {\n        \"enter\": {\n          \"fill\": {\n            \"value\": \"#F4F4F5\"\n          },\n          \"font\": {\n            \"value\": \"Segoe UI\"\n          },\n          \"fontWeight\": {\n            \"value\": 700\n          },\n          \"text\": {\n            \"signal\": \"''R$ '' + replace(format(datum[''Receita Total'']/1e6, ''.1f''), ''.'', '','') + '' mi''\"\n          },\n          \"baseline\": {\n            \"value\": \"bottom\"\n          }\n        },\n        \"update\": {\n          \"x\": {\n            \"field\": \"x0\",\n            \"offset\": 14\n          },\n          \"y\": {\n            \"signal\": \"(datum.y1 - datum.y0) > 70 ? datum.y1 - 12 : datum.y1 - 6\"\n          },\n          \"fontSize\": {\n            \"signal\": \"clamp(min((datum.y1 - datum.y0) * 0.28, (datum.x1 - datum.x0) * 0.125, (datum.y1 - datum.y0) - 42), 12, 24)\"\n          },\n          \"limit\": {\n            \"signal\": \"datum.x1 - datum.x0 - 12\"\n          },\n          \"fillOpacity\": {\n            \"value\": 1\n          }\n        }\n      }\n    }\n  ]\n}'"
+                }
+              }
+            },
+            "jsonConfig": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{}'"
+                }
+              }
+            },
+            "enableTooltips": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "enableContextMenu": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "enableHighlight": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "enableSelection": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "selectionMaxDataPoints": {
+              "expr": {
+                "Literal": {
+                  "Value": "50D"
+                }
+              }
+            },
+            "selectionMode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'simple'"
+                }
+              }
+            },
+            "version": {
+              "expr": {
+                "Literal": {
+                  "Value": "'6.2.0'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "developer": [
+        {
+          "properties": {
+            "version": {
+              "expr": {
+                "Literal": {
+                  "Value": "'1.9.1.0'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "stateManagement": [
+        {
+          "properties": {
+            "viewportHeight": {
+              "expr": {
+                "Literal": {
+                  "Value": "222D"
+                }
+              }
+            },
+            "viewportWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "884D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "4d88198c4a2740d88c7d",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_segmentos"
+              }
+            },
+            "Property": "Cluster_Name"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "68abe6e6cc504171bd7a",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_KPIs"
+              }
+            },
+            "Property": "Receita Total"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "27c54a365b2b1d8fcc09",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_KPIs"
+              }
+            },
+            "Property": "Total Clientes"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

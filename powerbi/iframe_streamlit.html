@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%;
+    background: transparent;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  }
+  .iframe-wrap {
+    width: 100%; height: 100%;
+    position: relative;
+    border-radius: 0 0 16px 16px;
+    overflow: hidden;
+  }
+  iframe {
+    border: 0;
+    width: 100%; height: 100%;
+    display: block;
+    background: rgba(8, 9, 10, 0.4);
+  }
+  /* Loading state visível enquanto o Streamlit carrega */
+  .loading {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 12px;
+    color: #A1A1AA; font-size: 13px;
+    background: rgba(20, 22, 30, 0.4);
+    pointer-events: none;
+    z-index: -1;
+  }
+  .loading .dots {
+    display: inline-flex; gap: 5px;
+  }
+  .loading .dots span {
+    width: 8px; height: 8px;
+    background: #BF6FF8;
+    border-radius: 50%;
+    animation: pulse 1.3s infinite;
+    box-shadow: 0 0 8px rgba(191, 111, 248, 0.5);
+  }
+  .loading .dots span:nth-child(2) { animation-delay: 0.18s; }
+  .loading .dots span:nth-child(3) { animation-delay: 0.36s; }
+  @keyframes pulse {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-5px); opacity: 1; }
+  }
+</style>
+</head>
+<body>
+<div class="iframe-wrap">
+  <div class="loading">
+    <div class="dots"><span></span><span></span><span></span></div>
+    <div>aquecendo o agente...</div>
+  </div>
+  <iframe
+    src="https://SEU-APP.streamlit.app/?embed=true"
+    allow="clipboard-write; clipboard-read"
+    loading="lazy"
+    title="Analista RFM (Claude Haiku 4.5)">
+  </iframe>
+</div>
+</body>
+</html>

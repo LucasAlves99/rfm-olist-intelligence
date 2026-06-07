@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Background P1 — Visão Executiva (chrome)</title>
+<style>
+  :root {
+    --bg-base: #08090A;
+    --bg-elev-1: #0E0F11;
+    --bg-elev-2: #131418;
+    --bg-card: rgba(20, 22, 30, 0.6);
+    --bg-card-solid: #14151D;
+    --border: rgba(255, 255, 255, 0.06);
+    --border-hover: rgba(255, 255, 255, 0.14);
+    --border-strong: rgba(255, 255, 255, 0.10);
+    --text-1: #F4F4F5;
+    --text-2: #A1A1AA;
+    --text-3: #8B8B92;
+    --text-muted: #6B6B73;
+    --champions: #5E6AD2;
+    --big-spenders: #BF6FF8;
+    --novos: #F2C94C;
+    --em-risco: #E5484D;
+    --champions-soft: rgba(94, 106, 210, 0.12);
+    --big-spenders-soft: rgba(191, 111, 248, 0.12);
+    --novos-soft: rgba(242, 201, 76, 0.12);
+    --em-risco-soft: rgba(229, 72, 77, 0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* Anti user-agent: força headings a herdar cor/peso/tamanho do contexto */
+  h1, h2, h3, h4, h5, h6 { color: inherit; font: inherit; }
+  html, body { width: 100%; height: 100%; overflow: hidden; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg-base);
+    color: var(--text-1);
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+  }
+
+  /* ─── Background aurora animada ─── */
+  .bg-mesh { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .blob { position: absolute; border-radius: 50%; filter: blur(110px); will-change: transform; }
+  .blob.a {
+    width: 800px; height: 800px; background: var(--big-spenders); opacity: 0.22;
+    top: -200px; left: -200px; animation: floatA 22s infinite ease-in-out;
+  }
+  .blob.b {
+    width: 700px; height: 700px; background: var(--champions); opacity: 0.16;
+    bottom: -180px; right: -180px; animation: floatB 20s infinite ease-in-out;
+  }
+  .blob.c {
+    width: 600px; height: 600px; background: var(--big-spenders); opacity: 0.13;
+    top: 35%; left: 38%; animation: floatC 24s infinite ease-in-out;
+  }
+  .blob.d {
+    width: 500px; height: 500px; background: var(--novos); opacity: 0.09;
+    top: 10%; right: 25%; animation: floatD 26s infinite ease-in-out;
+  }
+  .blob.e {
+    width: 450px; height: 450px; background: var(--em-risco); opacity: 0.08;
+    bottom: 15%; left: 20%; animation: floatE 28s infinite ease-in-out;
+  }
+  @keyframes floatA {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(180px, 120px) scale(1.15); }
+    66% { transform: translate(-80px, 200px) scale(0.95); }
+  }
+  @keyframes floatB {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-220px, -140px) scale(1.2); }
+  }
+  @keyframes floatC {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    40% { transform: translate(140px, -160px) scale(1.1); }
+    70% { transform: translate(-120px, 100px) scale(0.9); }
+  }
+  @keyframes floatD {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-200px, 180px) scale(1.25); }
+  }
+  @keyframes floatE {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(160px, -120px) scale(1.15); }
+  }
+  .bg-mesh::before {
+    content: ''; position: absolute;
+    top: 30%; left: -50%; width: 200%; height: 1px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(191, 111, 248, 0.4) 30%,
+      rgba(94, 106, 210, 0.4) 50%,
+      rgba(191, 111, 248, 0.4) 70%,
+      transparent 100%);
+    filter: blur(1px);
+    animation: shimmer 12s ease-in-out infinite;
+    opacity: 0.6;
+  }
+  @keyframes shimmer {
+    0%, 100% { transform: translateX(0) translateY(0); opacity: 0.3; }
+    50% { transform: translateX(-20%) translateY(40vh); opacity: 0.8; }
+  }
+  .bg-mesh::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(8, 9, 10, 0.55) 100%);
+  }
+
+  /* ─── Layout — aspect-ratio deriva a altura da largura (robusto em qualquer 16:9) ─── */
+  .dashboard {
+    position: relative; z-index: 1;
+    width: 100%; aspect-ratio: 16 / 9;
+    display: grid;
+    grid-template-rows: 56px 1fr 22px;
+    padding: 10px 14px; gap: 8px;
+  }
+
+  /* ─── Topbar ─── */
+  .topbar {
+    display: grid; grid-template-columns: auto 1fr auto; align-items: center;
+    gap: 20px; padding: 0 16px;
+    background: var(--bg-card);
+    backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid var(--border); border-radius: 12px;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .logo {
+    width: 34px; height: 34px; border-radius: 9px;
+    background: linear-gradient(135deg, var(--big-spenders), #9D54E5);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .logo::after {
+    content: ''; width: 11px; height: 11px;
+    background: var(--bg-base); border-radius: 2px; transform: rotate(45deg);
+  }
+  .brand h1 { font-size: 15px; font-weight: 600; letter-spacing: -0.2px; color: var(--text-1); line-height: 1; }
+  .brand .sub { font-size: 10px; color: var(--text-2); letter-spacing: 1.6px; font-weight: 600; margin-top: 2px; text-transform: uppercase; opacity: 0.85; line-height: 1; }
+
+  .tabs {
+    display: flex; gap: 3px; justify-self: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    padding: 4px; border-radius: 12px;
+  }
+  .tab {
+    padding: 7px 18px; border-radius: 7px;
+    font: 500 13px inherit; color: var(--text-2);
+    background: transparent; border: none;
+  }
+  .tab.active {
+    background: var(--bg-card-solid); color: var(--text-1);
+    border: 1px solid var(--border-strong);
+  }
+
+  .topbar-meta { display: flex; gap: 14px; }
+  .meta-pill { padding: 2px 12px; border-left: 1px solid var(--border); }
+  .meta-pill .label { font-size: 9px; color: var(--text-3); letter-spacing: 1.2px; font-weight: 600; text-transform: uppercase; }
+  .meta-pill .value { font-size: 12px; font-weight: 600; margin-top: 2px; font-variant-numeric: tabular-nums; letter-spacing: -0.1px; color: var(--text-1); }
+
+  /* ─── Page ─── */
+  .page { display: grid; grid-template-rows: auto 1fr; gap: 8px; min-height: 0; height: 100%; }
+
+  /* ─── KPIs — frames vazios (valor vem do visual PBI por cima) ─── */
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .kpi {
+    background: var(--bg-card);
+    backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    position: relative; min-height: 70px; overflow: hidden;
+  }
+  .kpi::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  }
+  .kpi .label-row { display: flex; align-items: center; gap: 8px; }
+  .kpi .dot { width: 8px; height: 8px; border-radius: 50%; position: relative; }
+  .kpi .dot::after {
+    content: ''; position: absolute; inset: -3px;
+    border-radius: 50%; background: inherit;
+    opacity: 0.3; filter: blur(4px);
+    animation: dotPulse 3s ease-in-out infinite;
+  }
+  @keyframes dotPulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.4); }
+  }
+  .kpi.champions .dot, .kpi.champions .dot::after { background: var(--champions); }
+  .kpi.big-spenders .dot, .kpi.big-spenders .dot::after { background: var(--big-spenders); }
+  .kpi.novos .dot, .kpi.novos .dot::after { background: var(--novos); }
+  .kpi.em-risco .dot, .kpi.em-risco .dot::after { background: var(--em-risco); }
+  .kpi .label { font-size: 11px; color: var(--text-2); font-weight: 500; letter-spacing: 0.3px; }
+  /* KPI value/MoM/bar — card autocontido (uma camada só, sem overlay SVG) */
+  .kpi { display: flex; flex-direction: column; justify-content: space-between; padding: 9px 14px; }
+  .kpi .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .kpi .value { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; color: var(--text-1); font-variant-numeric: tabular-nums; line-height: 1; }
+  .kpi .pill { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 9px; white-space: nowrap; line-height: 1.4; flex-shrink: 0; }
+  .kpi .pill.up   { background: #15351f; color: #34D399; }
+  .kpi .pill.down { background: #3a1416; color: #E5484D; }
+  .kpi .pill.warn { background: #3a3115; color: #F2C94C; }
+  .kpi .bar { position: relative; height: 5px; border-radius: 3px; background: rgba(255,255,255,0.12); }
+  .kpi .bar-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; }
+  .kpi .bar-tick { position: absolute; left: 50%; top: -3px; width: 2px; height: 11px; border-radius: 1px; background: rgba(255,255,255,0.8); }
+
+  /* ─── Page 1 layout ─── */
+  .content { display: grid; grid-template-columns: 74% 26%; gap: 8px; min-height: 0; }
+  .visuals { display: grid; grid-template-rows: 1.5fr 1fr; gap: 8px; min-height: 0; }
+  .visual-bottom { display: grid; grid-template-columns: 5fr 6fr; gap: 8px; min-height: 0; }
+
+  /* ─── Panel — header só, corpo vazio (visual PBI por cima) ─── */
+  .panel {
+    background: var(--bg-card);
+    backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: flex; flex-direction: column;
+    min-height: 0; position: relative; overflow: hidden; gap: 8px;
+  }
+  .panel-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .panel-title { font-size: 14px; font-weight: 600; letter-spacing: -0.2px; color: var(--text-1); }
+  .panel-sub { font-size: 11px; color: var(--text-3); margin-top: 2px; line-height: 1.3; }
+  .panel-badge {
+    font-size: 9px; padding: 4px 9px; border-radius: 6px; font-weight: 600;
+    letter-spacing: 0.7px; text-transform: uppercase;
+    border: 1px solid var(--border-strong); flex-shrink: 0; align-self: flex-start;
+  }
+  .badge-green { background: var(--champions-soft); color: var(--champions); border-color: rgba(94,106,210,0.2); }
+  .badge-purple { background: var(--big-spenders-soft); color: var(--big-spenders); border-color: rgba(191,111,248,0.2); }
+  .badge-gold { background: var(--novos-soft); color: var(--novos); border-color: rgba(242,201,76,0.2); }
+  .badge-red { background: var(--em-risco-soft); color: var(--em-risco); border-color: rgba(229,72,77,0.2); }
+
+  /* ─── AI panel — header só ─── */
+  .ai-panel {
+    background: var(--bg-card);
+    backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    display: flex; flex-direction: column;
+    min-height: 0; overflow: hidden;
+  }
+  .ai-header {
+    padding: 14px 16px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .ai-avatar {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, #1F2030, #14151D);
+    border: 1px solid var(--border-strong);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; color: var(--champions);
+    position: relative; flex-shrink: 0;
+  }
+  .ai-avatar::before {
+    content: ''; position: absolute; inset: -8px; border-radius: 18px;
+    background: radial-gradient(circle, var(--champions) 0%, transparent 70%);
+    opacity: 0.15; animation: avatarGlow 4s ease-in-out infinite; z-index: -1;
+  }
+  @keyframes avatarGlow {
+    0%, 100% { opacity: 0.10; transform: scale(1); }
+    50% { opacity: 0.25; transform: scale(1.15); }
+  }
+  .ai-info { flex: 1; min-width: 0; }
+  .ai-name { font-size: 13px; font-weight: 600; letter-spacing: -0.2px; color: var(--text-1); }
+  .ai-status { font-size: 11px; color: var(--text-3); display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+  .ai-status::before {
+    content: ''; width: 7px; height: 7px;
+    background: var(--champions); border-radius: 50%;
+    animation: pulse 2.2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+
+  /* ─── Footer ─── */
+  .footer {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 12px;
+    font-size: 12px; color: var(--text-muted); font-weight: 500;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .blob { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-mesh">
+  <div class="blob a"></div>
+  <div class="blob b"></div>
+  <div class="blob c"></div>
+  <div class="blob d"></div>
+  <div class="blob e"></div>
+</div>
+
+<div class="dashboard">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo"></div>
+      <div>
+        <h1>RFM Olist Intelligence</h1>
+        <div class="sub">SEGMENTAÇÃO · CLUSTERIZAÇÃO · IA EMBARCADA</div>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab active">Visão Executiva</button>
+      <button class="tab">Análise Detalhada</button>
+    </div>
+    <div class="topbar-meta">
+      <div class="meta-pill"><div class="label">Snapshot</div><div class="value">04 Set 2018</div></div>
+      <div class="meta-pill"><div class="label">Modelo</div><div class="value">K-Means · K=4</div></div>
+      <div class="meta-pill"><div class="label">Silhouette</div><div class="value">0,369</div></div>
+    </div>
+  </header>
+
+  <!-- PÁGINA 1 -->
+  <div class="page">
+
+    <!-- KPI frames (valores vêm dos visuais Card por cima) -->
+    <section class="kpis">
+      <div class="kpi champions">
+        <div class="top"><div class="label-row"><span class="dot"></span><span class="label">Total de clientes</span></div><span class="pill up">MoM +0,6%</span></div>
+        <div class="value">93 Mil</div>
+        <div class="bar"><div class="bar-fill" style="width:52%;background:#34D399"></div><div class="bar-tick"></div></div>
+      </div>
+      <div class="kpi big-spenders">
+        <div class="top"><div class="label-row"><span class="dot"></span><span class="label">Receita total</span></div><span class="pill up">MoM +1,6%</span></div>
+        <div class="value">R$ 15 Mi</div>
+        <div class="bar"><div class="bar-fill" style="width:55%;background:#34D399"></div><div class="bar-tick"></div></div>
+      </div>
+      <div class="kpi novos">
+        <div class="top"><div class="label-row"><span class="dot"></span><span class="label">Ticket médio</span></div><span class="pill up">MoM +0,6%</span></div>
+        <div class="value">R$ 159,86</div>
+        <div class="bar"><div class="bar-fill" style="width:52%;background:#34D399"></div><div class="bar-tick"></div></div>
+      </div>
+      <div class="kpi em-risco">
+        <div class="top"><div class="label-row"><span class="dot"></span><span class="label">Em risco de churn</span></div><span class="pill warn">alto</span></div>
+        <div class="value">22,9%</div>
+        <div class="bar"><div class="bar-fill" style="width:57%;background:#F2C94C"></div><div class="bar-tick"></div></div>
+      </div>
+    </section>
+
+    <main class="content">
+      <div class="visuals">
+
+        <!-- Painel: Treemap (corpo vazio — visual PBI por cima) -->
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h2 class="panel-title">Distribuição de receita por cluster</h2>
+              <div class="panel-sub">Tamanho proporcional à receita · Cor por segmento</div>
+            </div>
+            <div class="panel-badge badge-purple">Treemap</div>
+          </div>
+        </div>
+
+        <div class="visual-bottom">
+          <!-- Painel: Lorenz -->
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <h2 class="panel-title">Concentração de receita</h2>
+                <div class="panel-sub">Curva de Lorenz · Gini 0,66</div>
+              </div>
+              <div class="panel-badge badge-gold">Pareto</div>
+            </div>
+          </div>
+          <!-- Painel: CLV vs AOV -->
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <h2 class="panel-title">CLV projetado vs Ticket atual</h2>
+                <div class="panel-sub">12 meses projetados · oportunidade por segmento</div>
+              </div>
+              <div class="panel-badge badge-green">Forecast</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- AI panel (corpo vazio — HTML Content/iframe por cima) -->
+      <aside class="ai-panel">
+        <div class="ai-header">
+          <div class="ai-avatar">✦</div>
+          <div class="ai-info">
+            <div class="ai-name">Analista RFM</div>
+            <div class="ai-status">Claude Haiku 4.5 · iframe Streamlit</div>
+          </div>
+        </div>
+      </aside>
+
+    </main>
+  </div>
+
+  <footer class="footer">
+    <span>Olist Brazilian E-Commerce · pipeline reproduzível · K-Means K=4</span>
+    <span>Power BI + Streamlit · Claude Haiku 4.5</span>
+  </footer>
+
+</div>
+
+</body>
+</html>

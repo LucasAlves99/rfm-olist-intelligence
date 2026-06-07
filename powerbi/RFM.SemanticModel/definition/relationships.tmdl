@@ -1,0 +1,16 @@
+relationship AutoDetected_08835f24-62e0-44ab-b92f-4046e87362b4
+	fromColumn: fato_rfm_clientes.Cluster_Name
+	toColumn: dim_segmentos.Cluster_Name
+
+relationship AutoDetected_06549992-e5eb-476f-b72f-e9723b693765
+	fromColumn: fato_pedidos.customer_unique_id
+	toColumn: fato_rfm_clientes.customer_unique_id
+
+relationship Relationship
+	fromColumn: fato_pedidos.order_purchase_timestamp
+	toColumn: dim_calendario.Data
+
+relationship UF_Pedidos
+	fromColumn: fato_pedidos.customer_state
+	toColumn: risco_review_uf.UF
+

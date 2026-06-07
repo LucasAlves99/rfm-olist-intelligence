@@ -1,0 +1,70 @@
+table fato_cohort
+	lineageTag: 5a2e1c84-7b9d-4f02-a6c1-3e8d9f2b4c10
+
+	column Safra
+		dataType: string
+		lineageTag: 5a2e1c84-0001-4f02-a6c1-3e8d9f2b4c10
+		summarizeBy: none
+		sourceColumn: Safra
+
+		annotation SummarizationSetBy = Automatic
+
+	column MesIndice
+		dataType: int64
+		formatString: 0
+		lineageTag: 5a2e1c84-0002-4f02-a6c1-3e8d9f2b4c10
+		summarizeBy: none
+		sourceColumn: MesIndice
+
+		annotation SummarizationSetBy = Automatic
+
+	column Clientes_Retidos
+		dataType: int64
+		formatString: 0
+		lineageTag: 5a2e1c84-0003-4f02-a6c1-3e8d9f2b4c10
+		summarizeBy: sum
+		sourceColumn: Clientes_Retidos
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tamanho_Safra
+		dataType: int64
+		formatString: 0
+		lineageTag: 5a2e1c84-0004-4f02-a6c1-3e8d9f2b4c10
+		summarizeBy: sum
+		sourceColumn: Tamanho_Safra
+
+		annotation SummarizationSetBy = Automatic
+
+	column Pct_Retencao
+		dataType: double
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 5a2e1c84-0005-4f02-a6c1-3e8d9f2b4c10
+		summarizeBy: sum
+		sourceColumn: Pct_Retencao
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Semestre
+		dataType: string
+		lineageTag: 5a2e1c84-0006-4f02-a6c1-3e8d9f2b4c10
+		summarizeBy: none
+		sourceColumn: Semestre
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fato_cohort = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\Users\Luk\Desktop\RFM-Projeto\data\powerbi\fato_cohort.csv"),[Delimiter=";", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"Safra", type text}, {"MesIndice", Int64.Type}, {"Clientes_Retidos", Int64.Type}, {"Tamanho_Safra", Int64.Type}, {"Pct_Retencao", type number}}),
+				    #"Semestre Adicionado" = Table.AddColumn(#"Tipo Alterado", "Semestre", each Text.Start([Safra],4) & (if Number.FromText(Text.End([Safra],2)) <= 6 then "-S1" else "-S2"), type text)
+				in
+				    #"Semestre Adicionado"
+
+	annotation PBI_ResultType = Table
+

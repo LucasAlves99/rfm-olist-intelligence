@@ -1,0 +1,104 @@
+table dim_calendario
+	lineageTag: a8dc7b59-f952-4d18-b5aa-8793e524c5dc
+
+	column Data
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: dd1e3b03-9436-4b4e-abba-1fa5860c1716
+		summarizeBy: none
+		sourceColumn: Data
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Ano
+		dataType: int64
+		formatString: 0
+		lineageTag: 89a27f41-2a3b-451e-9728-55ad7057c439
+		summarizeBy: sum
+		sourceColumn: Ano
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes
+		dataType: int64
+		formatString: 0
+		lineageTag: 912116b8-7ca7-4ba0-b5dc-f12fd26fec80
+		summarizeBy: sum
+		sourceColumn: Mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column Dia
+		dataType: int64
+		formatString: 0
+		lineageTag: 78ffec5e-f69e-4403-824b-f27a35918d0e
+		summarizeBy: sum
+		sourceColumn: Dia
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre
+		dataType: int64
+		formatString: 0
+		lineageTag: 9a8932f5-33a8-4e01-bfeb-e452f2bc5ed3
+		summarizeBy: sum
+		sourceColumn: Trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column AnoMes
+		dataType: string
+		lineageTag: 76dab913-1948-4851-9960-0518495cb8af
+		summarizeBy: none
+		sourceColumn: AnoMes
+
+		annotation SummarizationSetBy = Automatic
+
+	column NomeMes
+		dataType: string
+		lineageTag: f7ee14bf-1924-4555-a18e-f8fdbbbfea6b
+		summarizeBy: none
+		sourceColumn: NomeMes
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiaSemana
+		dataType: string
+		lineageTag: b9628b54-e8e7-4685-ac23-edb497f78460
+		summarizeBy: none
+		sourceColumn: DiaSemana
+
+		annotation SummarizationSetBy = Automatic
+
+	column NumDiaSemana
+		dataType: int64
+		formatString: 0
+		lineageTag: 795802a5-0c94-4575-ba75-939232578fbc
+		summarizeBy: sum
+		sourceColumn: NumDiaSemana
+
+		annotation SummarizationSetBy = Automatic
+
+	column FimDeSemana
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 17f77f23-3bc5-400c-b390-e621615d1a80
+		summarizeBy: none
+		sourceColumn: FimDeSemana
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_calendario = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\Users\Luk\Desktop\RFM-Projeto\data\powerbi\dim_calendario.csv"),[Delimiter=";", Columns=10, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"Data", type date}, {"Ano", Int64.Type}, {"Mes", Int64.Type}, {"Dia", Int64.Type}, {"Trimestre", Int64.Type}, {"AnoMes", type text}, {"NomeMes", type text}, {"DiaSemana", type text}, {"NumDiaSemana", Int64.Type}, {"FimDeSemana", type logical}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_ResultType = Table
+

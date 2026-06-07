@@ -1,0 +1,280 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.4.0/schema.json",
+  "name": "p1_concentracao",
+  "position": {
+    "x": 16,
+    "y": 512,
+    "z": 7000,
+    "height": 160,
+    "width": 416,
+    "tabOrder": 7000
+  },
+  "visual": {
+    "visualType": "deneb7E15AEF80B9E4D4F8E12924291ECE89A",
+    "query": {
+      "queryState": {
+        "dataset": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fato_rfm_clientes"
+                    }
+                  },
+                  "Property": "customer_unique_id"
+                }
+              },
+              "queryRef": "fato_rfm_clientes.customer_unique_id",
+              "nativeQueryRef": "customer_unique_id",
+              "active": true
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "fato_rfm_clientes"
+                        }
+                      },
+                      "Property": "Monetary"
+                    }
+                  },
+                  "Function": 0
+                }
+              },
+              "queryRef": "Sum(fato_rfm_clientes.Monetary)",
+              "nativeQueryRef": "Monetary",
+              "active": false,
+              "displayName": "Monetary"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fato_rfm_clientes"
+                  }
+                },
+                "Property": "customer_unique_id"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "vega": [
+        {
+          "properties": {
+            "provider": {
+              "expr": {
+                "Literal": {
+                  "Value": "'vegaLite'"
+                }
+              }
+            },
+            "jsonSpec": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\",\n  \"description\": \"Curva de Lorenz · concentracao de receita por cliente · area de Gini demarcada\",\n  \"background\": \"transparent\",\n  \"padding\": 0,\n  \"width\": \"container\",\n  \"height\": \"container\",\n  \"config\": {\n    \"view\": {\n      \"stroke\": null\n    },\n    \"font\": \"Segoe UI\",\n    \"axis\": {\n      \"domain\": false,\n      \"tickColor\": \"rgba(255,255,255,0.15)\",\n      \"gridColor\": \"rgba(255,255,255,0.06)\",\n      \"labelColor\": \"#C8C8D0\",\n      \"titleColor\": \"#F4F4F5\",\n      \"labelFontSize\": 11,\n      \"titleFontSize\": 12\n    }\n  },\n  \"data\": {\n    \"name\": \"dataset\"\n  },\n  \"transform\": [\n    {\n      \"window\": [\n        {\n          \"op\": \"sum\",\n          \"field\": \"Monetary\",\n          \"as\": \"cum_revenue\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"field\": \"Monetary\",\n          \"order\": \"descending\"\n        }\n      ],\n      \"frame\": [\n        null,\n        0\n      ]\n    },\n    {\n      \"window\": [\n        {\n          \"op\": \"count\",\n          \"as\": \"rank\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"field\": \"Monetary\",\n          \"order\": \"descending\"\n        }\n      ],\n      \"frame\": [\n        null,\n        0\n      ]\n    },\n    {\n      \"joinaggregate\": [\n        {\n          \"op\": \"max\",\n          \"field\": \"cum_revenue\",\n          \"as\": \"total_revenue\"\n        },\n        {\n          \"op\": \"count\",\n          \"as\": \"total_n\"\n        }\n      ]\n    },\n    {\n      \"calculate\": \"datum.rank / datum.total_n\",\n      \"as\": \"pct_clients\"\n    },\n    {\n      \"calculate\": \"datum.cum_revenue / datum.total_revenue\",\n      \"as\": \"pct_revenue\"\n    }\n  ],\n  \"layer\": [\n    {\n      \"description\": \"AREA DE GINI · entre a linha de igualdade (y=x) e a curva de Lorenz\",\n      \"mark\": {\n        \"type\": \"area\",\n        \"color\": \"#F2C94C\",\n        \"opacity\": 0.16,\n        \"interpolate\": \"monotone\",\n        \"clip\": true\n      },\n      \"encoding\": {\n        \"x\": {\n          \"field\": \"pct_clients\",\n          \"type\": \"quantitative\",\n          \"scale\": {\n            \"domain\": [\n              0,\n              1\n            ]\n          },\n          \"title\": \"% acumulado de clientes (ordenados por receita)\",\n          \"axis\": {\n            \"format\": \".0%\",\n            \"grid\": true,\n            \"tickCount\": 5\n          }\n        },\n        \"y\": {\n          \"field\": \"pct_clients\",\n          \"type\": \"quantitative\",\n          \"scale\": {\n            \"domain\": [\n              0,\n              1\n            ]\n          },\n          \"title\": \"% receita acumulada\",\n          \"axis\": {\n            \"format\": \".0%\",\n            \"grid\": true,\n            \"tickCount\": 5\n          }\n        },\n        \"y2\": {\n          \"field\": \"pct_revenue\"\n        }\n      }\n    },\n    {\n      \"description\": \"linha de igualdade perfeita (45 graus)\",\n      \"data\": {\n        \"values\": [\n          {\n            \"x\": 0,\n            \"y\": 0\n          },\n          {\n            \"x\": 1,\n            \"y\": 1\n          }\n        ]\n      },\n      \"mark\": {\n        \"type\": \"line\",\n        \"color\": \"#71717A\",\n        \"strokeDash\": [\n          4,\n          4\n        ],\n        \"opacity\": 0.55,\n        \"clip\": true\n      },\n      \"encoding\": {\n        \"x\": {\n          \"field\": \"x\",\n          \"type\": \"quantitative\",\n          \"scale\": {\n            \"domain\": [\n              0,\n              1\n            ]\n          },\n          \"title\": \"% acumulado de clientes (ordenados por receita)\"\n        },\n        \"y\": {\n          \"field\": \"y\",\n          \"type\": \"quantitative\",\n          \"scale\": {\n            \"domain\": [\n              0,\n              1\n            ]\n          },\n          \"title\": \"% receita acumulada\"\n        }\n      }\n    },\n    {\n      \"description\": \"marcador Pareto · 20% dos clientes\",\n      \"data\": {\n        \"values\": [\n          {\n            \"x\": 0.2\n          }\n        ]\n      },\n      \"mark\": {\n        \"type\": \"rule\",\n        \"color\": \"#F2C94C\",\n        \"strokeDash\": [\n          2,\n          3\n        ],\n        \"opacity\": 0.45,\n        \"clip\": true\n      },\n      \"encoding\": {\n        \"x\": {\n          \"field\": \"x\",\n          \"type\": \"quantitative\",\n          \"scale\": {\n            \"domain\": [\n              0,\n              1\n            ]\n          },\n          \"title\": \"% acumulado de clientes (ordenados por receita)\"\n        }\n      }\n    },\n    {\n      \"description\": \"curva de Lorenz\",\n      \"mark\": {\n        \"type\": \"line\",\n        \"color\": \"#A78BFA\",\n        \"strokeWidth\": 2.5,\n        \"interpolate\": \"monotone\",\n        \"tooltip\": true,\n        \"clip\": true\n      },\n      \"encoding\": {\n        \"x\": {\n          \"field\": \"pct_clients\",\n          \"type\": \"quantitative\",\n          \"title\": \"% acumulado de clientes (ordenados por receita)\",\n          \"scale\": {\n            \"domain\": [\n              0,\n              1\n            ]\n          },\n          \"axis\": {\n            \"format\": \".0%\"\n          }\n        },\n        \"y\": {\n          \"field\": \"pct_revenue\",\n          \"type\": \"quantitative\",\n          \"scale\": {\n            \"domain\": [\n              0,\n              1\n            ]\n          },\n          \"axis\": {\n            \"format\": \".0%\"\n          },\n          \"title\": \"% receita acumulada\"\n        },\n        \"tooltip\": [\n          {\n            \"field\": \"pct_clients\",\n            \"type\": \"quantitative\",\n            \"title\": \"% clientes\",\n            \"format\": \".1%\"\n          },\n          {\n            \"field\": \"pct_revenue\",\n            \"type\": \"quantitative\",\n            \"title\": \"% receita\",\n            \"format\": \".1%\"\n          }\n        ]\n      }\n    },\n    {\n      \"description\": \"insight: top 20% dos clientes concentram 54% da receita\",\n      \"data\": {\n        \"values\": [\n          {\n            \"x\": 0.97,\n            \"y\": 0.1,\n            \"label\": \"20% dos clientes = 54% da receita\"\n          }\n        ]\n      },\n      \"mark\": {\n        \"type\": \"text\",\n        \"color\": \"#F2C94C\",\n        \"fontSize\": 11,\n        \"fontWeight\": 600,\n        \"align\": \"right\",\n        \"baseline\": \"bottom\"\n      },\n      \"encoding\": {\n        \"x\": {\n          \"field\": \"x\",\n          \"type\": \"quantitative\",\n          \"title\": \"% acumulado de clientes (ordenados por receita)\",\n          \"scale\": {\n            \"domain\": [\n              0,\n              1\n            ]\n          }\n        },\n        \"y\": {\n          \"field\": \"y\",\n          \"type\": \"quantitative\",\n          \"title\": \"% receita acumulada\",\n          \"scale\": {\n            \"domain\": [\n              0,\n              1\n            ]\n          }\n        },\n        \"text\": {\n          \"field\": \"label\"\n        }\n      }\n    }\n  ]\n}'"
+                }
+              }
+            },
+            "jsonConfig": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{}'"
+                }
+              }
+            },
+            "enableTooltips": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "enableContextMenu": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "enableHighlight": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "enableSelection": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "selectionMaxDataPoints": {
+              "expr": {
+                "Literal": {
+                  "Value": "50D"
+                }
+              }
+            },
+            "selectionMode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'simple'"
+                }
+              }
+            },
+            "version": {
+              "expr": {
+                "Literal": {
+                  "Value": "'6.4.1'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "developer": [
+        {
+          "properties": {
+            "version": {
+              "expr": {
+                "Literal": {
+                  "Value": "'1.9.1.0'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "stateManagement": [
+        {
+          "properties": {
+            "viewportHeight": {
+              "expr": {
+                "Literal": {
+                  "Value": "150D"
+                }
+              }
+            },
+            "viewportWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "406D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "c2fc6e97108259208865",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fato_rfm_clientes"
+              }
+            },
+            "Property": "customer_unique_id"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "32adb64bebdc9e10fd56",
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fato_rfm_clientes"
+                  }
+                },
+                "Property": "Monetary"
+              }
+            },
+            "Function": 0
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

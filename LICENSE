@@ -1,0 +1,57 @@
+MIT License
+
+Copyright (c) 2026 Lucas Alves
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+## Notas importantes sobre uso de terceiros
+
+Este projeto utiliza/inclui referências aos seguintes recursos com licenças
+próprias:
+
+### Dataset Olist
+O dataset "Brazilian E-Commerce Public Dataset by Olist" é distribuído pela
+Olist via Kaggle sob a licença **CC BY-NC-SA 4.0** (Creative Commons
+Attribution-NonCommercial-ShareAlike 4.0 International).
+
+- Fonte: https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
+- Implica: uso não-comercial, atribuição obrigatória, derivados compartilham
+  a mesma licença.
+
+Os CSVs originais **NÃO estão incluídos** neste repositório (cobertos pelo
+.gitignore). Devem ser baixados separadamente do Kaggle.
+
+### Bibliotecas Python
+- pandas (BSD 3-Clause)
+- NumPy (BSD 3-Clause)
+- scikit-learn (BSD 3-Clause)
+- Streamlit (Apache 2.0)
+- DuckDB (MIT)
+- Anthropic SDK (MIT)
+
+### Modelo de IA
+Claude Haiku 4.5 é fornecido pela Anthropic. Uso sujeito aos Termos de Serviço
+e Política de Uso Aceitável da Anthropic:
+- https://www.anthropic.com/legal/consumer-terms
+- https://www.anthropic.com/legal/aup
+
+### Power BI custom visual
+"HTML Content" por Daniel Marsh-Patrick — uso gratuito via AppSource.

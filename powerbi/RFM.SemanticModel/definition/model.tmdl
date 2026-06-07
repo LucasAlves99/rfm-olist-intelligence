@@ -1,0 +1,27 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["dim_calendario","dim_segmentos","fato_pedidos","fato_rfm_clientes","fato_cohort","risco_review_uf"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table dim_calendario
+ref table dim_segmentos
+ref table fato_pedidos
+ref table fato_rfm_clientes
+ref table _KPIs
+ref table _Saude
+ref table _Concentracao
+ref table _Background
+ref table fato_cohort
+ref table risco_review_uf
+
+ref cultureInfo pt-BR
+

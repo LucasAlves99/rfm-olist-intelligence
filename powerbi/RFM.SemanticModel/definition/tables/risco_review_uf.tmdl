@@ -1,0 +1,52 @@
+table risco_review_uf
+	lineageTag: 7b3c9d52-1a4e-4c80-b6f2-9e1d3a5c7012
+
+	column UF
+		dataType: string
+		lineageTag: 7b3c9d52-0001-4c80-b6f2-9e1d3a5c7012
+		summarizeBy: none
+		sourceColumn: UF
+
+		annotation SummarizationSetBy = Automatic
+
+	column Pedidos
+		dataType: int64
+		formatString: #,0
+		lineageTag: 7b3c9d52-0002-4c80-b6f2-9e1d3a5c7012
+		summarizeBy: sum
+		sourceColumn: Pedidos
+
+		annotation SummarizationSetBy = Automatic
+
+	column Alto_Risco
+		dataType: int64
+		formatString: #,0
+		lineageTag: 7b3c9d52-0003-4c80-b6f2-9e1d3a5c7012
+		summarizeBy: sum
+		sourceColumn: Alto_Risco
+
+		annotation SummarizationSetBy = Automatic
+
+	column Pct_Alto_Risco
+		dataType: double
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 7b3c9d52-0004-4c80-b6f2-9e1d3a5c7012
+		summarizeBy: sum
+		sourceColumn: Pct_Alto_Risco
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition risco_review_uf = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\Users\Luk\Desktop\RFM-Projeto\data\powerbi\risco_review_uf.csv"),[Delimiter=";", Columns=4, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"UF", type text}, {"Pedidos", Int64.Type}, {"Alto_Risco", Int64.Type}, {"Pct_Alto_Risco", type number}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_ResultType = Table
+

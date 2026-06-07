@@ -1,0 +1,129 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Curva de Lorenz · concentracao de receita por cliente · area de Gini demarcada",
+  "background": "transparent",
+  "padding": 0,
+  "width": "container",
+  "height": "container",
+  "config": {
+    "view": {"stroke": null},
+    "font": "Segoe UI",
+    "axis": {
+      "domain": false,
+      "tickColor": "rgba(255,255,255,0.15)",
+      "gridColor": "rgba(255,255,255,0.06)",
+      "labelColor": "#A1A1AA",
+      "titleColor": "#F4F4F5",
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    }
+  },
+  "data": {"name": "dataset"},
+  "transform": [
+    {
+      "window": [{"op": "sum", "field": "Monetary", "as": "cum_revenue"}],
+      "sort": [{"field": "Monetary", "order": "descending"}],
+      "frame": [null, 0]
+    },
+    {
+      "window": [{"op": "count", "as": "rank"}],
+      "sort": [{"field": "Monetary", "order": "descending"}],
+      "frame": [null, 0]
+    },
+    {
+      "joinaggregate": [
+        {"op": "max", "field": "cum_revenue", "as": "total_revenue"},
+        {"op": "count", "as": "total_n"}
+      ]
+    },
+    {"calculate": "datum.rank / datum.total_n", "as": "pct_clients"},
+    {"calculate": "datum.cum_revenue / datum.total_revenue", "as": "pct_revenue"}
+  ],
+  "layer": [
+    {
+      "description": "AREA DE GINI · entre a linha de igualdade (y=x) e a curva de Lorenz",
+      "mark": {"type": "area", "color": "#F2C94C", "opacity": 0.16, "interpolate": "monotone", "clip": true},
+      "encoding": {
+        "x": {"field": "pct_clients", "type": "quantitative", "scale": {"domain": [0, 1]}},
+        "y":  {"field": "pct_clients", "type": "quantitative", "scale": {"domain": [0, 1]}},
+        "y2": {"field": "pct_revenue"}
+      }
+    },
+    {
+      "description": "linha de igualdade perfeita (45 graus)",
+      "data": {"values": [{"x": 0, "y": 0}, {"x": 1, "y": 1}]},
+      "mark": {"type": "line", "color": "#71717A", "strokeDash": [4, 4], "opacity": 0.55, "clip": true},
+      "encoding": {
+        "x": {"field": "x", "type": "quantitative", "scale": {"domain": [0, 1]}},
+        "y": {"field": "y", "type": "quantitative", "scale": {"domain": [0, 1]}}
+      }
+    },
+    {
+      "description": "marcador Pareto · 20% dos clientes",
+      "data": {"values": [{"x": 0.2}]},
+      "mark": {"type": "rule", "color": "#F2C94C", "strokeDash": [2, 3], "opacity": 0.45, "clip": true},
+      "encoding": {
+        "x": {"field": "x", "type": "quantitative", "scale": {"domain": [0, 1]}}
+      }
+    },
+    {
+      "description": "curva de Lorenz",
+      "mark": {"type": "line", "color": "#A78BFA", "strokeWidth": 2.5, "interpolate": "monotone", "tooltip": true, "clip": true},
+      "encoding": {
+        "x": {
+          "field": "pct_clients",
+          "type": "quantitative",
+          "title": "% acumulado de clientes (ordenados por receita)",
+          "scale": {"domain": [0, 1]},
+          "axis": {"format": ".0%"}
+        },
+        "y": {
+          "field": "pct_revenue",
+          "type": "quantitative",
+          "title": "% acumulado de receita",
+          "scale": {"domain": [0, 1]},
+          "axis": {"format": ".0%"}
+        },
+        "tooltip": [
+          {"field": "pct_clients", "type": "quantitative", "title": "% clientes", "format": ".1%"},
+          {"field": "pct_revenue", "type": "quantitative", "title": "% receita",  "format": ".1%"}
+        ]
+      }
+    },
+    {
+      "description": "rotulo do coeficiente de Gini · calculado dinamicamente (regra do trapezio)",
+      "transform": [
+        {
+          "window": [
+            {"op": "lag", "field": "pct_clients", "as": "px"},
+            {"op": "lag", "field": "pct_revenue", "as": "py"}
+          ],
+          "sort": [{"field": "pct_clients", "order": "ascending"}],
+          "frame": [null, 0]
+        },
+        {"calculate": "(datum.pct_clients - (datum.px === null ? 0 : datum.px)) * (datum.pct_revenue + (datum.py === null ? 0 : datum.py)) / 2", "as": "trap"},
+        {"aggregate": [{"op": "sum", "field": "trap", "as": "area_under"}]},
+        {"calculate": "1 - 2 * datum.area_under", "as": "gini"},
+        {"calculate": "'Gini = ' + replace(format(datum.gini, '.2f'), '.', ',')", "as": "label"},
+        {"calculate": "0.46", "as": "lx"},
+        {"calculate": "0.74", "as": "ly"}
+      ],
+      "mark": {"type": "text", "color": "#F2C94C", "fontSize": 13, "fontWeight": 600, "align": "left"},
+      "encoding": {
+        "x": {"field": "lx", "type": "quantitative", "scale": {"domain": [0, 1]}},
+        "y": {"field": "ly", "type": "quantitative", "scale": {"domain": [0, 1]}},
+        "text": {"field": "label"}
+      }
+    },
+    {
+      "description": "sublegenda da area de Gini",
+      "data": {"values": [{"x": 0.46, "y": 0.66, "label": "area = desigualdade"}]},
+      "mark": {"type": "text", "color": "#A1A1AA", "fontSize": 10, "align": "left"},
+      "encoding": {
+        "x": {"field": "x", "type": "quantitative", "scale": {"domain": [0, 1]}},
+        "y": {"field": "y", "type": "quantitative", "scale": {"domain": [0, 1]}},
+        "text": {"field": "label"}
+      }
+    }
+  ]
+}

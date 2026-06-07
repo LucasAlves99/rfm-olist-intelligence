@@ -1,0 +1,338 @@
+cultureInfo pt-BR
+
+	linguisticMetadata =
+			{
+			  "Version": "2.0.0",
+			  "Language": "en-US",
+			  "Entities": {
+			    "table_kpis.receita_total": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_KPIs",
+			          "ConceptualProperty": "Receita Total"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Receita Total": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_kpis.total_clientes": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_KPIs",
+			          "ConceptualProperty": "Total Clientes"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Total Clientes": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_kpis.clv_medio": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_KPIs",
+			          "ConceptualProperty": "CLV Medio"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "CLV Medio": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_kpis.ticket_medio": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_KPIs",
+			          "ConceptualProperty": "Ticket Medio"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Ticket Medio": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_kpis.pedidos_por_mes": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_KPIs",
+			          "ConceptualProperty": "Pedidos por Mes"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "table_kpis.review_medio": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_KPIs",
+			          "ConceptualProperty": "Review Medio"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "table_kpis.recencia_media": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_KPIs",
+			          "ConceptualProperty": "Recencia Media"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "table_kpis.receita_por_uf": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_KPIs",
+			          "ConceptualProperty": "Receita por UF"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "table_saude.clientes_1_compra": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Saude",
+			          "ConceptualProperty": "Clientes 1 Compra"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Clientes 1 Compra": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_saude.clientes_2_compras": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Saude",
+			          "ConceptualProperty": "Clientes 2 Compras"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Clientes 2 Compras": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_saude.clientes_34_compras": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Saude",
+			          "ConceptualProperty": "Clientes 3-4 Compras"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Clientes 3-4 Compras": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_saude.clientes_5_compras": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Saude",
+			          "ConceptualProperty": "Clientes 5+ Compras"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Clientes 5+ Compras": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_kpis.frequency_media": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_KPIs",
+			          "ConceptualProperty": "Frequency Media"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "table_kpis.ticket_medio_cliente": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_KPIs",
+			          "ConceptualProperty": "Ticket Medio Cliente"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "table_kpis.receita_pedidos": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_KPIs",
+			          "ConceptualProperty": "Receita Pedidos"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Receita Pedidos": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_kpis.clientes_ativos": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_KPIs",
+			          "ConceptualProperty": "Clientes Ativos"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Clientes Ativos": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_saude.receita_em_risco": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Saude",
+			          "ConceptualProperty": "Receita em Risco"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Receita em Risco": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_saude.clientes_em_risco": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Saude",
+			          "ConceptualProperty": "Clientes em Risco"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Clientes em Risco": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_saude.retencao_cohort": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Saude",
+			          "ConceptualProperty": "Retencao Cohort"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Retencao Cohort": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    }
+			  }
+			}
+		contentType: json
+

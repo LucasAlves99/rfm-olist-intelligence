@@ -1,0 +1,80 @@
+# .gitignore — RFM Olist Project
+
+# ── Dados brutos (não versionar) ─────────────────────────────────────────────
+data/raw/
+*.csv
+!data/powerbi/*.csv
+
+# ── Modelos serializados ──────────────────────────────────────────────────────
+models/*.pkl
+
+# ── Python cache ─────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ── Jupyter ───────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ── Ambientes virtuais ────────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+.env
+
+# ── IDEs ──────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── SO ────────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Config local do Claude Code (permissões da máquina, não versionar) ────────
+.claude/settings.local.json
+
+# ── Temporários do projeto ────────────────────────────────────────────────────
+_nb_code_dump.txt
+_doc_*.md
+_entenda_tudo.html
+_qa_preview.png
+
+# ── Power BI: binário compilado e cache (a fonte versionável é o PBIP/TMDL) ────
+*.pbix
+**/.pbi/
+*.abf
+
+# ── Notebook legado (original inline, superseded pelo REFATORADO; backup local) ──
+**/Segmentacao_RFM_Olist_FINAL_MESMO*.ipynb
+
+# ── Documentação extensa/didática (mantida só localmente; README é a doc central) ──
+GUIA_PROJETO.md
+GUIA_LINHA_A_LINHA.md
+GUIA_TESTES_LINHA_A_LINHA.md
+ENTENDA_O_PROJETO.md
+ENTENDA_O_PROJETO.pdf
+ENTENDA_TUDO.md
+ENTENDA_TUDO.pdf
+DOCUMENTATION.md
+MELHORIAS_PROJETO_RFM_OLIST.md
+PROJECT_CONTEXT.md
+
+# ── 🔒 SEGREDOS · NUNCA COMMITAR ──────────────────────────────────────────────
+# Streamlit secrets (contém ANTHROPIC_API_KEY)
+streamlit_agent/.streamlit/secrets.toml
+.streamlit/secrets.toml
+# Arquivos ad-hoc de chaves/credenciais
+**/k.txt
+**/key.txt
+**/*api*key*
+**/*secret*
+**/*credentials*
+*.pem
+*.key

@@ -1,0 +1,109 @@
+{
+  "problem": "bad_review_prediction (score<=2)",
+  "n_samples": 95824,
+  "positive_rate": 0.128,
+  "random_state": 42,
+  "cv_folds": 5,
+  "best_model": "RandomForest",
+  "best_threshold": 0.6346,
+  "cv_results": {
+    "Baseline (DummyMostFreq)": {
+      "f1_cv": 0.0,
+      "f1_cv_std": 0.0,
+      "f1_train": 0.0,
+      "overfit_gap": 0.0,
+      "pr_auc_cv": 0.128,
+      "roc_auc_cv": 0.5,
+      "balanced_acc_cv": 0.5,
+      "accuracy_cv": 0.872,
+      "recall_cv": 0.0,
+      "precision_cv": 0.0
+    },
+    "LogisticRegression": {
+      "f1_cv": 0.4381,
+      "f1_cv_std": 0.0082,
+      "f1_train": 0.4415,
+      "overfit_gap": 0.0034,
+      "pr_auc_cv": 0.4369,
+      "roc_auc_cv": 0.7545,
+      "balanced_acc_cv": 0.6974,
+      "accuracy_cv": 0.8292,
+      "recall_cv": 0.5203,
+      "precision_cv": 0.3783
+    },
+    "RandomForest": {
+      "f1_cv": 0.4599,
+      "f1_cv_std": 0.0083,
+      "f1_train": 0.4957,
+      "overfit_gap": 0.0358,
+      "pr_auc_cv": 0.4759,
+      "roc_auc_cv": 0.7604,
+      "balanced_acc_cv": 0.7021,
+      "accuracy_cv": 0.8477,
+      "recall_cv": 0.5065,
+      "precision_cv": 0.4212
+    },
+    "HistGradientBoosting": {
+      "f1_cv": 0.4463,
+      "f1_cv_std": 0.008,
+      "f1_train": 0.4673,
+      "overfit_gap": 0.021,
+      "pr_auc_cv": 0.4801,
+      "roc_auc_cv": 0.7598,
+      "balanced_acc_cv": 0.7053,
+      "accuracy_cv": 0.8287,
+      "recall_cv": 0.5393,
+      "precision_cv": 0.3807
+    }
+  },
+  "test": {
+    "f1_default": 0.4595,
+    "f1_tuned": 0.4675,
+    "accuracy_tuned": 0.8825,
+    "pr_auc": 0.4637,
+    "roc_auc": 0.7607,
+    "overfit_gap_f1": 0.0485
+  },
+  "top_features": [
+    {
+      "feature": "atraso_dias",
+      "importance": 0.12229
+    },
+    {
+      "feature": "atrasou",
+      "importance": 0.03975
+    },
+    {
+      "feature": "tempo_entrega_dias",
+      "importance": 0.03012
+    },
+    {
+      "feature": "n_items",
+      "importance": 0.02248
+    },
+    {
+      "feature": "prazo_estimado_dias",
+      "importance": 0.00399
+    },
+    {
+      "feature": "n_sellers",
+      "importance": 0.00383
+    },
+    {
+      "feature": "cat",
+      "importance": 0.0038
+    },
+    {
+      "feature": "valor_por_item",
+      "importance": 0.00327
+    },
+    {
+      "feature": "mes",
+      "importance": 0.00296
+    },
+    {
+      "feature": "customer_state",
+      "importance": 0.00272
+    }
+  ]
+}
