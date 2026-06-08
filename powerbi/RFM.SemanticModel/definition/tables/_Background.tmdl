@@ -844,7 +844,6 @@ table _Background
 			  <iframe
 			    src=""https://rfm-olist-intelligence.streamlit.app/?embed=true""
 			    allow=""clipboard-write; clipboard-read""
-			    loading=""lazy""
 			    title=""Analista RFM (Claude Haiku 4.5)"">
 			  </iframe>
 			</div>
