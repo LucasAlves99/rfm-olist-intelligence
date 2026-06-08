@@ -51,6 +51,11 @@ _qa_preview.png
 **/.pbi/
 *.abf
 
+# ── Protótipos / fontes HTML de design (mantidos só localmente) ───────────────
+powerbi/wireframe_dashboard.html
+powerbi/background_p1.html
+powerbi/background_p2.html
+
 # ── Notebook legado (original inline, superseded pelo REFATORADO; backup local) ──
 **/Segmentacao_RFM_Olist_FINAL_MESMO*.ipynb
 

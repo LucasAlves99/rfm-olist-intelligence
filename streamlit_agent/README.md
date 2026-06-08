@@ -1,6 +1,6 @@
 # Analista RFM — Streamlit Agent
 
-Agente de IA embarcado no dashboard Power BI, conectado aos datamarts da segmentação RFM Olist.
+Agente de IA acessível a partir do dashboard Power BI (link), conectado aos datamarts da segmentação RFM Olist.
 
 ## Stack
 
@@ -67,19 +67,23 @@ Streamlit Cloud free "dorme" após 7 dias sem acesso. Pra manter quente:
 2. Cria um cron que faz GET na URL do app a cada hora
 3. Pronto — app fica sempre quente
 
-## Embedar no Power BI
+## Integração com o Power BI
 
-1. No Power BI Desktop, instale o custom visual **"HTML Content"**
-   (Daniel Marsh-Patrick — AppSource gratis)
-2. Adiciona o visual na página
-3. No campo de HTML, cola:
-   ```html
-   <iframe
-     src="https://SEU-APP.streamlit.app/?embed=true"
-     style="width:100%; height:100%; border:none; border-radius:14px;">
-   </iframe>
-   ```
-4. Posiciona no slot direito (30% da tela) conforme wireframe
+> **Nota:** o Power BI sandboxa custom visuals e **bloqueia iframes externos
+> interativos** (segurança) — embutir o app Streamlit direto na página do
+> relatório não renderiza. A integração usa **link**, não embed.
+
+No dashboard (página *Visão Executiva*), o painel direito tem um card
+**"Analista RFM"** com um **botão nativo** de ação **URL da Web** apontando para
+a URL pública do app:
+
+```
+https://rfm-olist-intelligence.streamlit.app
+```
+
+Um clique (Ctrl+clique no Desktop; clique simples no Service) abre o agente em
+nova aba, em tela cheia. Assim o ciclo *análise → pergunta* fica fechado sem
+depender do sandbox do Power BI.
 
 ## Tools disponíveis para o Claude
 

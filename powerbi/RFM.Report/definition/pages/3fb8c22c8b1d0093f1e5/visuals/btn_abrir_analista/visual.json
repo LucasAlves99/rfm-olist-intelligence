@@ -1,29 +1,106 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.4.0/schema.json",
   "name": "btn_abrir_analista",
-  "position": { "x": 965, "y": 600, "z": 9500, "height": 42, "width": 292, "tabOrder": 9500 },
+  "position": {
+    "x": 960,
+    "y": 592,
+    "z": 9500,
+    "height": 48.000000000000007,
+    "width": 303.99999999999994,
+    "tabOrder": 9500
+  },
   "visual": {
     "visualType": "actionButton",
     "objects": {
       "icon": [
-        { "properties": { "shapeType": { "expr": { "Literal": { "Value": "'blank'" } } } }, "selector": { "id": "default" } },
-        { "properties": { "show": { "expr": { "Literal": { "Value": "true" } } } } }
+        {
+          "properties": {
+            "shapeType": {
+              "expr": {
+                "Literal": {
+                  "Value": "'blank'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        },
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
       ],
       "shape": [
-        { "properties": { "tileShape": { "expr": { "Literal": { "Value": "'rectangle'" } } } }, "selector": { "id": "default" } }
+        {
+          "properties": {
+            "tileShape": {
+              "expr": {
+                "Literal": {
+                  "Value": "'rectangle'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
       ],
       "outline": [
-        { "properties": { "show": { "expr": { "Literal": { "Value": "false" } } } } }
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
       ]
     },
     "visualContainerObjects": {
       "visualLink": [
         {
           "properties": {
-            "show": { "expr": { "Literal": { "Value": "true" } } },
-            "type": { "expr": { "Literal": { "Value": "'WebUrl'" } } },
-            "webUrl": { "expr": { "Literal": { "Value": "'https://rfm-olist-intelligence.streamlit.app'" } } },
-            "tooltip": { "expr": { "Literal": { "Value": "'Abrir o Analista RFM (IA) em nova aba'" } } }
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "type": {
+              "expr": {
+                "Literal": {
+                  "Value": "'WebUrl'"
+                }
+              }
+            },
+            "webUrl": {
+              "expr": {
+                "Literal": {
+                  "Value": "'https://rfm-olist-intelligence.streamlit.app'"
+                }
+              }
+            },
+            "tooltip": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Abrir o Analista RFM (IA) em nova aba'"
+                }
+              }
+            }
           }
         }
       ]

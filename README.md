@@ -51,9 +51,9 @@ Este projeto entrega uma solução completa de **inteligência de clientes** sob
 
 3. **Dashboard executivo** — interface Power BI dark com Star Schema, medidas DAX customizadas e duas páginas (Visão Executiva + Análise Detalhada). Os visuais avançados (Lorenz com Gini, treemap, evolução por cluster, funil) são construídos em **Deneb (Vega-Lite)** para um acabamento que o visual nativo não alcança.
 
-4. **Agente conversacional** — chatbot baseado em Claude Haiku 4.5 com Prompt Caching e Tool Use nativo, capaz de consultar os datamarts em tempo real via DuckDB. Embarcado dentro do dashboard como iframe, eliminando a fricção de mudar de contexto.
+4. **Agente conversacional** — chatbot baseado em Claude Haiku 4.5 com Prompt Caching e Tool Use nativo, capaz de consultar os datamarts em tempo real via DuckDB. **Publicado como app Streamlit** e acessível direto do dashboard (card "Analista RFM" + botão), fechando o ciclo análise → pergunta.
 
-O diferencial arquitetural é a **integração híbrida BI + IA generativa**: o usuário navega pelos gráficos e conversa com um analista virtual sem sair da tela, com custo operacional de ~R$ 0,07 por pergunta.
+O diferencial arquitetural é a **integração híbrida BI + IA generativa**: o usuário navega pelos gráficos e, a um clique, conversa com um analista virtual sobre os mesmos dados — com custo operacional de ~R$ 0,07 por pergunta.
 
 ---
 
@@ -92,7 +92,7 @@ O diferencial arquitetural é a **integração híbrida BI + IA generativa**: o 
 ┌──────────────┐           ┌─────────────────────────┐
 │  POWER BI    │           │  STREAMLIT AGENT        │
 │              │           │                         │
-│  Star Schema │  ◄ iframe │  Claude Haiku 4.5       │
+│  Star Schema │  → link   │  Claude Haiku 4.5       │
 │  Medidas DAX │           │  Prompt Caching         │
 │  Theme dark  │           │  Tool Use + DuckDB      │
 └──────────────┘           └─────────────────────────┘
@@ -256,8 +256,6 @@ rfm-olist-intelligence/
 │   ├── RFM.pbip                        Projeto Power BI (abre no Desktop)
 │   ├── RFM.Report/                     Páginas e visuais (PBIR, versionável)
 │   ├── RFM.SemanticModel/              Modelo + medidas DAX (TMDL, versionável)
-│   ├── wireframe_dashboard.html        Protótipo interativo (referência visual)
-│   ├── background_p1.html / p2.html    Fonte legível dos fundos HTML (medidas)
 │   ├── dicionario_dados.md             Schema dos datamarts
 │   └── GUIA_DESIGN_DASHBOARD.md        DAX + theme JSON
 │
