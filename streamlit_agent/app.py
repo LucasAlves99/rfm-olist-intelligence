@@ -7,8 +7,10 @@ Deploy: Streamlit Community Cloud (free) com uptime ping.
 """
 
 # Standard library
+import base64
 import logging
 import time
+from pathlib import Path
 
 # Third-party
 import streamlit as st
@@ -30,6 +32,19 @@ HAIKU_PRICE_PER_MTOK = {
     "cache_write": 1.00,
 }
 USD_TO_BRL = 5.5  # cotação aproximada para exibição do custo da sessão
+
+# Avatares do chat (SVG embutido como data-URI): agente ✦ igual ao dashboard, usuário limpo.
+_ASSETS = Path(__file__).parent / "assets"
+
+
+def _svg_avatar(filename: str) -> str:
+    svg = (_ASSETS / filename).read_text(encoding="utf-8")
+    b64 = base64.b64encode(svg.encode("utf-8")).decode()
+    return f"data:image/svg+xml;base64,{b64}"
+
+
+AGENT_AVATAR = _svg_avatar("agent_avatar.svg")
+USER_AVATAR = _svg_avatar("user_avatar.svg")
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Page config
@@ -330,7 +345,7 @@ if not st.session_state.greeted and api_ready:
 # Histórico de mensagens
 # ──────────────────────────────────────────────────────────────────────────────
 for msg in st.session_state.messages:
-    avatar = "✨" if msg["role"] == "assistant" else None
+    avatar = AGENT_AVATAR if msg["role"] == "assistant" else USER_AVATAR
     with st.chat_message(msg["role"], avatar=avatar):
         st.markdown(msg["content"])
 
@@ -367,7 +382,7 @@ if user_input and api_ready:
 # Se a última msg é do user, gera resposta do bot em streaming
 # ──────────────────────────────────────────────────────────────────────────────
 if api_ready and st.session_state.messages and st.session_state.messages[-1]["role"] == "user":
-    with st.chat_message("assistant", avatar="✨"):
+    with st.chat_message("assistant", avatar=AGENT_AVATAR):
         placeholder = st.empty()
 
         # 1) Mostra typing indicator IMEDIATAMENTE com label apropriado
