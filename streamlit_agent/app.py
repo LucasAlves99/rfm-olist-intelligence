@@ -1,7 +1,7 @@
 """Streamlit App — Analista RFM (Claude Haiku 4.5).
 
-App principal que será embedado via iframe dentro do Power BI.
-Layout dark executive matching o wireframe HTML.
+App principal, publicado no Streamlit Cloud e acessível a partir do
+dashboard Power BI (link/botão). Layout dark executive.
 
 Deploy: Streamlit Community Cloud (free) com uptime ping.
 """
@@ -331,7 +331,7 @@ except Exception as e:
 if not st.session_state.greeted and api_ready:
     st.session_state.greeted = True
     greeting = (
-        "Olá. Sou seu **analista RFM** embarcado, com acesso ao contexto "
+        "Olá. Sou seu **analista RFM** do projeto, com acesso ao contexto "
         "completo do projeto e aos datamarts.\n\n"
         "**Diagnóstico inicial** · base com 93.358 clientes, concentração "
         "Pareto severa (Gini 0,66) e 22,9% em risco de churn. Recomendo "
