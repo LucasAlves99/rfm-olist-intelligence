@@ -2,7 +2,7 @@
 
 # RFM Olist Intelligence
 
-**Segmentação estratégica de clientes com pipeline reproduzível, dashboard Power BI e agente conversacional embarcado.**
+**Segmentação estratégica de clientes com pipeline reproduzível, dashboard Power BI e agente conversacional publicado.**
 
 [![Tests](https://img.shields.io/badge/tests-51%20passing-brightgreen?style=flat-square)](./tests)
 [![Coverage](https://img.shields.io/badge/coverage-94%25-brightgreen?style=flat-square)](./tests)
@@ -45,7 +45,7 @@
 
 Este projeto entrega uma solução completa de **inteligência de clientes** sobre a base pública da Olist (e-commerce brasileiro, ~100 mil pedidos), combinando quatro componentes integrados:
 
-1. **Pipeline analítico** — código Python modular que transforma 5 CSVs brutos em 4 datamarts tipados, aplicando segmentação RFM, clusterização KMeans e projeção de Customer Lifetime Value. Validado por 51 testes automatizados.
+1. **Pipeline analítico** — código Python modular que transforma 5 CSVs brutos em datamarts tipados, aplicando segmentação RFM, clusterização KMeans e projeção de Customer Lifetime Value. Validado por 51 testes automatizados.
 
 2. **Modelos preditivos (ML)** — classificação supervisionada com rigor metodológico (comparação multi-algoritmo, validação cruzada estratificada, diagnóstico de overfit, tuning de threshold e análise de lift, **sem data leakage**). O modelo principal prevê **review ruim** no momento da entrega, habilitando *service recovery* proativo (alavanca de NPS/retenção).
 
@@ -78,12 +78,14 @@ O diferencial arquitetural é a **integração híbrida BI + IA generativa**: o 
          │
          ▼
 ┌─────────────────────────────────────────────────────┐
-│  4 DATAMARTS                                        │
+│  6 DATAMARTS                                        │
 │                                                     │
 │  fato_rfm_clientes    (1 linha/cliente)             │
 │  fato_pedidos         (1 linha/pedido)              │
 │  dim_segmentos        (1 linha/cluster)             │
 │  dim_calendario       (1 linha/dia)                 │
+│  fato_cohort          (retenção por cohort)         │
+│  risco_review_uf      (risco de review por UF)      │
 │                                                     │
 │  CSV UTF-8-SIG para PBI · Parquet Snappy para Agent │
 └─────┬───────────────────────────┬───────────────────┘
@@ -201,12 +203,14 @@ streamlit run app.py
 ### Geração dos artefatos do dashboard
 
 ```bash
-# Os 4 datamarts ficam disponíveis em:
+# Os datamarts ficam disponíveis em:
 ls data/powerbi/
 # fato_rfm_clientes.csv
 # fato_pedidos.csv
 # dim_segmentos.csv
 # dim_calendario.csv
+# fato_cohort.csv
+# risco_review_uf.csv
 
 # Abrir o dashboard pronto no Power BI Desktop:
 #   powerbi/RFM.pbip
@@ -224,7 +228,7 @@ rfm-olist-intelligence/
 │
 ├── data/
 │   ├── raw/                        5 CSVs Olist (gitignored)
-│   └── powerbi/                    4 datamarts CSV tipados
+│   └── powerbi/                    6 datamarts CSV tipados (UTF-8-SIG)
 │
 ├── models/                         (.pkl gitignored — gerados pelos scripts)
 │   ├── model_metadata.json         Silhouette, K, snapshot, training date
@@ -256,8 +260,10 @@ rfm-olist-intelligence/
 │   ├── RFM.pbip                        Projeto Power BI (abre no Desktop)
 │   ├── RFM.Report/                     Páginas e visuais (PBIR, versionável)
 │   ├── RFM.SemanticModel/              Modelo + medidas DAX (TMDL, versionável)
+│   ├── deneb_specs/                    Specs Vega-Lite (ex: lorenz-curve.json)
+│   ├── dashboard_theme.json            Tema dark do Power BI
 │   ├── dicionario_dados.md             Schema dos datamarts
-│   └── GUIA_DESIGN_DASHBOARD.md        DAX + theme JSON
+│   └── GUIA_DESIGN_DASHBOARD.md        DAX + theme JSON + visuais Deneb
 │
 ├── streamlit_agent/
 │   ├── app.py                      UI dark executive (Streamlit)
@@ -265,7 +271,10 @@ rfm-olist-intelligence/
 │   │   ├── system_prompt.py        Contexto do projeto (cached)
 │   │   ├── tools.py                7 tools DuckDB
 │   │   └── claude_client.py        SDK + cache + tool loop + streaming
-│   ├── data/                       Datamarts em Parquet (–65% vs CSV)
+│   ├── assets/                     Avatares SVG do chat (agente/usuário)
+│   ├── data/                       5 datamarts em Parquet (–65% vs CSV)
+│   ├── requirements.txt            Dependências do app (deploy isolado)
+│   ├── README.md                   Setup e deploy do agente
 │   └── .streamlit/
 │       ├── config.toml             Tema dark
 │       └── secrets.toml.example    Template da API key
@@ -400,17 +409,17 @@ O footer da aplicação Streamlit exibe o custo da sessão em tempo real, com tr
 
 - [x] Pipeline RFM modular com 51 testes pytest
 - [x] Cluster naming robusto (derivado do perfil R/F/M)
-- [x] 4 datamarts tipados em CSV (Power BI) e Parquet (Agent)
+- [x] 6 datamarts tipados em CSV (Power BI) · 5 em Parquet (Agent)
 - [x] Modelos preditivos validados (review ruim + estudo de recompra), sem leakage
 - [x] Dashboard Power BI (PBIP/TMDL) — 2 páginas, visuais em Deneb, tema dark
 - [x] Agente Streamlit com Claude Haiku 4.5 + 7 tools DuckDB validadas
 - [x] Tracking de custo em tempo real
 - [x] Conformidade WCAG AA (focus rings, ARIA, reduced-motion)
 - [x] Repositório publicado no GitHub
+- [x] Deploy do agente em Streamlit Community Cloud
 
 ### Em andamento
 
-- [ ] Deploy do agente em Streamlit Community Cloud
 - [ ] Publicação do dashboard no Power BI Service (+ screenshots/GIF no README)
 
 ### Backlog
@@ -429,7 +438,7 @@ complementares ficam **junto do código**:
 
 | Documento | Público-alvo |
 |---|---|
-| [`powerbi/dicionario_dados.md`](./powerbi/dicionario_dados.md) | Analistas BI — schema completo dos 4 datamarts |
+| [`powerbi/dicionario_dados.md`](./powerbi/dicionario_dados.md) | Analistas BI — schema completo dos 6 datamarts |
 | [`powerbi/GUIA_DESIGN_DASHBOARD.md`](./powerbi/GUIA_DESIGN_DASHBOARD.md) | Analistas BI — medidas DAX, theme JSON e visuais Deneb |
 | [`streamlit_agent/README.md`](./streamlit_agent/README.md) | Setup e deploy do agente de IA |
 
