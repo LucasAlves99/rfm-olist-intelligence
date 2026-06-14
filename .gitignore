@@ -80,6 +80,11 @@ streamlit_agent/.streamlit/secrets.toml
 **/key.txt
 **/*api*key*
 **/*secret*
+# ...exceto o template sem segredo (necessário para o setup do agente)
+!**/secrets.toml.example
 **/*credentials*
 *.pem
 *.key
+
+# Scripts geradores one-off do dashboard (ficam locais, fora do Git)
+powerbi/_*.py
