@@ -438,8 +438,9 @@ complementares ficam **junto do código**:
 
 | Documento | Público-alvo |
 |---|---|
+| [`powerbi/DOCUMENTACAO_PBI.md`](./powerbi/DOCUMENTACAO_PBI.md) | Analistas BI — referência técnica do artefato Power BI (modelo, 34 medidas DAX, relacionamentos, mapa de visuais) |
 | [`powerbi/dicionario_dados.md`](./powerbi/dicionario_dados.md) | Analistas BI — schema completo dos 6 datamarts |
-| [`powerbi/GUIA_DESIGN_DASHBOARD.md`](./powerbi/GUIA_DESIGN_DASHBOARD.md) | Analistas BI — medidas DAX, theme JSON e visuais Deneb |
+| [`powerbi/GUIA_DESIGN_DASHBOARD.md`](./powerbi/GUIA_DESIGN_DASHBOARD.md) | Analistas BI — rationale de design (medidas DAX, theme JSON, visuais Deneb) |
 | [`streamlit_agent/README.md`](./streamlit_agent/README.md) | Setup e deploy do agente de IA |
 
 ---
