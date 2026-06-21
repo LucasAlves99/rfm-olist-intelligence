@@ -15,10 +15,11 @@ import sys
 from pathlib import Path
 
 import joblib
-import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from src.export import write_powerbi_csv  # noqa: E402
 from train_review_model import build_features  # noqa: E402
 
 OUT = ROOT / "data" / "powerbi" / "risco_review_uf.csv"
@@ -42,7 +43,7 @@ def main() -> None:
     agg["Pct_Alto_Risco"] = (agg["Alto_Risco"] / agg["Pedidos"]).round(4)
     agg = agg.sort_values("Pct_Alto_Risco", ascending=False)
 
-    agg.to_csv(OUT, sep=";", decimal=",", encoding="utf-8-sig", index=False)
+    write_powerbi_csv(agg, OUT)
     print(f"Exportado: {OUT}")
     print(agg.head(10).to_string(index=False))
     print(

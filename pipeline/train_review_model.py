@@ -16,51 +16,65 @@ Rigor metodológico:
 - Tuning de threshold via probabilidades out-of-fold (sem vazar o teste).
 - Avaliação final em teste hold-out + análise de LIFT (valor de negócio).
 
+A infraestrutura de treino (modelos, CV, seleção, threshold, avaliação,
+persistência) é compartilhada com train_repeat_model.py via pipeline/ml_common.py.
+
 Uso:
     "C:/Users/Luk/anaconda3/python.exe" pipeline/train_review_model.py
 """
 
 from __future__ import annotations
 
-import json
+import sys
 import warnings
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from sklearn.compose import ColumnTransformer
-from sklearn.dummy import DummyClassifier
-from sklearn.ensemble import HistGradientBoostingClassifier, RandomForestClassifier
-from sklearn.impute import SimpleImputer
-from sklearn.inspection import permutation_importance
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import (
-    average_precision_score,
-    classification_report,
-    confusion_matrix,
-    f1_score,
-    precision_recall_curve,
-    roc_auc_score,
+from sklearn.model_selection import StratifiedKFold, train_test_split
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from ml_common import (  # noqa: E402
+    RANDOM_STATE,
+    build_candidates,
+    evaluate_holdout,
+    make_preprocessor,
+    permutation_top,
+    run_cross_validation,
+    save_artifacts,
+    select_best,
+    tune_threshold,
 )
-from sklearn.model_selection import (
-    StratifiedKFold,
-    cross_val_predict,
-    cross_validate,
-    train_test_split,
-)
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 warnings.filterwarnings("ignore")
 
-RANDOM_STATE = 42
 ROOT = Path(__file__).resolve().parents[1]
 RAW = ROOT / "data" / "raw"
 OUT_MODEL = ROOT / "models" / "review_model.pkl"
 OUT_METRICS = ROOT / "models" / "review_model_metrics.json"
 
+NUMERIC = [
+    "atraso_dias",
+    "tempo_entrega_dias",
+    "prazo_estimado_dias",
+    "atrasou",
+    "price_total",
+    "freight_total",
+    "freight_ratio",
+    "valor_por_item",
+    "n_items",
+    "n_sellers",
+    "n_products",
+    "payment_value",
+    "installments",
+    "n_payment_methods",
+    "mes",
+    "dow",
+]
+CATEG = ["cat", "customer_state", "payment_type"]
 
-# ───────────────────────────── 1. Feature engineering (até a entrega) ─────────────────────────────
+
+# ─────────────────────── 1. Feature engineering (até a entrega) ───────────────────────
 def build_features() -> tuple[pd.DataFrame, pd.Series]:
     orders = pd.read_csv(RAW / "olist_orders_dataset.csv")
     items = pd.read_csv(RAW / "olist_order_items_dataset.csv")
@@ -160,109 +174,36 @@ def build_features() -> tuple[pd.DataFrame, pd.Series]:
     return feats, y
 
 
-NUMERIC = [
-    "atraso_dias",
-    "tempo_entrega_dias",
-    "prazo_estimado_dias",
-    "atrasou",
-    "price_total",
-    "freight_total",
-    "freight_ratio",
-    "valor_por_item",
-    "n_items",
-    "n_sellers",
-    "n_products",
-    "payment_value",
-    "installments",
-    "n_payment_methods",
-    "mes",
-    "dow",
-]
-CATEG = ["cat", "customer_state", "payment_type"]
-
-
-def make_preprocessor() -> ColumnTransformer:
-    return ColumnTransformer(
-        [
-            (
-                "num",
-                Pipeline([("imp", SimpleImputer(strategy="median")), ("sc", StandardScaler())]),
-                NUMERIC,
-            ),
-            (
-                "cat",
-                OneHotEncoder(
-                    handle_unknown="infrequent_if_exist", min_frequency=0.01, sparse_output=False
-                ),
-                CATEG,
-            ),
-        ]
+def candidate_models():
+    return build_candidates(
+        lambda: make_preprocessor(NUMERIC, CATEG),
+        rf_kwargs={"n_estimators": 400, "max_depth": 14, "min_samples_leaf": 20},
+        hgb_kwargs={
+            "max_depth": 5,
+            "learning_rate": 0.07,
+            "max_iter": 500,
+            "l2_regularization": 1.0,
+        },
     )
 
 
-def candidate_models() -> dict[str, Pipeline]:
-    pre = make_preprocessor
-    return {
-        "Baseline (DummyMostFreq)": Pipeline(
-            [("pre", pre()), ("clf", DummyClassifier(strategy="most_frequent"))]
-        ),
-        "LogisticRegression": Pipeline(
-            [
-                ("pre", pre()),
-                (
-                    "clf",
-                    LogisticRegression(
-                        class_weight="balanced", max_iter=2000, C=0.5, random_state=RANDOM_STATE
-                    ),
-                ),
-            ]
-        ),
-        "RandomForest": Pipeline(
-            [
-                ("pre", pre()),
-                (
-                    "clf",
-                    RandomForestClassifier(
-                        n_estimators=400,
-                        max_depth=14,
-                        min_samples_leaf=20,
-                        class_weight="balanced_subsample",
-                        n_jobs=-1,
-                        random_state=RANDOM_STATE,
-                    ),
-                ),
-            ]
-        ),
-        "HistGradientBoosting": Pipeline(
-            [
-                ("pre", pre()),
-                (
-                    "clf",
-                    HistGradientBoostingClassifier(
-                        max_depth=5,
-                        learning_rate=0.07,
-                        max_iter=500,
-                        l2_regularization=1.0,
-                        early_stopping=True,
-                        validation_fraction=0.15,
-                        class_weight="balanced",
-                        random_state=RANDOM_STATE,
-                    ),
-                ),
-            ]
-        ),
-    }
-
-
-SCORING = {
-    "f1": "f1",
-    "pr_auc": "average_precision",
-    "roc_auc": "roc_auc",
-    "balanced_acc": "balanced_accuracy",
-    "accuracy": "accuracy",
-    "recall": "recall",
-    "precision": "precision",
-}
+def print_lift(y_te: pd.Series, proba: np.ndarray) -> None:
+    """LIFT — valor de negócio: captura de reviews ruins nos top decis de risco."""
+    print("\nLIFT (valor de negócio) — ordenando o teste por risco previsto:")
+    dfl = (
+        pd.DataFrame({"y": y_te.values, "p": proba})
+        .sort_values("p", ascending=False)
+        .reset_index(drop=True)
+    )
+    base = y_te.mean()
+    for q in (0.10, 0.20, 0.30):
+        k = int(len(dfl) * q)
+        cap = dfl.iloc[:k]["y"].sum() / y_te.sum()
+        rate = dfl.iloc[:k]["y"].mean()
+        print(
+            f"  top {int(q*100):>2}% risco: captura {cap:.1%} dos reviews ruins | "
+            f"taxa {rate:.1%} (lift {rate/base:.2f}x)"
+        )
 
 
 def main() -> None:
@@ -280,130 +221,23 @@ def main() -> None:
         X, y, test_size=0.20, stratify=y, random_state=RANDOM_STATE
     )
     cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=RANDOM_STATE)
-    results = {}
 
-    print("\n" + "-" * 80)
-    print("VALIDAÇÃO CRUZADA (5-fold) + diagnóstico de overfit  (gap = F1_treino - F1_CV)")
-    print("-" * 80)
-    print(
-        f"{'Modelo':<28}{'F1(CV)':>9}{'PR-AUC':>9}{'ROC':>8}{'BalAcc':>8}{'Acc':>8}{'F1(tr)':>8}{'gap':>7}"
+    models = candidate_models()
+    results = run_cross_validation(models, X_tr, y_tr, cv)
+    best_name = select_best(results)
+
+    best = models[best_name]
+    best_thr = tune_threshold(best, X_tr, y_tr, cv)
+
+    proba, test_metrics = evaluate_holdout(
+        best, X_tr, y_tr, X_te, y_te, best_thr, best_name,
+        target_names=["ok", "review_ruim"],
     )
-    for name, pipe in candidate_models().items():
-        r = cross_validate(
-            pipe, X_tr, y_tr, cv=cv, scoring=SCORING, return_train_score=True, n_jobs=-1
-        )
-        f1cv, f1tr = r["test_f1"].mean(), r["train_f1"].mean()
-        results[name] = {
-            "f1_cv": round(f1cv, 4),
-            "f1_cv_std": round(r["test_f1"].std(), 4),
-            "f1_train": round(f1tr, 4),
-            "overfit_gap": round(f1tr - f1cv, 4),
-            "pr_auc_cv": round(r["test_pr_auc"].mean(), 4),
-            "roc_auc_cv": round(r["test_roc_auc"].mean(), 4),
-            "balanced_acc_cv": round(r["test_balanced_acc"].mean(), 4),
-            "accuracy_cv": round(r["test_accuracy"].mean(), 4),
-            "recall_cv": round(r["test_recall"].mean(), 4),
-            "precision_cv": round(r["test_precision"].mean(), 4),
-        }
-        s = results[name]
-        print(
-            f"{name:<28}{f1cv:>9.3f}{s['pr_auc_cv']:>9.3f}{s['roc_auc_cv']:>8.3f}"
-            f"{s['balanced_acc_cv']:>8.3f}{s['accuracy_cv']:>8.3f}{f1tr:>8.3f}{s['overfit_gap']:>7.3f}"
-        )
+    print(f"(baseline PR-AUC = taxa positiva = {y.mean():.3f})")
 
-    def sel(r):
-        return r["f1_cv"] - 0.5 * max(0.0, r["overfit_gap"] - 0.03)
+    print_lift(y_te, proba)
+    imp = permutation_top(best, X_te, y_te, list(X.columns), n=10)
 
-    ranked = sorted(
-        ((n, r) for n, r in results.items() if not n.startswith("Baseline")),
-        key=lambda kv: sel(kv[1]),
-        reverse=True,
-    )
-    best_name = ranked[0][0]
-    print(f"\n>>> Melhor modelo (F1 CV penalizando overfit): {best_name}")
-
-    best = candidate_models()[best_name]
-    oof = cross_val_predict(best, X_tr, y_tr, cv=cv, method="predict_proba", n_jobs=-1)[:, 1]
-    prec, rec, thr = precision_recall_curve(y_tr, oof)
-    f1s = np.divide(2 * prec * rec, prec + rec, out=np.zeros_like(prec), where=(prec + rec) > 0)
-    best_thr = float(thr[np.argmax(f1s[:-1])]) if len(thr) else 0.5
-    print(f"Threshold ótimo (max F1 out-of-fold): {best_thr:.3f}")
-
-    best.fit(X_tr, y_tr)
-    proba = best.predict_proba(X_te)[:, 1]
-    pred_def = (proba >= 0.5).astype(int)
-    pred_tun = (proba >= best_thr).astype(int)
-
-    print("\n" + "=" * 80)
-    print(f"AVALIAÇÃO FINAL — TESTE hold-out 20% (n={len(X_te):,}) — {best_name}")
-    print("=" * 80)
-    for label, pred in [
-        ("threshold=0.50", pred_def),
-        (f"threshold={best_thr:.3f} (F1-ótimo)", pred_tun),
-    ]:
-        print(
-            f"\n· {label}  ->  F1={f1_score(y_te, pred, zero_division=0):.3f} | "
-            f"accuracy={(pred == y_te).mean():.3f}"
-        )
-        print(
-            "  "
-            + classification_report(
-                y_te, pred, digits=3, zero_division=0, target_names=["ok", "review_ruim"]
-            ).replace("\n", "\n  ")
-        )
-        tn, fp, fn, tp = confusion_matrix(y_te, pred).ravel()
-        print(f"  Matriz: TN={tn} FP={fp} FN={fn} TP={tp}")
-    pr_auc = average_precision_score(y_te, proba)
-    roc = roc_auc_score(y_te, proba)
-    print(f"\nPR-AUC (teste): {pr_auc:.3f}  (baseline={y.mean():.3f}) | ROC-AUC (teste): {roc:.3f}")
-
-    f1_tr_full = f1_score(
-        y_tr, (best.predict_proba(X_tr)[:, 1] >= best_thr).astype(int), zero_division=0
-    )
-    f1_te_tun = f1_score(y_te, pred_tun, zero_division=0)
-    print(
-        f"Overfit check final: F1 treino={f1_tr_full:.3f} vs teste={f1_te_tun:.3f} "
-        f"(gap={f1_tr_full - f1_te_tun:+.3f})"
-    )
-
-    # LIFT — valor de negócio: top decis por probabilidade
-    print("\nLIFT (valor de negócio) — ordenando o teste por risco previsto:")
-    dfl = (
-        pd.DataFrame({"y": y_te.values, "p": proba})
-        .sort_values("p", ascending=False)
-        .reset_index(drop=True)
-    )
-    base = y_te.mean()
-    for q in (0.10, 0.20, 0.30):
-        k = int(len(dfl) * q)
-        cap = dfl.iloc[:k]["y"].sum() / y_te.sum()
-        rate = dfl.iloc[:k]["y"].mean()
-        print(
-            f"  top {int(q*100):>2}% risco: captura {cap:.1%} dos reviews ruins | "
-            f"taxa {rate:.1%} (lift {rate/base:.2f}x)"
-        )
-
-    try:
-        perm = permutation_importance(
-            best,
-            X_te,
-            y_te,
-            scoring="average_precision",
-            n_repeats=5,
-            random_state=RANDOM_STATE,
-            n_jobs=-1,
-        )
-        imp = sorted(zip(X.columns, perm.importances_mean), key=lambda kv: kv[1], reverse=True)[:10]
-        print("\nTop features (permutation importance, drop em PR-AUC):")
-        for f, v in imp:
-            print(f"  {f:<22} {v:+.4f}")
-    except Exception as e:  # noqa
-        imp = []
-        print("permutation_importance pulado:", e)
-
-    import joblib
-
-    joblib.dump({"model": best, "threshold": best_thr, "features": list(X.columns)}, OUT_MODEL)
     metrics = {
         "problem": "bad_review_prediction (score<=2)",
         "n_samples": int(len(X)),
@@ -413,18 +247,10 @@ def main() -> None:
         "best_model": best_name,
         "best_threshold": round(best_thr, 4),
         "cv_results": results,
-        "test": {
-            "f1_default": round(float(f1_score(y_te, pred_def, zero_division=0)), 4),
-            "f1_tuned": round(float(f1_te_tun), 4),
-            "accuracy_tuned": round(float((pred_tun == y_te).mean()), 4),
-            "pr_auc": round(float(pr_auc), 4),
-            "roc_auc": round(float(roc), 4),
-            "overfit_gap_f1": round(float(f1_tr_full - f1_te_tun), 4),
-        },
+        "test": test_metrics,
         "top_features": [{"feature": f, "importance": round(float(v), 5)} for f, v in imp],
     }
-    OUT_METRICS.write_text(json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"\nModelo salvo em {OUT_MODEL}\nMétricas salvas em {OUT_METRICS}")
+    save_artifacts(best, best_thr, list(X.columns), metrics, OUT_MODEL, OUT_METRICS)
 
 
 if __name__ == "__main__":
