@@ -4,8 +4,9 @@
 
 **Segmentação estratégica de clientes com pipeline reproduzível, dashboard Power BI e agente conversacional publicado.**
 
-[![Tests](https://img.shields.io/badge/tests-51%20passing-brightgreen?style=flat-square)](./tests)
-[![Coverage](https://img.shields.io/badge/coverage-94%25-brightgreen?style=flat-square)](./tests)
+[![CI](https://github.com/LucasAlves99/rfm-olist-intelligence/actions/workflows/ci.yml/badge.svg)](https://github.com/LucasAlves99/rfm-olist-intelligence/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/badge/tests-73%20passing-brightgreen?style=flat-square)](./tests)
+[![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen?style=flat-square)](./tests)
 [![Python](https://img.shields.io/badge/python-3.13-blue?style=flat-square&logo=python&logoColor=white)](https://www.python.org)
 [![Pandas](https://img.shields.io/badge/pandas-2.2-150458?style=flat-square&logo=pandas&logoColor=white)](https://pandas.pydata.org)
 [![Scikit-Learn](https://img.shields.io/badge/scikit--learn-1.6-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
@@ -45,7 +46,7 @@
 
 Este projeto entrega uma solução completa de **inteligência de clientes** sobre a base pública da Olist (e-commerce brasileiro, ~100 mil pedidos), combinando quatro componentes integrados:
 
-1. **Pipeline analítico** — código Python modular que transforma 5 CSVs brutos em datamarts tipados, aplicando segmentação RFM, clusterização KMeans e projeção de Customer Lifetime Value. Validado por 51 testes automatizados.
+1. **Pipeline analítico** — código Python modular que transforma 5 CSVs brutos em datamarts tipados, aplicando segmentação RFM, clusterização KMeans e projeção de Customer Lifetime Value. Validado por 73 testes automatizados.
 
 2. **Modelos preditivos (ML)** — classificação supervisionada com rigor metodológico (comparação multi-algoritmo, validação cruzada estratificada, diagnóstico de overfit, tuning de threshold e análise de lift, **sem data leakage**). O modelo principal prevê **review ruim** no momento da entrega, habilitando *service recovery* proativo (alavanca de NPS/retenção).
 
@@ -73,7 +74,7 @@ O diferencial arquitetural é a **integração híbrida BI + IA generativa**: o 
 │  → clustering (KMeans) → CLV → export              │
 │                                                    │
 │  Orquestrado por pipeline/run_pipeline.py          │
-│  Validado por 51 testes pytest                     │
+│  Validado por 73 testes pytest                     │
 └────────┬───────────────────────────────────────────┘
          │
          ▼
@@ -115,7 +116,7 @@ O diferencial arquitetural é a **integração híbrida BI + IA generativa**: o 
 | Coeficiente de Gini | 0,66 (concentração severa) |
 | Pareto observado | Top 20% dos clientes gera 65% da receita |
 | Silhouette score (K=4) | 0,369 (separação aceitável) |
-| Cobertura de testes | 51/51 passando |
+| Cobertura de testes | 73/73 passando · 90% |
 
 ### Segmentos identificados
 
@@ -149,7 +150,7 @@ Operacionalizado em lote (`score_review_risk.py`) → tabela de **risco por esta
 |---|---|
 | Análise e modelagem | Python 3.13, pandas 2.2, NumPy, scikit-learn 1.6, joblib, PyYAML |
 | Modelos preditivos | scikit-learn (RandomForest, HistGradientBoosting, LogisticRegression), imbalanced-learn (SMOTE) |
-| Qualidade | pytest 8.3 (51 testes), ruff, black |
+| Qualidade | pytest 8.3 (73 testes), ruff, black |
 | Visualização | Power BI (PBIR/TMDL), DAX, Deneb (Vega-Lite), HTML Content visual (AppSource) |
 | Agente conversacional | Streamlit 1.32+, Anthropic SDK 0.40+, Claude Haiku 4.5, DuckDB 1.0+, PyArrow 14+ |
 | Hospedagem | Streamlit Community Cloud (free tier), Power BI Service |
@@ -244,7 +245,7 @@ rfm-olist-intelligence/
 │   ├── clustering.py               Pipeline KMeans, serialização, elbow
 │   └── export.py                   Exportação tipada para Power BI
 │
-├── tests/                          51 testes pytest
+├── tests/                          73 testes pytest
 │   ├── test_data_quality.py        11 testes
 │   ├── test_rfm.py                  8 testes
 │   ├── test_segmentation.py        20 testes
@@ -300,14 +301,14 @@ pytest tests/ -v
 ```
 ========================== test session starts ==========================
 platform win32 -- Python 3.13.5, pytest-8.3.4, pluggy-1.5.0
-collected 51 items
+collected 73 items
 
 tests/test_data_quality.py ............    [ 21%]   11 passed
 tests/test_rfm.py ........                 [ 37%]    8 passed
 tests/test_segmentation.py ...............  [ 76%]   20 passed
 tests/test_utils.py ............           [100%]   12 passed
 
-========================== 51 passed in 4.40s ===========================
+========================== 73 passed in 12.5s ===========================
 ```
 
 Destaque para o teste `test_robust_to_id_permutation`, que valida a invariância dos nomes de cluster em relação aos IDs aleatórios do KMeans — propriedade fundamental para reprodutibilidade entre re-treinos.
@@ -407,7 +408,7 @@ O footer da aplicação Streamlit exibe o custo da sessão em tempo real, com tr
 
 ### Concluído
 
-- [x] Pipeline RFM modular com 51 testes pytest
+- [x] Pipeline RFM modular com 73 testes pytest
 - [x] Cluster naming robusto (derivado do perfil R/F/M)
 - [x] 6 datamarts tipados em CSV (Power BI) · 5 em Parquet (Agent)
 - [x] Modelos preditivos validados (review ruim + estudo de recompra), sem leakage
@@ -438,8 +439,9 @@ complementares ficam **junto do código**:
 
 | Documento | Público-alvo |
 |---|---|
+| [`powerbi/DOCUMENTACAO_PBI.md`](./powerbi/DOCUMENTACAO_PBI.md) | Analistas BI — referência técnica do artefato Power BI (modelo, 34 medidas DAX, relacionamentos, mapa de visuais) |
 | [`powerbi/dicionario_dados.md`](./powerbi/dicionario_dados.md) | Analistas BI — schema completo dos 6 datamarts |
-| [`powerbi/GUIA_DESIGN_DASHBOARD.md`](./powerbi/GUIA_DESIGN_DASHBOARD.md) | Analistas BI — medidas DAX, theme JSON e visuais Deneb |
+| [`powerbi/GUIA_DESIGN_DASHBOARD.md`](./powerbi/GUIA_DESIGN_DASHBOARD.md) | Analistas BI — rationale de design (medidas DAX, theme JSON, visuais Deneb) |
 | [`streamlit_agent/README.md`](./streamlit_agent/README.md) | Setup e deploy do agente de IA |
 
 ---

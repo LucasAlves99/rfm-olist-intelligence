@@ -94,6 +94,55 @@ table _KPIs
 		displayFolder: Temporal
 		lineageTag: 54c4f138-0004-408c-b52f-ce152c2914f2
 
+	measure 'Receita Mes' =
+			VAR maxd = MAX(fato_pedidos[order_purchase_timestamp])
+			VAR refDate = IF(maxd < EOMONTH(maxd, 0), EOMONTH(maxd, -1), maxd)
+			VAR y = YEAR(refDate)
+			VAR m = MONTH(refDate)
+			RETURN CALCULATE(SUM(fato_pedidos[monetary_value]), FILTER(ALL(dim_calendario), dim_calendario[Ano]=y && dim_calendario[Mes]=m))
+		formatString: "R$ "#,0
+		displayFolder: Mensal
+		lineageTag: 7b2c0010-0001-4aaa-9bbb-000000000010
+
+	measure 'Pedidos Mes' =
+			VAR maxd = MAX(fato_pedidos[order_purchase_timestamp])
+			VAR refDate = IF(maxd < EOMONTH(maxd, 0), EOMONTH(maxd, -1), maxd)
+			VAR y = YEAR(refDate)
+			VAR m = MONTH(refDate)
+			RETURN CALCULATE(COUNTROWS(fato_pedidos), FILTER(ALL(dim_calendario), dim_calendario[Ano]=y && dim_calendario[Mes]=m))
+		formatString: #,0
+		displayFolder: Mensal
+		lineageTag: 7b2c0010-0002-4aaa-9bbb-000000000011
+
+	measure 'Clientes Ativos Mes' =
+			VAR maxd = MAX(fato_pedidos[order_purchase_timestamp])
+			VAR refDate = IF(maxd < EOMONTH(maxd, 0), EOMONTH(maxd, -1), maxd)
+			VAR y = YEAR(refDate)
+			VAR m = MONTH(refDate)
+			RETURN CALCULATE(DISTINCTCOUNT(fato_pedidos[customer_unique_id]), FILTER(ALL(dim_calendario), dim_calendario[Ano]=y && dim_calendario[Mes]=m))
+		formatString: #,0
+		displayFolder: Mensal
+		lineageTag: 7b2c0010-0003-4aaa-9bbb-000000000012
+
+	measure 'Ticket Mes' = DIVIDE([Receita Mes], [Pedidos Mes])
+		formatString: "R$ "#,0.00
+		displayFolder: Mensal
+		lineageTag: 7b2c0010-0004-4aaa-9bbb-000000000013
+
+	measure 'Pedidos MoM %' =
+			VAR maxd = MAX(fato_pedidos[order_purchase_timestamp])
+			VAR refDate = IF(maxd < EOMONTH(maxd, 0), EOMONTH(maxd, -1), maxd)
+			VAR y = YEAR(refDate)
+			VAR m = MONTH(refDate)
+			VAR pm = IF(m=1,12,m-1)
+			VAR py = IF(m=1,y-1,y)
+			VAR a = CALCULATE(COUNTROWS(fato_pedidos), FILTER(ALL(dim_calendario), dim_calendario[Ano]=y && dim_calendario[Mes]=m))
+			VAR bb = CALCULATE(COUNTROWS(fato_pedidos), FILTER(ALL(dim_calendario), dim_calendario[Ano]=py && dim_calendario[Mes]=pm))
+			RETURN DIVIDE(a-bb, bb)
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Mensal
+		lineageTag: 7b2c0010-0005-4aaa-9bbb-000000000014
+
 	column _
 		lineageTag: 59dbd32a-6823-4319-8cf0-46a109642445
 		sourceColumn: [Value]

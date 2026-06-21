@@ -2,6 +2,10 @@
 
 > Como o dashboard foi construído no Power BI e como evoluí-lo. As seções de coordenadas/medidas
 > abaixo são a referência de design; o estado atual já implementado está resumido logo a seguir.
+>
+> 📘 **Referência técnica do artefato (modelo, medidas DAX, relacionamentos, mapa de visuais):**
+> [`DOCUMENTACAO_PBI.md`](./DOCUMENTACAO_PBI.md). As coordenadas **1920×1080** deste guia são
+> legado — o estado implementado é **1280×720** (ver §5 da documentação técnica).
 
 ---
 

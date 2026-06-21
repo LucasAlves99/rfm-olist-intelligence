@@ -3,34 +3,38 @@ table _Background
 
 	/// HTML chrome Pagina 1
 	measure '_BG Pagina 1' =
-			VAR vCli = FORMAT(DIVIDE([Total Clientes],1000),"#,##0","pt-BR") & " Mil"
+			VAR vCli = FORMAT([Clientes Ativos Mes],"#,##0","pt-BR")
 			VAR mCli = [Clientes Ativos MoM %]
-			VAR vRec = "R$ " & FORMAT(DIVIDE([Receita Total],1000000),"#,##0","pt-BR") & " Mi"
+			VAR vRec = "R$ " & FORMAT(DIVIDE([Receita Mes],1000000),"#,##0.0","pt-BR") & " mi"
 			VAR mRec = [Receita MoM %]
-			VAR vTic = "R$ " & FORMAT([Ticket Medio],"#,##0.00","pt-BR")
+			VAR vTic = "R$ " & FORMAT([Ticket Mes],"#,##0.00","pt-BR")
 			VAR mTic = [Ticket MoM %]
+			VAR mPed = [Pedidos MoM %]
+			VAR vPed = FORMAT([Pedidos Mes],"#,##0","pt-BR")
+			VAR clsPed = IF(ABS(mPed)<0.01,"flat",IF(mPed>=0,"up","down"))
+			VAR pillPed = IF(mPed>=0,"+","") & FORMAT(mPed,"0.0%","pt-BR") & " no m&#234;s"
 			VAR pRis = [% Em Risco]
 			VAR vRis = FORMAT(pRis,"0.0%","pt-BR")
 			VAR fCli = (MAX(0.85,MIN(1.15,1+mCli))-0.85)/0.30*100
 			VAR fRec = (MAX(0.85,MIN(1.15,1+mRec))-0.85)/0.30*100
 			VAR fTic = (MAX(0.85,MIN(1.15,1+mTic))-0.85)/0.30*100
 			VAR fRis = MIN(pRis,0.40)/0.40*100
-			VAR clsCli = IF(mCli>=0,"up","down")
-			VAR clsRec = IF(mRec>=0,"up","down")
-			VAR clsTic = IF(mTic>=0,"up","down")
+			VAR clsCli = IF(ABS(mCli)<0.01,"flat",IF(mCli>=0,"up","down"))
+			VAR clsRec = IF(ABS(mRec)<0.01,"flat",IF(mRec>=0,"up","down"))
+			VAR clsTic = IF(ABS(mTic)<0.01,"flat",IF(mTic>=0,"up","down"))
 			VAR clsRis = IF(pRis>0.2,"warn","up")
 			VAR colCli = IF(mCli>=0,"#34D399","#E5484D")
 			VAR colRec = IF(mRec>=0,"#34D399","#E5484D")
 			VAR colTic = IF(mTic>=0,"#34D399","#E5484D")
 			VAR colRis = IF(pRis>0.2,"#F2C94C","#34D399")
-			VAR pillCli = "MoM " & IF(mCli>=0,"+","") & FORMAT(mCli,"0.0%","pt-BR")
-			VAR pillRec = "MoM " & IF(mRec>=0,"+","") & FORMAT(mRec,"0.0%","pt-BR")
-			VAR pillTic = "MoM " & IF(mTic>=0,"+","") & FORMAT(mTic,"0.0%","pt-BR")
+			VAR pillCli = IF(mCli>=0,"+","") & FORMAT(mCli,"0.0%","pt-BR") & " no m&#234;s"
+			VAR pillRec = IF(mRec>=0,"+","") & FORMAT(mRec,"0.0%","pt-BR") & " no m&#234;s"
+			VAR pillTic = IF(mTic>=0,"+","") & FORMAT(mTic,"0.0%","pt-BR") & " no m&#234;s"
 			VAR pillRis = IF(pRis>0.2,"alto","saud&#225;vel")
-			VAR kpiCli = "<div class=""kpi champions""><div class=""top""><div class=""label-row""><span class=""dot""></span><span class=""label"">Total de clientes</span></div><span class=""pill " & clsCli & """>" & pillCli & "</span></div><div class=""value"">" & vCli & "</div><div class=""bar""><div class=""bar-fill"" style=""width:" & FORMAT(fCli,"0") & "%;background:" & colCli & """></div><div class=""bar-tick""></div></div></div>"
-			VAR kpiRec = "<div class=""kpi big-spenders""><div class=""top""><div class=""label-row""><span class=""dot""></span><span class=""label"">Receita total</span></div><span class=""pill " & clsRec & """>" & pillRec & "</span></div><div class=""value"">" & vRec & "</div><div class=""bar""><div class=""bar-fill"" style=""width:" & FORMAT(fRec,"0") & "%;background:" & colRec & """></div><div class=""bar-tick""></div></div></div>"
-			VAR kpiTic = "<div class=""kpi novos""><div class=""top""><div class=""label-row""><span class=""dot""></span><span class=""label"">Ticket m&#233;dio</span></div><span class=""pill " & clsTic & """>" & pillTic & "</span></div><div class=""value"">" & vTic & "</div><div class=""bar""><div class=""bar-fill"" style=""width:" & FORMAT(fTic,"0") & "%;background:" & colTic & """></div><div class=""bar-tick""></div></div></div>"
-			VAR kpiRis = "<div class=""kpi em-risco""><div class=""top""><div class=""label-row""><span class=""dot""></span><span class=""label"" title=""Clientes inativos h&#225; mais de 1 ano (rec&#234;ncia &#62; 365 dias) &#8212; alto risco de churn"">Em risco de churn</span></div><span class=""pill " & clsRis & """>" & pillRis & "</span></div><div class=""value"">" & vRis & "</div><div class=""bar""><div class=""bar-fill"" style=""width:" & FORMAT(fRis,"0") & "%;background:" & colRis & """></div><div class=""bar-tick""></div></div></div>"
+			VAR kpiCli = "<div class=""kpi champions""><div class=""top""><div class=""label-row""><span class=""dot""></span><span class=""label"">Receita do m&#234;s</span></div><span class=""pill " & clsRec & """>" & pillRec & "</span></div><div class=""value"">" & vRec & "</div><div class=""spark"">" & [_Spark Receita] & "</div></div>"
+			VAR kpiRec = "<div class=""kpi big-spenders""><div class=""top""><div class=""label-row""><span class=""dot""></span><span class=""label"">Pedidos do m&#234;s</span></div><span class=""pill " & clsPed & """>" & pillPed & "</span></div><div class=""value"">" & vPed & "</div><div class=""spark"">" & [_Spark Pedidos] & "</div></div>"
+			VAR kpiTic = "<div class=""kpi novos""><div class=""top""><div class=""label-row""><span class=""dot""></span><span class=""label"">Ticket m&#233;dio</span></div><span class=""pill " & clsTic & """>" & pillTic & "</span></div><div class=""value"">" & vTic & "</div><div class=""spark"">" & [_Spark Ticket] & "</div></div>"
+			VAR kpiRis = "<div class=""kpi em-risco""><div class=""top""><div class=""label-row""><span class=""dot""></span><span class=""label"">Clientes ativos</span></div><span class=""pill " & clsCli & """>" & pillCli & "</span></div><div class=""value"">" & vCli & "</div><div class=""spark"">" & [_Spark Clientes] & "</div></div>"
 			RETURN
 			"<!DOCTYPE html>
 			<html lang=""pt-BR"">
@@ -234,9 +238,11 @@ table _Background
 			  .kpi .pill.up   { background: #15351f; color: #34D399; }
 			  .kpi .pill.down { background: #3a1416; color: #E5484D; }
 			  .kpi .pill.warn { background: #3a3115; color: #F2C94C; }
+				  .kpi .pill.flat { background: #26272E; color: #A1A1AA; }
 			  .kpi .bar { position: relative; height: 5px; border-radius: 3px; background: rgba(255,255,255,0.12); }
 			  .kpi .bar-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; }
 			  .kpi .bar-tick { position: absolute; left: 50%; top: -3px; width: 2px; height: 11px; border-radius: 1px; background: rgba(255,255,255,0.8); }
+				  .kpi .spark { margin-top: 4px; line-height: 0; }
 			
 			  /* &#9472;&#9472;&#9472; Page 1 layout &#9472;&#9472;&#9472; */
 			  .content { display: grid; grid-template-columns: 74% 26%; gap: 8px; min-height: 0; }
@@ -249,7 +255,7 @@ table _Background
 			    backdrop-filter: blur(20px) saturate(140%);
 			    border: 1px solid var(--border);
 			    border-radius: 12px;
-			    padding: 10px 12px;
+			    padding: 5px 12px 10px 12px;
 			    display: flex; flex-direction: column;
 			    min-height: 0; position: relative; overflow: hidden; gap: 8px;
 			  }
@@ -381,7 +387,7 @@ table _Background
 			          <div class=""panel-header"">
 			            <div>
 			              <h2 class=""panel-title"">Distribui&#231;&#227;o de receita por cluster</h2>
-			              <div class=""panel-sub"">Tamanho proporcional &#224; receita &#183; Cor por segmento</div>
+			
 			            </div>
 			            <div class=""panel-badge badge-purple"">Treemap</div>
 			          </div>
@@ -402,7 +408,7 @@ table _Background
 			            <div class=""panel-header"">
 			              <div>
 			                <h2 class=""panel-title"">CLV projetado vs Ticket atual</h2>
-			                <div class=""panel-sub"">12 meses projetados &#183; oportunidade por segmento</div>
+			                <div class=""panel-sub"">Ticket atual vs CLV projetado 12 meses</div>
 			              </div>
 			              <div class=""panel-badge badge-green"">Projeção</div>
 			            </div>
@@ -824,6 +830,98 @@ table _Background
 			"<!DOCTYPE html><html><head><meta charset='UTF-8'><style>" & css & "</style></head><body><div class='w'>" & rowRisco & rowBig & rowNovos & rowCamp & "</div></body></html>"
 		displayFolder: Cards SVG
 		lineageTag: 6fe8b3b0-0002-4ba0-897c-1480182bbc81
+
+	/// Sparkline 12 meses - Clientes
+	measure '_Spark Clientes' =
+			VAR _N = 12
+			VAR _Color = "#E5484D"
+			VAR _W = 120
+			VAR _H = 24
+			VAR _Pad = 3
+			VAR _MaxDate = MAX(fato_pedidos[order_purchase_timestamp])
+			VAR _RefDate = IF(_MaxDate < EOMONTH(_MaxDate,0), EOMONTH(_MaxDate,-1), EOMONTH(_MaxDate,0))
+			VAR _Series = ADDCOLUMNS(GENERATESERIES(0, _N-1, 1), "@val", VAR _off = [Value] VAR _d = EDATE(_RefDate, _off-(_N-1)) VAR _yy = YEAR(_d) VAR _mm = MONTH(_d) RETURN CALCULATE(DISTINCTCOUNT(fato_pedidos[customer_unique_id]), FILTER(ALL(dim_calendario), dim_calendario[Ano]=_yy && dim_calendario[Mes]=_mm)))
+			VAR _Min = MINX(_Series,[@val])
+			VAR _Max = MAXX(_Series,[@val])
+			VAR _Rng = _Max-_Min
+			VAR _InnerH = _H-2*_Pad
+			VAR _Pts = CONCATENATEX(_Series, FORMAT(DIVIDE([Value],_N-1)*_W,"0") & "," & FORMAT(_H-_Pad-DIVIDE([@val]-_Min,_Rng,0.5)*_InnerH,"0"), " ", [Value], ASC)
+			VAR _LastY = _H-_Pad-DIVIDE(MAXX(FILTER(_Series,[Value]=_N-1),[@val])-_Min,_Rng,0.5)*_InnerH
+			VAR _Area = "<polygon points=""0," & _H & " " & _Pts & " " & _W & "," & _H & """ fill=""" & _Color & """ fill-opacity=""0.12""/>"
+			VAR _Line = "<polyline points=""" & _Pts & """ fill=""none"" stroke=""" & _Color & """ stroke-width=""1.5"" stroke-linejoin=""round"" stroke-linecap=""round""/>"
+			VAR _Dot = "<circle cx=""" & _W & """ cy=""" & FORMAT(_LastY,"0") & """ r=""2.2"" fill=""" & _Color & """/>"
+			RETURN "<svg xmlns=""http://www.w3.org/2000/svg"" viewBox=""0 0 " & _W & " " & _H & """ preserveAspectRatio=""none"" style=""width:100%;height:" & _H & "px;display:block"">" & _Area & _Line & _Dot & "</svg>"
+		displayFolder: Sparklines
+		lineageTag: 7a1c0001-aaaa-4bbb-8ccc-000000000001
+
+	/// Sparkline 12 meses - Receita
+	measure '_Spark Receita' =
+			VAR _N = 12
+			VAR _Color = "#5E6AD2"
+			VAR _W = 120
+			VAR _H = 24
+			VAR _Pad = 3
+			VAR _MaxDate = MAX(fato_pedidos[order_purchase_timestamp])
+			VAR _RefDate = IF(_MaxDate < EOMONTH(_MaxDate,0), EOMONTH(_MaxDate,-1), EOMONTH(_MaxDate,0))
+			VAR _Series = ADDCOLUMNS(GENERATESERIES(0, _N-1, 1), "@val", VAR _off = [Value] VAR _d = EDATE(_RefDate, _off-(_N-1)) VAR _yy = YEAR(_d) VAR _mm = MONTH(_d) RETURN CALCULATE(SUM(fato_pedidos[monetary_value]), FILTER(ALL(dim_calendario), dim_calendario[Ano]=_yy && dim_calendario[Mes]=_mm)))
+			VAR _Min = MINX(_Series,[@val])
+			VAR _Max = MAXX(_Series,[@val])
+			VAR _Rng = _Max-_Min
+			VAR _InnerH = _H-2*_Pad
+			VAR _Pts = CONCATENATEX(_Series, FORMAT(DIVIDE([Value],_N-1)*_W,"0") & "," & FORMAT(_H-_Pad-DIVIDE([@val]-_Min,_Rng,0.5)*_InnerH,"0"), " ", [Value], ASC)
+			VAR _LastY = _H-_Pad-DIVIDE(MAXX(FILTER(_Series,[Value]=_N-1),[@val])-_Min,_Rng,0.5)*_InnerH
+			VAR _Area = "<polygon points=""0," & _H & " " & _Pts & " " & _W & "," & _H & """ fill=""" & _Color & """ fill-opacity=""0.12""/>"
+			VAR _Line = "<polyline points=""" & _Pts & """ fill=""none"" stroke=""" & _Color & """ stroke-width=""1.5"" stroke-linejoin=""round"" stroke-linecap=""round""/>"
+			VAR _Dot = "<circle cx=""" & _W & """ cy=""" & FORMAT(_LastY,"0") & """ r=""2.2"" fill=""" & _Color & """/>"
+			RETURN "<svg xmlns=""http://www.w3.org/2000/svg"" viewBox=""0 0 " & _W & " " & _H & """ preserveAspectRatio=""none"" style=""width:100%;height:" & _H & "px;display:block"">" & _Area & _Line & _Dot & "</svg>"
+		displayFolder: Sparklines
+		lineageTag: 7a1c0001-aaaa-4bbb-8ccc-000000000002
+
+	/// Sparkline 12 meses - Ticket
+	measure '_Spark Ticket' =
+			VAR _N = 12
+			VAR _Color = "#F2C94C"
+			VAR _W = 120
+			VAR _H = 24
+			VAR _Pad = 3
+			VAR _MaxDate = MAX(fato_pedidos[order_purchase_timestamp])
+			VAR _RefDate = IF(_MaxDate < EOMONTH(_MaxDate,0), EOMONTH(_MaxDate,-1), EOMONTH(_MaxDate,0))
+			VAR _Series = ADDCOLUMNS(GENERATESERIES(0, _N-1, 1), "@val", VAR _off = [Value] VAR _d = EDATE(_RefDate, _off-(_N-1)) VAR _yy = YEAR(_d) VAR _mm = MONTH(_d) RETURN CALCULATE(DIVIDE(SUM(fato_pedidos[monetary_value]), COUNTROWS(fato_pedidos)), FILTER(ALL(dim_calendario), dim_calendario[Ano]=_yy && dim_calendario[Mes]=_mm)))
+			VAR _Min = MINX(_Series,[@val])
+			VAR _Max = MAXX(_Series,[@val])
+			VAR _Rng = _Max-_Min
+			VAR _InnerH = _H-2*_Pad
+			VAR _Pts = CONCATENATEX(_Series, FORMAT(DIVIDE([Value],_N-1)*_W,"0") & "," & FORMAT(_H-_Pad-DIVIDE([@val]-_Min,_Rng,0.5)*_InnerH,"0"), " ", [Value], ASC)
+			VAR _LastY = _H-_Pad-DIVIDE(MAXX(FILTER(_Series,[Value]=_N-1),[@val])-_Min,_Rng,0.5)*_InnerH
+			VAR _Area = "<polygon points=""0," & _H & " " & _Pts & " " & _W & "," & _H & """ fill=""" & _Color & """ fill-opacity=""0.12""/>"
+			VAR _Line = "<polyline points=""" & _Pts & """ fill=""none"" stroke=""" & _Color & """ stroke-width=""1.5"" stroke-linejoin=""round"" stroke-linecap=""round""/>"
+			VAR _Dot = "<circle cx=""" & _W & """ cy=""" & FORMAT(_LastY,"0") & """ r=""2.2"" fill=""" & _Color & """/>"
+			RETURN "<svg xmlns=""http://www.w3.org/2000/svg"" viewBox=""0 0 " & _W & " " & _H & """ preserveAspectRatio=""none"" style=""width:100%;height:" & _H & "px;display:block"">" & _Area & _Line & _Dot & "</svg>"
+		displayFolder: Sparklines
+		lineageTag: 7a1c0001-aaaa-4bbb-8ccc-000000000003
+
+	/// Sparkline 12 meses - Pedidos
+	measure '_Spark Pedidos' =
+			VAR _N = 12
+			VAR _Color = "#BF6FF8"
+			VAR _W = 120
+			VAR _H = 24
+			VAR _Pad = 3
+			VAR _MaxDate = MAX(fato_pedidos[order_purchase_timestamp])
+			VAR _RefDate = IF(_MaxDate < EOMONTH(_MaxDate,0), EOMONTH(_MaxDate,-1), EOMONTH(_MaxDate,0))
+			VAR _Series = ADDCOLUMNS(GENERATESERIES(0, _N-1, 1), "@val", VAR _off = [Value] VAR _d = EDATE(_RefDate, _off-(_N-1)) VAR _yy = YEAR(_d) VAR _mm = MONTH(_d) RETURN CALCULATE(COUNTROWS(fato_pedidos), FILTER(ALL(dim_calendario), dim_calendario[Ano]=_yy && dim_calendario[Mes]=_mm)))
+			VAR _Min = MINX(_Series,[@val])
+			VAR _Max = MAXX(_Series,[@val])
+			VAR _Rng = _Max-_Min
+			VAR _InnerH = _H-2*_Pad
+			VAR _Pts = CONCATENATEX(_Series, FORMAT(DIVIDE([Value],_N-1)*_W,"0") & "," & FORMAT(_H-_Pad-DIVIDE([@val]-_Min,_Rng,0.5)*_InnerH,"0"), " ", [Value], ASC)
+			VAR _LastY = _H-_Pad-DIVIDE(MAXX(FILTER(_Series,[Value]=_N-1),[@val])-_Min,_Rng,0.5)*_InnerH
+			VAR _Area = "<polygon points=""0," & _H & " " & _Pts & " " & _W & "," & _H & """ fill=""" & _Color & """ fill-opacity=""0.12""/>"
+			VAR _Line = "<polyline points=""" & _Pts & """ fill=""none"" stroke=""" & _Color & """ stroke-width=""1.5"" stroke-linejoin=""round"" stroke-linecap=""round""/>"
+			VAR _Dot = "<circle cx=""" & _W & """ cy=""" & FORMAT(_LastY,"0") & """ r=""2.2"" fill=""" & _Color & """/>"
+			RETURN "<svg xmlns=""http://www.w3.org/2000/svg"" viewBox=""0 0 " & _W & " " & _H & """ preserveAspectRatio=""none"" style=""width:100%;height:" & _H & "px;display:block"">" & _Area & _Line & _Dot & "</svg>"
+		displayFolder: Sparklines
+		lineageTag: 7a1c0001-aaaa-4bbb-8ccc-000000000004
 
 	column _
 		lineageTag: e491dcc1-a3ea-4178-93f1-8fe0870b8851
