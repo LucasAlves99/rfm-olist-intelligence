@@ -1,0 +1,113 @@
+{
+  "problem": "repeat_purchase_propensity",
+  "n_samples": 93358,
+  "positive_rate": 0.03,
+  "random_state": 42,
+  "cv_folds": 5,
+  "best_model": "LogisticRegression",
+  "best_threshold": 0.6199,
+  "cv_results": {
+    "Baseline (DummyMostFreq)": {
+      "f1_cv": 0.0,
+      "f1_cv_std": 0.0,
+      "f1_train": 0.0,
+      "overfit_gap": 0.0,
+      "pr_auc_cv": 0.03,
+      "roc_auc_cv": 0.5,
+      "balanced_acc_cv": 0.5,
+      "accuracy_cv": 0.97,
+      "recall_cv": 0.0,
+      "precision_cv": 0.0
+    },
+    "LogisticRegression": {
+      "f1_cv": 0.0893,
+      "f1_cv_std": 0.0029,
+      "f1_train": 0.0911,
+      "overfit_gap": 0.0018,
+      "pr_auc_cv": 0.0544,
+      "roc_auc_cv": 0.6607,
+      "balanced_acc_cv": 0.615,
+      "accuracy_cv": 0.6386,
+      "recall_cv": 0.5899,
+      "precision_cv": 0.0483
+    },
+    "RandomForest": {
+      "f1_cv": 0.0912,
+      "f1_cv_std": 0.0037,
+      "f1_train": 0.1349,
+      "overfit_gap": 0.0437,
+      "pr_auc_cv": 0.0548,
+      "roc_auc_cv": 0.6539,
+      "balanced_acc_cv": 0.5983,
+      "accuracy_cv": 0.7189,
+      "recall_cv": 0.4699,
+      "precision_cv": 0.0505
+    },
+    "HistGradientBoosting": {
+      "f1_cv": 0.0829,
+      "f1_cv_std": 0.0017,
+      "f1_train": 0.0969,
+      "overfit_gap": 0.014,
+      "pr_auc_cv": 0.0542,
+      "roc_auc_cv": 0.6511,
+      "balanced_acc_cv": 0.6012,
+      "accuracy_cv": 0.5988,
+      "recall_cv": 0.6037,
+      "precision_cv": 0.0445
+    },
+    "SMOTE + LogisticRegression": {
+      "f1_cv": 0.0888,
+      "f1_cv_std": 0.0029,
+      "f1_train": 0.0909,
+      "overfit_gap": 0.0021,
+      "pr_auc_cv": 0.0543,
+      "roc_auc_cv": 0.655,
+      "balanced_acc_cv": 0.6136,
+      "accuracy_cv": 0.638,
+      "recall_cv": 0.5877,
+      "precision_cv": 0.048
+    }
+  },
+  "test": {
+    "f1_default": 0.0841,
+    "f1_tuned": 0.091,
+    "accuracy_tuned": 0.8331,
+    "pr_auc": 0.0492,
+    "roc_auc": 0.6442,
+    "overfit_gap_f1": 0.0129
+  },
+  "top_features": [
+    {
+      "feature": "year",
+      "importance": 0.01346
+    },
+    {
+      "feature": "month",
+      "importance": 0.00603
+    },
+    {
+      "feature": "category",
+      "importance": 0.00587
+    },
+    {
+      "feature": "n_items",
+      "importance": 0.00191
+    },
+    {
+      "feature": "avg_item_value",
+      "importance": 0.00156
+    },
+    {
+      "feature": "state",
+      "importance": 0.00076
+    },
+    {
+      "feature": "quarter",
+      "importance": 0.00053
+    },
+    {
+      "feature": "n_payments",
+      "importance": 0.00017
+    }
+  ]
+}
