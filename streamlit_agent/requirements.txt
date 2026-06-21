@@ -1,8 +1,8 @@
 # Streamlit Agent - Analista RFM Olist
-# Python 3.10+
+# Python 3.10+ — versões pinadas para reprodutibilidade do deploy.
 
-streamlit>=1.32.0
-anthropic>=0.40.0
-duckdb>=1.0.0
-pandas>=2.0.0
-pyarrow>=14.0.0
+streamlit==1.45.1
+anthropic==0.100.0
+duckdb==1.5.2
+pandas==2.2.3
+pyarrow==19.0.0
