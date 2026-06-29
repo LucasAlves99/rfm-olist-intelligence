@@ -113,8 +113,8 @@ O diferencial arquitetural é a **integração híbrida BI + IA generativa**: o 
 | Receita total | R$ 15,42 mi |
 | Pedidos processados | 96.478 (`status = delivered`) |
 | Período | 24 meses (Set/2016 – Set/2018) |
-| Coeficiente de Gini | 0,66 (concentração severa) |
-| Pareto observado | Top 20% dos clientes gera 65% da receita |
+| Coeficiente de Gini | 0,48 (concentração moderada) |
+| Pareto observado | Top 20% dos clientes gera 54% da receita |
 | Silhouette score (K=4) | 0,369 (separação aceitável) |
 | Cobertura de testes | 73/73 passando · 90% |
 
@@ -246,7 +246,12 @@ rfm-olist-intelligence/
 │   └── export.py                   Exportação tipada para Power BI
 │
 ├── tests/                          73 testes pytest
+│   ├── test_clustering.py           5 testes
+│   ├── test_config.py               3 testes
+│   ├── test_data_loader.py          4 testes
 │   ├── test_data_quality.py        11 testes
+│   ├── test_export.py               5 testes
+│   ├── test_ml_common.py            5 testes
 │   ├── test_rfm.py                  8 testes
 │   ├── test_segmentation.py        20 testes
 │   └── test_utils.py               12 testes
@@ -303,12 +308,17 @@ pytest tests/ -v
 platform win32 -- Python 3.13.5, pytest-8.3.4, pluggy-1.5.0
 collected 73 items
 
-tests/test_data_quality.py ............    [ 21%]   11 passed
-tests/test_rfm.py ........                 [ 37%]    8 passed
-tests/test_segmentation.py ...............  [ 76%]   20 passed
+tests/test_clustering.py .....             [  6%]    5 passed
+tests/test_config.py ...                   [ 10%]    3 passed
+tests/test_data_loader.py ....             [ 16%]    4 passed
+tests/test_data_quality.py ...........     [ 31%]   11 passed
+tests/test_export.py .....                 [ 38%]    5 passed
+tests/test_ml_common.py .....              [ 45%]    5 passed
+tests/test_rfm.py ........                 [ 56%]    8 passed
+tests/test_segmentation.py ...............  [ 83%]   20 passed
 tests/test_utils.py ............           [100%]   12 passed
 
-========================== 73 passed in 12.5s ===========================
+========================== 73 passed in 27.3s ===========================
 ```
 
 Destaque para o teste `test_robust_to_id_permutation`, que valida a invariância dos nomes de cluster em relação aos IDs aleatórios do KMeans — propriedade fundamental para reprodutibilidade entre re-treinos.
