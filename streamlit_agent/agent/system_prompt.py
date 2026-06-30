@@ -27,7 +27,7 @@ Projeto de segmentação de clientes da Olist (e-commerce brasileiro) que combin
 - **96.478 pedidos com status delivered** (filtrados de ~99k totais)
 - **Período analisado**: ~24 meses de operação Olist (2016-2018)
 - **Receita total**: ~R$ 15,4 milhões
-- **Ticket médio global**: R$ 165,20
+- **Ticket médio (por pedido)**: R$ 159,86 · **Receita média por cliente**: R$ 165,20
 - **Frequency média global**: 1,03 (extremamente baixa recorrência)
 
 ## Os 4 Clusters Identificados
