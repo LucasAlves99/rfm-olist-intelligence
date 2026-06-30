@@ -9,14 +9,6 @@ table _Concentracao
 		formatString: 0.0%
 		lineageTag: a93eb3fe-e5b7-478a-b4ab-7335151a2de9
 
-	measure '% Clientes Acumulado' = VAR ClienteAtual = MAX(fato_rfm_clientes[customer_unique_id]) VAR MonetaryAtual = CALCULATE(MAX(fato_rfm_clientes[Monetary]), fato_rfm_clientes[customer_unique_id] = ClienteAtual) VAR ClientesAcima = CALCULATE(DISTINCTCOUNT(fato_rfm_clientes[customer_unique_id]), FILTER(ALL(fato_rfm_clientes), fato_rfm_clientes[Monetary] >= MonetaryAtual)) VAR TotalClientes = CALCULATE(DISTINCTCOUNT(fato_rfm_clientes[customer_unique_id]), ALL(fato_rfm_clientes)) RETURN DIVIDE(ClientesAcima, TotalClientes)
-		formatString: 0.0%
-		lineageTag: 14d22ecb-45f3-4857-9b1b-290f9fe3dd33
-
-	measure '% Receita Acumulada' = VAR ClienteAtual = MAX(fato_rfm_clientes[customer_unique_id]) VAR MonetaryAtual = CALCULATE(MAX(fato_rfm_clientes[Monetary]), fato_rfm_clientes[customer_unique_id] = ClienteAtual) VAR ReceitaAcima = CALCULATE(SUM(fato_rfm_clientes[Monetary]), FILTER(ALL(fato_rfm_clientes), fato_rfm_clientes[Monetary] >= MonetaryAtual)) VAR ReceitaTotal = CALCULATE(SUM(fato_rfm_clientes[Monetary]), ALL(fato_rfm_clientes)) RETURN DIVIDE(ReceitaAcima, ReceitaTotal)
-		formatString: 0.0%
-		lineageTag: 788b8f23-b342-4df3-8fa7-90624c01918b
-
 	column _
 		lineageTag: 692e06dc-a4bd-4ef6-aa48-b65332d34bd3
 		sourceColumn: [Value]

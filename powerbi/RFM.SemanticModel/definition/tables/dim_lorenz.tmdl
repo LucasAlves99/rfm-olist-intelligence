@@ -1,0 +1,44 @@
+table dim_lorenz
+	lineageTag: 3fd04b15-279b-4259-be63-9c4c632c0910
+
+	column ordem
+		dataType: int64
+		formatString: 0
+		lineageTag: acf99b3d-9c51-47c1-af82-0df66043d3d3
+		summarizeBy: none
+		sourceColumn: ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	column pct_clientes
+		dataType: double
+		lineageTag: 9e0e347d-e831-43ee-a505-26ff4bf3720f
+		summarizeBy: none
+		sourceColumn: pct_clientes
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column pct_receita
+		dataType: double
+		lineageTag: 6493009e-fc1c-4833-88df-1a09a0e74610
+		summarizeBy: none
+		sourceColumn: pct_receita
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition dim_lorenz = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\Users\Luk\Desktop\RFM-Projeto\data\powerbi\dim_lorenz.csv"),[Delimiter=";", Columns=3, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"ordem", Int64.Type}, {"pct_clientes", type number}, {"pct_receita", type number}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_ResultType = Table
+

@@ -21,8 +21,8 @@ modelo em pastas de texto (TMDL/PBIR) — versionáveis em Git e editáveis sem 
 | Culture | `pt-BR` |
 | Time Intelligence automática | Desabilitada (`__PBI_TimeIntelligenceEnabled = 0`) |
 | Páginas | 2 — Visão Executiva · Análise Detalhada (1280×720, FitToPage) |
-| Tabelas | 6 de dados + 4 de medidas |
-| Medidas DAX | 34 |
+| Tabelas | 7 de dados + 4 de medidas |
+| Medidas DAX | 32 |
 | Relacionamentos | 4 (todos 1→N, single direction) |
 | Tema | `dashboard_theme.json` (dark executivo) |
 | Custom visuals | Deneb (Vega-Lite) · HTML Content (chrome/KPIs) |
@@ -150,12 +150,19 @@ via relacionamento). Granularidade: `order_id`.
 `UF`, `Pedidos`, `Alto_Risco`, `Pct_Alto_Risco`. Alimentada pelo modelo de review ruim
 (`pipeline/score_review_risk.py`).
 
+### 3.7 `dim_lorenz` — curva de concentração pré-calculada (1 linha/ponto)
+
+`ordem` (int), `pct_clientes` (double 0–1), `pct_receita` (double 0–1). ~200 pontos amostrados
+da curva de Lorenz (receita acumulada × clientes acumulados, do maior gastador ao menor).
+Gerada por `build_lorenz_curve()` no pipeline. **Sem relacionamento** — alimenta apenas o spec
+Deneb da curva de Lorenz (página 1), substituindo o cálculo por-linha sobre os 93k clientes.
+
 ---
 
 ## 4. Tabelas de medidas (DAX)
 
 4 tabelas-calculadas vazias (`source = { BLANK() }`) que apenas hospedam medidas, organizadas
-por domínio. Total: **34 medidas**.
+por domínio. Total: **32 medidas**.
 
 ### 4.1 `_KPIs` — indicadores executivos (14 medidas)
 
@@ -198,17 +205,17 @@ por domínio. Total: **34 medidas**.
 | `% Receita em Risco` | `DIVIDE([Receita em Risco], [Receita Total])` | 0.0% | Risco |
 | `Retencao Cohort` | `DIVIDE(SUM(Clientes_Retidos), SUM(Tamanho_Safra))` | 0.0% | Cohort |
 
-### 4.3 `_Concentracao` — Pareto / Lorenz (4 medidas)
+### 4.3 `_Concentracao` — Pareto / Lorenz (2 medidas)
 
 | Medida | Papel |
 |---|---|
 | `Receita Top 20%` | Receita dos 20% maiores clientes via `TOPN` sobre `Monetary` |
 | `% Concentracao Top 20%` | `Receita Top 20%` / `Receita Total` |
-| `% Clientes Acumulado` | Posição acumulada do cliente (eixo X da curva de Lorenz) |
-| `% Receita Acumulada` | Receita acumulada até o cliente (eixo Y da curva de Lorenz) |
 
-> As duas medidas acumuladas operam por linha de `customer_unique_id` (`MAX(...)` +
-> `FILTER(ALL(...))`) — pesadas; usadas no spec Deneb da curva de Lorenz.
+> As medidas acumuladas `% Clientes Acumulado` / `% Receita Acumulada` (eixos da curva de
+> Lorenz, calculadas por linha com `MAX(...)` + `FILTER(ALL(...))` — O(n²)) foram **removidas**:
+> a curva agora é **pré-calculada no pipeline** (tabela `dim_lorenz`, ~200 pontos), eliminando
+> o DAX pesado e o tráfego de 93k linhas pro visual Deneb.
 
 ### 4.4 `_Background` — chrome HTML e cards (3 medidas)
 
@@ -268,7 +275,8 @@ Os visuais de gráfico são **Deneb** com specs embutidos no `visual.json`. Cada
 `"data": {"name": "dataset"}` e referencia campos pelos nomes do modelo (ex.: `Monetary`,
 `Cluster_Name`). A curva de Lorenz tem cópia versionada em
 [`deneb_specs/lorenz-curve.json`](./deneb_specs/lorenz-curve.json) (área de Gini demarcada,
-`width/height: "container"`, fundo transparente).
+`width/height: "container"`, fundo transparente). Ela lê a tabela **`dim_lorenz`** (pontos
+pré-calculados) — o visual trafega ~200 linhas em vez dos 93.358 clientes, deixando a página 1 leve.
 
 ---
 

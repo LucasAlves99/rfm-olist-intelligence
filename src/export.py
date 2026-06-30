@@ -6,6 +6,7 @@ import logging
 from pathlib import Path
 
 # Third-party
+import numpy as np
 import pandas as pd
 
 logger = logging.getLogger(__name__)
@@ -189,6 +190,52 @@ def build_dim_segmentos() -> pd.DataFrame:
             "Cor_Power_BI": ["Iris", "Mauve", "Gold", "Radish"],
         }
     )
+
+
+def build_lorenz_curve(rfm: pd.DataFrame, n_points: int = 200) -> pd.DataFrame:
+    """Pré-calcula a curva de concentração (Lorenz) da receita por cliente.
+
+    Ordena os clientes por Monetary decrescente e calcula a fração acumulada
+    de receita conforme se acumulam clientes (do maior gastador ao menor).
+    Reduz a base inteira (~93k clientes) a ``n_points`` amostrados por percentil:
+    o visual Deneb passa a plotar ~200 pontos em vez das 93.358 linhas, deixando
+    a página 1 do dashboard leve (antes a curva trafegava a base toda pro navegador).
+
+    Args:
+        rfm: DataFrame RFM com a coluna ``Monetary``.
+        n_points: Número aproximado de pontos amostrados da curva.
+
+    Returns:
+        DataFrame com colunas ``ordem`` (int), ``pct_clientes`` e ``pct_receita``
+        (0–1), pronto para alimentar o spec Vega-Lite da curva de Lorenz.
+    """
+    vals = np.sort(rfm["Monetary"].to_numpy(dtype="float64"))[::-1]  # decrescente
+    n = len(vals)
+    total = vals.sum()
+    if n == 0 or total == 0:
+        df = pd.DataFrame({"pct_clientes": [0.0, 1.0], "pct_receita": [0.0, 1.0]})
+        df.insert(0, "ordem", [0, 1])
+        return df
+
+    cum_rev = np.cumsum(vals) / total
+    pct_cli_full = np.arange(1, n + 1) / n
+
+    # Amostra percentis de clientes uniformemente espaçados (+ origem (0,0)).
+    targets = np.linspace(1.0 / n, 1.0, n_points)
+    idx = np.clip((targets * n).astype(int) - 1, 0, n - 1)
+    pct_cli = np.concatenate([[0.0], pct_cli_full[idx]])
+    pct_rev = np.concatenate([[0.0], cum_rev[idx]])
+
+    df = pd.DataFrame(
+        {
+            "pct_clientes": np.round(pct_cli, 5).astype("float32"),
+            "pct_receita": np.round(pct_rev, 5).astype("float32"),
+        }
+    ).drop_duplicates("pct_clientes").reset_index(drop=True)
+    df.insert(0, "ordem", np.arange(len(df), dtype="int16"))
+
+    logger.info(f"dim_lorenz criada: {len(df):,} pontos (de {n:,} clientes)")
+    return df
 
 
 def build_dim_calendario(start: str = "2016-01-01", end: str = "2018-12-31") -> pd.DataFrame:

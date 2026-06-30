@@ -7,6 +7,7 @@ import pytest
 from src.export import (
     build_dim_calendario,
     build_dim_segmentos,
+    build_lorenz_curve,
     export_orders_to_powerbi,
     export_rfm_to_powerbi,
     write_powerbi_csv,
@@ -87,3 +88,27 @@ def test_build_dim_calendario_intervalo_e_colunas():
         assert col in dim.columns
     assert dim["Ano"].iloc[0] == 2018
     assert dim["FimDeSemana"].dtype == bool
+
+
+def test_build_lorenz_curve_estrutura_e_monotonia():
+    # 100 clientes; 1 deles concentra muito mais que os demais
+    rfm = pd.DataFrame({"Monetary": [1000.0] + [10.0] * 99})
+    lz = build_lorenz_curve(rfm, n_points=50)
+
+    assert list(lz.columns) == ["ordem", "pct_clientes", "pct_receita"]
+    # Origem (0,0) e fechamento em (1,1)
+    assert lz["pct_clientes"].iloc[0] == 0.0 and lz["pct_receita"].iloc[0] == 0.0
+    assert lz["pct_clientes"].iloc[-1] == pytest.approx(1.0)
+    assert lz["pct_receita"].iloc[-1] == pytest.approx(1.0)
+    # Curva de concentração (maior gastador primeiro): acima da diagonal
+    assert (lz["pct_receita"] >= lz["pct_clientes"] - 1e-6).all()
+    # Acumuladas são monotônicas não-decrescentes
+    assert lz["pct_clientes"].is_monotonic_increasing
+    assert lz["pct_receita"].is_monotonic_increasing
+
+
+def test_build_lorenz_curve_base_vazia_ou_zerada():
+    # Receita toda zero não deve quebrar (guarda contra divisão por zero)
+    lz = build_lorenz_curve(pd.DataFrame({"Monetary": [0.0, 0.0]}))
+    assert len(lz) == 2
+    assert lz["pct_receita"].tolist() == [0.0, 1.0]

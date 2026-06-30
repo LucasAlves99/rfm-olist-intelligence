@@ -93,6 +93,23 @@ Coluna nova: **`product_category`** (string) — categoria do produto traduzida 
 
 ---
 
+## dim_lorenz.csv (novo)
+
+**Granularidade**: 1 linha por ponto da curva (~200 pontos)
+**Função**: Curva de concentração (Lorenz) pré-calculada para o visual Deneb da página 1
+
+| Coluna | Tipo | Descrição |
+|---|---|---|
+| `ordem` | int16 | Índice do ponto (0 = origem) — chave de ordenação da curva |
+| `pct_clientes` | float32 | % acumulado de clientes (0–1), do maior gastador ao menor |
+| `pct_receita` | float32 | % acumulado de receita (0–1) correspondente |
+
+> Gerada por `build_lorenz_curve()` (`src/export.py`). Reduz os 93.358 clientes a ~200 pontos
+> amostrados — o visual passa a trafegar ~200 linhas em vez da base inteira. Sem relacionamento
+> no modelo (standalone, consumida só pelo spec Vega-Lite da Lorenz).
+
+---
+
 ## dim_calendario.csv
 
 **Granularidade**: 1 linha por dia

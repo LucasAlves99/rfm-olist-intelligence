@@ -8,7 +8,7 @@ model Model
 
 annotation __PBI_TimeIntelligenceEnabled = 0
 
-annotation PBI_QueryOrder = ["dim_calendario","dim_segmentos","fato_pedidos","fato_rfm_clientes","fato_cohort","risco_review_uf"]
+annotation PBI_QueryOrder = ["dim_calendario","dim_segmentos","fato_pedidos","fato_rfm_clientes","fato_cohort","risco_review_uf","dim_lorenz"]
 
 annotation PBI_ProTooling = ["DevMode"]
 
@@ -22,6 +22,7 @@ ref table _Concentracao
 ref table _Background
 ref table fato_cohort
 ref table risco_review_uf
+ref table dim_lorenz
 
 ref cultureInfo pt-BR
 

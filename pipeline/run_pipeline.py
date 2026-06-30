@@ -44,6 +44,7 @@ from src.clustering import fit_and_save, predict_clusters
 from src.export import (
     build_dim_calendario,
     build_dim_segmentos,
+    build_lorenz_curve,
     export_orders_to_powerbi,
     export_rfm_to_powerbi,
     write_powerbi_csv,
@@ -125,6 +126,9 @@ def main() -> None:
     # fato_cohort (retenção por safra de aquisição — tabela pré-calculada p/ heatmap)
     cohort = build_cohort_retention(orders_base)
     write_powerbi_csv(cohort, output_dir / "fato_cohort.csv", encoding=encoding)
+
+    # dim_lorenz (curva de concentração pré-calculada — ~200 pontos em vez de 93k)
+    write_powerbi_csv(build_lorenz_curve(rfm), output_dir / "dim_lorenz.csv", encoding=encoding)
 
     # Dimensões (mesmo formato BR via helper compartilhado)
     write_powerbi_csv(build_dim_segmentos(), output_dir / "dim_segmentos.csv", encoding=encoding)
