@@ -280,6 +280,13 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# Âncora de confiabilidade: deixa explícito que as respostas vêm dos dados reais,
+# não de conhecimento genérico do modelo.
+st.caption(
+    "Responde com base nos **datamarts RFM** (clusters, cohort, métricas de churn) — "
+    "consultados ao vivo via DuckDB sobre Parquet, não em conhecimento genérico."
+)
+
 # ──────────────────────────────────────────────────────────────────────────────
 # State: histórico de mensagens
 # ──────────────────────────────────────────────────────────────────────────────
