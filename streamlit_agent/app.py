@@ -334,7 +334,7 @@ if not st.session_state.greeted and api_ready:
         "Olá. Sou seu **analista RFM** do projeto, com acesso ao contexto "
         "completo do projeto e aos datamarts.\n\n"
         "**Diagnóstico inicial** · base com 93.358 clientes, concentração "
-        "Pareto severa (Gini 0,66) e 22,9% em risco de churn. Recomendo "
+        "Pareto moderada (Gini 0,48) e 22,9% em risco de churn. Recomendo "
         "priorizar *win-back urgente* + programa de fidelidade pros Big "
         "Spenders.\n\n"
         "Use os atalhos abaixo ou pergunte qualquer coisa."

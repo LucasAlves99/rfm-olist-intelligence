@@ -72,9 +72,9 @@ Os nomes são derivados **automaticamente do perfil R/F/M médio** de cada clust
 
 ## Diagnósticos chave da base
 
-1. **Concentração extrema (Gini 0,66)**: top 20% dos clientes gera
-   65% da receita. Pareto severo — dependência alta de poucos clientes.
-2. **Baixa recorrência crônica**: 96% compraram apenas 1 vez.
+1. **Concentração moderada (Gini 0,48)**: top 20% dos clientes gera
+   54% da receita. Pareto relevante — dependência alta de poucos clientes.
+2. **Baixa recorrência crônica**: 97% compraram apenas 1 vez.
    Frequency é o maior gargalo do negócio Olist.
 3. **Base envelhecida**: Recency média de 242 dias. 22,9% em risco
    real de churn (sem comprar há mais de 365 dias).
