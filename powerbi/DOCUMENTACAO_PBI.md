@@ -221,7 +221,7 @@ por domínio. Total: **32 medidas**.
 
 | Medida | Papel |
 |---|---|
-| `_BG Pagina 1` | HTML completo do "chrome" da página 1 (topbar, KPIs com valor+MoM+barra, painéis vazios, card do Analista). Renderizado no visual **HTML Content** de fundo. Injeta valores via DAX (`FORMAT`, cores condicionais por sinal do MoM). |
+| `_BG Pagina 1` | HTML completo do "chrome" da página 1 (topbar com período da base "2016–2018", 4 KPIs-herói da base — Receita total, Pedidos, Ticket médio, Clientes — com sparkline de tendência 12m, painéis vazios, card do Analista). Renderizado no visual **HTML Content** de fundo. Injeta valores via DAX (`FORMAT`). |
 | `_BG Pagina 2` | HTML do chrome da página 2 + **barra de diagnóstico gerencial** com números calculados ao vivo (% compra única, retenção mês 1, receita em risco). |
 | `_Plano Acao` | HTML do card "Plano de ação" (página 2): 4 linhas priorizadas por cluster com receita associada e ação de CRM. Pasta *Cards SVG*. |
 

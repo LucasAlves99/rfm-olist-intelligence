@@ -3,14 +3,14 @@ table _Background
 
 	/// HTML chrome Pagina 1
 	measure '_BG Pagina 1' =
-			VAR vCli = FORMAT([Clientes Ativos Mes],"#,##0","pt-BR")
+			VAR vCli = FORMAT([Total Clientes],"#,##0","pt-BR")
 			VAR mCli = [Clientes Ativos MoM %]
-			VAR vRec = "R$ " & FORMAT(DIVIDE([Receita Mes],1000000),"#,##0.0","pt-BR") & " mi"
+			VAR vRec = "R$ " & FORMAT(DIVIDE([Receita Total],1000000),"#,##0.0","pt-BR") & " mi"
 			VAR mRec = [Receita MoM %]
-			VAR vTic = "R$ " & FORMAT([Ticket Mes],"#,##0.00","pt-BR")
+			VAR vTic = "R$ " & FORMAT([Ticket Medio],"#,##0.00","pt-BR")
 			VAR mTic = [Ticket MoM %]
 			VAR mPed = [Pedidos MoM %]
-			VAR vPed = FORMAT([Pedidos Mes],"#,##0","pt-BR")
+			VAR vPed = FORMAT([Total Pedidos],"#,##0","pt-BR")
 			VAR clsPed = IF(ABS(mPed)<0.01,"flat",IF(mPed>=0,"up","down"))
 			VAR pillPed = IF(mPed>=0,"+","") & FORMAT(mPed,"0.0%","pt-BR") & " no m&#234;s"
 			VAR pRis = [% Em Risco]
@@ -31,10 +31,10 @@ table _Background
 			VAR pillRec = IF(mRec>=0,"+","") & FORMAT(mRec,"0.0%","pt-BR") & " no m&#234;s"
 			VAR pillTic = IF(mTic>=0,"+","") & FORMAT(mTic,"0.0%","pt-BR") & " no m&#234;s"
 			VAR pillRis = IF(pRis>0.2,"alto","saud&#225;vel")
-			VAR kpiCli = "<div class=""kpi champions""><div class=""top""><div class=""label-row""><span class=""dot""></span><span class=""label"">Receita do m&#234;s</span></div><span class=""pill " & clsRec & """>" & pillRec & "</span></div><div class=""value"">" & vRec & "</div><div class=""spark"">" & [_Spark Receita] & "</div></div>"
-			VAR kpiRec = "<div class=""kpi big-spenders""><div class=""top""><div class=""label-row""><span class=""dot""></span><span class=""label"">Pedidos do m&#234;s</span></div><span class=""pill " & clsPed & """>" & pillPed & "</span></div><div class=""value"">" & vPed & "</div><div class=""spark"">" & [_Spark Pedidos] & "</div></div>"
-			VAR kpiTic = "<div class=""kpi novos""><div class=""top""><div class=""label-row""><span class=""dot""></span><span class=""label"">Ticket m&#233;dio</span></div><span class=""pill " & clsTic & """>" & pillTic & "</span></div><div class=""value"">" & vTic & "</div><div class=""spark"">" & [_Spark Ticket] & "</div></div>"
-			VAR kpiRis = "<div class=""kpi em-risco""><div class=""top""><div class=""label-row""><span class=""dot""></span><span class=""label"">Clientes ativos</span></div><span class=""pill " & clsCli & """>" & pillCli & "</span></div><div class=""value"">" & vCli & "</div><div class=""spark"">" & [_Spark Clientes] & "</div></div>"
+			VAR kpiCli = "<div class=""kpi champions""><div class=""top""><div class=""label-row""><span class=""dot""></span><span class=""label"">Receita total</span></div></div><div class=""value"">" & vRec & "</div><div class=""spark"">" & [_Spark Receita] & "</div></div>"
+			VAR kpiRec = "<div class=""kpi big-spenders""><div class=""top""><div class=""label-row""><span class=""dot""></span><span class=""label"">Pedidos</span></div></div><div class=""value"">" & vPed & "</div><div class=""spark"">" & [_Spark Pedidos] & "</div></div>"
+			VAR kpiTic = "<div class=""kpi novos""><div class=""top""><div class=""label-row""><span class=""dot""></span><span class=""label"">Ticket m&#233;dio</span></div></div><div class=""value"">" & vTic & "</div><div class=""spark"">" & [_Spark Ticket] & "</div></div>"
+			VAR kpiRis = "<div class=""kpi em-risco""><div class=""top""><div class=""label-row""><span class=""dot""></span><span class=""label"">Clientes</span></div></div><div class=""value"">" & vCli & "</div><div class=""spark"">" & [_Spark Clientes] & "</div></div>"
 			RETURN
 			"<!DOCTYPE html>
 			<html lang=""pt-BR"">
@@ -360,7 +360,7 @@ table _Background
 			      <div class=""logo""></div>
 			      <div>
 			        <h1>RFM Olist Intelligence</h1>
-			        <div class=""sub"">SEGMENTA&#199;&#195;O &#183; CLUSTERIZA&#199;&#195;O &#183; IA EMBARCADA</div>
+			        <div class=""sub"">BASE OLIST 2016&#8211;2018 &#183; SEGMENTA&#199;&#195;O &#183; CLUSTERIZA&#199;&#195;O &#183; IA EMBARCADA</div>
 			      </div>
 			    </div>
 			    <div class=""tabs"">
@@ -706,7 +706,7 @@ table _Background
 						      <div class=""logo""></div>
 						      <div>
 						        <h1>RFM Olist Intelligence</h1>
-						        <div class=""sub"">SEGMENTA&#199;&#195;O &#183; CLUSTERIZA&#199;&#195;O &#183; IA EMBARCADA</div>
+						        <div class=""sub"">BASE OLIST 2016&#8211;2018 &#183; SEGMENTA&#199;&#195;O &#183; CLUSTERIZA&#199;&#195;O &#183; IA EMBARCADA</div>
 						      </div>
 						    </div>
 						    <div class=""tabs"">
