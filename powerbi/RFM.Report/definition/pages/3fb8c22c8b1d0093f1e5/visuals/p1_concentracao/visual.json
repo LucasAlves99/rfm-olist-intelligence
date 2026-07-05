@@ -42,7 +42,8 @@
                 }
               },
               "queryRef": "dim_lorenz.pct_clientes",
-              "nativeQueryRef": "pct_clientes"
+              "nativeQueryRef": "pct_clientes",
+              "active": false
             },
             {
               "field": {
@@ -56,7 +57,8 @@
                 }
               },
               "queryRef": "dim_lorenz.pct_receita",
-              "nativeQueryRef": "pct_receita"
+              "nativeQueryRef": "pct_receita",
+              "active": false
             }
           ]
         }
@@ -94,7 +96,7 @@
             "jsonSpec": {
               "expr": {
                 "Literal": {
-                  "Value": "'{\"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\", \"description\": \"Curva de Lorenz - concentracao de receita (pre-calculada em dim_lorenz)\", \"background\": \"transparent\", \"padding\": {\"top\": 6, \"left\": 2, \"right\": 6, \"bottom\": 2}, \"width\": \"container\", \"height\": \"container\", \"config\": {\"view\": {\"stroke\": null}, \"font\": \"Segoe UI\", \"axis\": {\"domain\": false, \"tickColor\": \"rgba(255,255,255,0.15)\", \"gridColor\": \"rgba(255,255,255,0.06)\", \"labelColor\": \"#C8C8D0\", \"titleColor\": \"#F4F4F5\", \"labelFontSize\": 11, \"titleFontSize\": 12}}, \"data\": {\"name\": \"dataset\"}, \"layer\": [{\"description\": \"area de Gini entre a diagonal e a curva\", \"mark\": {\"type\": \"area\", \"color\": \"#F2C94C\", \"opacity\": 0.16, \"interpolate\": \"monotone\", \"clip\": true}, \"encoding\": {\"x\": {\"field\": \"pct_clientes\", \"type\": \"quantitative\", \"scale\": {\"domain\": [0, 1]}, \"title\": \"% acumulado de clientes\", \"axis\": {\"format\": \".0%\", \"grid\": true, \"tickCount\": 5}}, \"y\": {\"field\": \"pct_clientes\", \"type\": \"quantitative\", \"scale\": {\"domain\": [0, 1]}, \"title\": \"% receita acumulada\", \"axis\": {\"format\": \".0%\", \"grid\": true, \"tickCount\": 5}}, \"y2\": {\"field\": \"pct_receita\"}}}, {\"description\": \"linha de igualdade perfeita (45 graus)\", \"data\": {\"values\": [{\"x\": 0, \"y\": 0}, {\"x\": 1, \"y\": 1}]}, \"mark\": {\"type\": \"line\", \"color\": \"#71717A\", \"strokeDash\": [4, 4], \"opacity\": 0.55, \"clip\": true}, \"encoding\": {\"x\": {\"field\": \"x\", \"type\": \"quantitative\", \"scale\": {\"domain\": [0, 1]}}, \"y\": {\"field\": \"y\", \"type\": \"quantitative\", \"scale\": {\"domain\": [0, 1]}}}}, {\"description\": \"curva de Lorenz\", \"mark\": {\"type\": \"line\", \"color\": \"#A78BFA\", \"strokeWidth\": 2.5, \"interpolate\": \"monotone\", \"tooltip\": true, \"clip\": true}, \"encoding\": {\"x\": {\"field\": \"pct_clientes\", \"type\": \"quantitative\", \"scale\": {\"domain\": [0, 1]}, \"axis\": {\"format\": \".0%\"}, \"title\": \"% acumulado de clientes\"}, \"y\": {\"field\": \"pct_receita\", \"type\": \"quantitative\", \"scale\": {\"domain\": [0, 1]}, \"axis\": {\"format\": \".0%\"}, \"title\": \"% receita acumulada\"}, \"tooltip\": [{\"field\": \"pct_clientes\", \"type\": \"quantitative\", \"title\": \"% clientes\", \"format\": \".1%\"}, {\"field\": \"pct_receita\", \"type\": \"quantitative\", \"title\": \"% receita\", \"format\": \".1%\"}]}}, {\"description\": \"insight: top 20% concentra 54% da receita\", \"data\": {\"values\": [{\"x\": 0.97, \"y\": 0.1, \"label\": \"20% dos clientes = 54% da receita\"}]}, \"mark\": {\"type\": \"text\", \"color\": \"#F2C94C\", \"fontSize\": 11, \"fontWeight\": 600, \"align\": \"right\", \"baseline\": \"bottom\"}, \"encoding\": {\"x\": {\"field\": \"x\", \"type\": \"quantitative\", \"scale\": {\"domain\": [0, 1]}}, \"y\": {\"field\": \"y\", \"type\": \"quantitative\", \"scale\": {\"domain\": [0, 1]}}, \"text\": {\"field\": \"label\"}}}]}'"
+                  "Value": "'{\"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\", \"description\": \"Curva de Lorenz - concentracao de receita (pre-calculada em dim_lorenz)\", \"background\": \"transparent\", \"padding\": {\"top\": 6, \"left\": 2, \"right\": 6, \"bottom\": 2}, \"width\": \"container\", \"height\": \"container\", \"config\": {\"view\": {\"stroke\": null}, \"font\": \"Segoe UI\", \"axis\": {\"domain\": false, \"tickColor\": \"rgba(255,255,255,0.15)\", \"gridColor\": \"rgba(255,255,255,0.06)\", \"labelColor\": \"#C8C8D0\", \"titleColor\": \"#F4F4F5\", \"labelFontSize\": 11, \"titleFontSize\": 12}}, \"data\": {\"name\": \"dataset\"}, \"layer\": [{\"description\": \"area de Gini entre a diagonal e a curva\", \"mark\": {\"type\": \"area\", \"color\": \"#F2C94C\", \"opacity\": 0.16, \"interpolate\": \"monotone\", \"clip\": true}, \"encoding\": {\"x\": {\"field\": \"pct_clientes\", \"type\": \"quantitative\", \"scale\": {\"domain\": [0, 1]}, \"title\": \"% acumulado de clientes\", \"axis\": {\"format\": \".0%\", \"grid\": true, \"tickCount\": 5}}, \"y\": {\"field\": \"pct_clientes\", \"type\": \"quantitative\", \"scale\": {\"domain\": [0, 1]}, \"title\": \"% receita acumulada\", \"axis\": {\"format\": \".0%\", \"grid\": true, \"tickCount\": 5}}, \"y2\": {\"field\": \"pct_receita\"}}}, {\"description\": \"linha de igualdade perfeita (45 graus)\", \"data\": {\"values\": [{\"x\": 0, \"y\": 0}, {\"x\": 1, \"y\": 1}]}, \"mark\": {\"type\": \"line\", \"color\": \"#71717A\", \"strokeDash\": [4, 4], \"opacity\": 0.55, \"clip\": true}, \"encoding\": {\"x\": {\"field\": \"x\", \"type\": \"quantitative\", \"scale\": {\"domain\": [0, 1]}}, \"y\": {\"field\": \"y\", \"type\": \"quantitative\", \"scale\": {\"domain\": [0, 1]}}}}, {\"description\": \"curva de Lorenz\", \"mark\": {\"type\": \"line\", \"color\": \"#A78BFA\", \"strokeWidth\": 2.5, \"interpolate\": \"monotone\", \"tooltip\": true, \"clip\": true}, \"encoding\": {\"x\": {\"field\": \"pct_clientes\", \"type\": \"quantitative\", \"scale\": {\"domain\": [0, 1]}, \"axis\": {\"format\": \".0%\"}, \"title\": \"% acumulado de clientes\"}, \"y\": {\"field\": \"pct_receita\", \"type\": \"quantitative\", \"scale\": {\"domain\": [0, 1]}, \"axis\": {\"format\": \".0%\"}, \"title\": \"% receita acumulada\"}, \"tooltip\": [{\"field\": \"pct_clientes\", \"type\": \"quantitative\", \"title\": \"% clientes\", \"format\": \".1%\"}, {\"field\": \"pct_receita\", \"type\": \"quantitative\", \"title\": \"% receita\", \"format\": \".1%\"}]}}, {\"description\": \"insight dinamico: % de receita concentrada no top 20% dos clientes\", \"transform\": [{\"calculate\": \"abs(datum.pct_clientes - 0.2)\", \"as\": \"d20\"}, {\"window\": [{\"op\": \"rank\", \"as\": \"rk\"}], \"sort\": [{\"field\": \"d20\", \"order\": \"ascending\"}]}, {\"filter\": \"datum.rk == 1\"}, {\"calculate\": \"''20% dos clientes = '' + format(datum.pct_receita, ''.0%'') + '' da receita''\", \"as\": \"lbl20\"}], \"mark\": {\"type\": \"text\", \"color\": \"#F2C94C\", \"fontSize\": 11, \"fontWeight\": 600, \"align\": \"right\", \"baseline\": \"bottom\"}, \"encoding\": {\"x\": {\"datum\": 0.97, \"type\": \"quantitative\"}, \"y\": {\"datum\": 0.1, \"type\": \"quantitative\"}, \"text\": {\"field\": \"lbl20\", \"type\": \"nominal\"}}}]}'"
                 }
               }
             },
@@ -246,8 +248,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": []
   }
 }

@@ -45,6 +45,41 @@
       "source": "review_uf",
       "target": "p2_review_cluster",
       "type": "NoFilter"
+    },
+    {
+      "source": "p2_ano_slicer",
+      "target": "p2_uf",
+      "type": "DataFilter"
+    },
+    {
+      "source": "p2_ano_slicer",
+      "target": "cohort_heatmap",
+      "type": "NoFilter"
+    },
+    {
+      "source": "p2_ano_slicer",
+      "target": "review_uf",
+      "type": "NoFilter"
+    },
+    {
+      "source": "p2_ano_slicer",
+      "target": "p2_funil",
+      "type": "NoFilter"
+    },
+    {
+      "source": "p2_ano_slicer",
+      "target": "p2_review_cluster",
+      "type": "NoFilter"
+    },
+    {
+      "source": "p2_ano_slicer",
+      "target": "p2_review_recency",
+      "type": "NoFilter"
+    },
+    {
+      "source": "p2_ano_slicer",
+      "target": "16953eb3264a12377001",
+      "type": "NoFilter"
     }
   ]
 }

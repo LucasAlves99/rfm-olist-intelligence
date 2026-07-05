@@ -1,0 +1,212 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": "transparent",
+  "padding": {
+    "top": 2,
+    "left": 0,
+    "right": 8,
+    "bottom": 0
+  },
+  "width": "container",
+  "height": "container",
+  "title": {
+    "text": "Clientes acumulados por nº de compras · largura em escala log · % = conversão da etapa anterior",
+    "fontSize": 9,
+    "fontWeight": 400,
+    "color": "#A1A1AA",
+    "anchor": "start",
+    "offset": 4
+  },
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "Segoe UI",
+    "axis": {
+      "domain": false,
+      "ticks": false,
+      "gridColor": "rgba(255,255,255,0.06)",
+      "labelColor": "#C8C8D0",
+      "titleColor": "#C8C8D0",
+      "labelFontSize": 10,
+      "titleFontSize": 10
+    }
+  },
+  "data": {
+    "name": "dataset"
+  },
+  "transform": [
+    {
+      "fold": [
+        "Clientes 1 Compra",
+        "Clientes 2 Compras",
+        "Clientes 3-4 Compras",
+        "Clientes 5+ Compras"
+      ],
+      "as": [
+        "estagio",
+        "qtd"
+      ]
+    },
+    {
+      "calculate": "{'Clientes 1 Compra':1,'Clientes 2 Compras':2,'Clientes 3-4 Compras':3,'Clientes 5+ Compras':4}[datum.estagio]",
+      "as": "ord"
+    },
+    {
+      "window": [
+        {
+          "op": "sum",
+          "field": "qtd",
+          "as": "cum"
+        }
+      ],
+      "sort": [
+        {
+          "field": "ord",
+          "order": "descending"
+        }
+      ],
+      "frame": [
+        null,
+        0
+      ]
+    },
+    {
+      "window": [
+        {
+          "op": "lag",
+          "field": "cum",
+          "as": "prev"
+        }
+      ],
+      "sort": [
+        {
+          "field": "ord",
+          "order": "ascending"
+        }
+      ]
+    },
+    {
+      "calculate": "datum.prev != null ? datum.cum/datum.prev : null",
+      "as": "conv"
+    },
+    {
+      "calculate": "datum.ord==1 ? 'Base (1+ compra)' : datum.ord==2 ? '2+ compras' : datum.ord==3 ? '3+ compras' : '5+ compras'",
+      "as": "Etapa"
+    },
+    {
+      "calculate": "datum.conv==null ? format(datum.cum,',.0f')+' clientes' : format(datum.cum,',.0f')+' · '+format(datum.conv,'.1%')",
+      "as": "lbl"
+    }
+  ],
+  "encoding": {
+    "y": {
+      "field": "Etapa",
+      "type": "nominal",
+      "sort": {
+        "field": "ord",
+        "op": "min"
+      },
+      "title": null,
+      "axis": {
+        "labelFontSize": 10
+      }
+    },
+    "tooltip": [
+      {
+        "field": "Etapa",
+        "title": "Etapa"
+      },
+      {
+        "field": "cum",
+        "type": "quantitative",
+        "format": ",.0f",
+        "title": "Clientes"
+      },
+      {
+        "field": "conv",
+        "type": "quantitative",
+        "format": ".1%",
+        "title": "Conversão da etapa anterior"
+      }
+    ]
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "cornerRadiusEnd": 4,
+        "height": {
+          "band": 0.7
+        },
+        "color": {
+          "x1": 0,
+          "y1": 0,
+          "x2": 1,
+          "y2": 0,
+          "gradient": "linear",
+          "stops": [
+            {
+              "offset": 0,
+              "color": "#5E6AD2"
+            },
+            {
+              "offset": 1,
+              "color": "#A78BFA"
+            }
+          ]
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "cum",
+          "type": "quantitative",
+          "title": null,
+          "scale": {
+            "type": "log",
+            "domain": [
+              10,
+              3000000
+            ]
+          },
+          "axis": null
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.__selected__ === 'off'",
+            "value": 0.18
+          },
+          "value": 1
+        },
+        "x2": {
+          "datum": 10
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 4,
+        "fontSize": 9,
+        "color": "#C8C8D0"
+      },
+      "encoding": {
+        "x": {
+          "field": "cum",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lbl"
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.__selected__ === 'off'",
+            "value": 0.18
+          },
+          "value": 1
+        }
+      }
+    }
+  ]
+}

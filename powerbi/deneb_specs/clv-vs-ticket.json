@@ -1,0 +1,251 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "background": "transparent",
+  "padding": {
+    "left": 6,
+    "top": 2,
+    "right": 8,
+    "bottom": 2
+  },
+  "width": "container",
+  "height": "container",
+  "title": {
+    "text": "Só Campeões projetam retorno 12m acima do ticket atual — nos demais, a recompra é a alavanca",
+    "fontSize": 9,
+    "fontWeight": 400,
+    "color": "#A1A1AA",
+    "anchor": "start",
+    "offset": 6
+  },
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "Segoe UI",
+    "axis": {
+      "domain": false,
+      "ticks": false,
+      "labelColor": "#C8C8D0",
+      "titleColor": "#C8C8D0",
+      "labelFontSize": 10
+    },
+    "legend": {
+      "labelColor": "#E4E4E7",
+      "labelFontSize": 10,
+      "symbolType": "square",
+      "symbolSize": 95,
+      "orient": "bottom",
+      "direction": "horizontal",
+      "offset": 8
+    }
+  },
+  "data": {
+    "name": "dataset"
+  },
+  "encoding": {
+    "y": {
+      "field": "Cluster_Name",
+      "type": "nominal",
+      "title": null,
+      "sort": [
+        "Campeões",
+        "Big Spenders (Não-Recorrentes)",
+        "Novos / Ocasionais",
+        "Em Risco / Hibernando"
+      ],
+      "axis": {
+        "labelLimit": 128,
+        "labelFontSize": 10,
+        "labelPadding": 8,
+        "labelExpr": "replace(datum.value, ' (Não-Recorrentes)', '')"
+      }
+    }
+  },
+  "layer": [
+    {
+      "transform": [
+        {
+          "fold": [
+            "Ticket Medio",
+            "CLV Medio"
+          ],
+          "as": [
+            "metric",
+            "valor"
+          ]
+        },
+        {
+          "calculate": "datum.metric == 'Ticket Medio' ? 'Ticket atual' : 'CLV 12m'",
+          "as": "Métrica"
+        }
+      ],
+      "mark": {
+        "type": "bar",
+        "cornerRadiusEnd": 3,
+        "height": {
+          "band": 0.82
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "valor",
+          "type": "quantitative",
+          "title": null,
+          "scale": {
+            "domainMin": 0,
+            "domainMax": 480,
+            "nice": false
+          },
+          "axis": null
+        },
+        "yOffset": {
+          "field": "Métrica",
+          "sort": [
+            "Ticket atual",
+            "CLV 12m"
+          ]
+        },
+        "color": {
+          "field": "Métrica",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Ticket atual",
+              "CLV 12m"
+            ],
+            "range": [
+              "#A78BFA",
+              "#5E6AD2"
+            ]
+          },
+          "legend": {
+            "title": null
+          }
+        },
+        "tooltip": [
+          {
+            "field": "Cluster_Name",
+            "title": "Cluster"
+          },
+          {
+            "field": "Métrica",
+            "title": "Métrica"
+          },
+          {
+            "field": "valor",
+            "type": "quantitative",
+            "format": ",.2f",
+            "title": "R$"
+          }
+        ],
+        "opacity": {
+          "condition": {
+            "test": "datum.__selected__ === 'off'",
+            "value": 0.2
+          },
+          "value": 1
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "fold": [
+            "Ticket Medio",
+            "CLV Medio"
+          ],
+          "as": [
+            "metric",
+            "valor"
+          ]
+        },
+        {
+          "calculate": "datum.metric == 'Ticket Medio' ? 'Ticket atual' : 'CLV 12m'",
+          "as": "Métrica"
+        },
+        {
+          "calculate": "'R$ ' + format(datum.valor, ',.0f')",
+          "as": "rotulo"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 4,
+        "baseline": "middle",
+        "fontSize": 10,
+        "fontWeight": 700,
+        "color": "#EDEDEF"
+      },
+      "encoding": {
+        "x": {
+          "field": "valor",
+          "type": "quantitative"
+        },
+        "yOffset": {
+          "field": "Métrica",
+          "sort": [
+            "Ticket atual",
+            "CLV 12m"
+          ]
+        },
+        "text": {
+          "field": "rotulo"
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.__selected__ === 'off'",
+            "value": 0.2
+          },
+          "value": 1
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "calculate": "datum['CLV Medio'] / datum['Ticket Medio']",
+          "as": "mult"
+        },
+        {
+          "calculate": "replace(format(datum.mult, '.1f'), '.', ',') + '×'",
+          "as": "tag"
+        },
+        {
+          "calculate": "datum.mult >= 1 ? '#4ADE80' : '#F2C94C'",
+          "as": "cor"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dx": -2,
+        "baseline": "middle",
+        "fontSize": 14,
+        "fontWeight": 800
+      },
+      "encoding": {
+        "x": {
+          "datum": 480,
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "tag"
+        },
+        "color": {
+          "field": "cor",
+          "type": "nominal",
+          "scale": null,
+          "legend": null
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.__selected__ === 'off'",
+            "value": 0.2
+          },
+          "value": 1
+        }
+      }
+    }
+  ]
+}

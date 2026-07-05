@@ -179,16 +179,34 @@
       }
     },
     {
-      "description": "insight: top 20% concentra 54% da receita",
-      "data": {
-        "values": [
-          {
-            "x": 0.97,
-            "y": 0.1,
-            "label": "20% dos clientes = 54% da receita"
-          }
-        ]
-      },
+      "description": "insight dinamico: % de receita concentrada no top 20% dos clientes",
+      "transform": [
+        {
+          "calculate": "abs(datum.pct_clientes - 0.2)",
+          "as": "d20"
+        },
+        {
+          "window": [
+            {
+              "op": "rank",
+              "as": "rk"
+            }
+          ],
+          "sort": [
+            {
+              "field": "d20",
+              "order": "ascending"
+            }
+          ]
+        },
+        {
+          "filter": "datum.rk == 1"
+        },
+        {
+          "calculate": "'20% dos clientes = ' + format(datum.pct_receita, '.0%') + ' da receita'",
+          "as": "lbl20"
+        }
+      ],
       "mark": {
         "type": "text",
         "color": "#F2C94C",
@@ -199,27 +217,16 @@
       },
       "encoding": {
         "x": {
-          "field": "x",
-          "type": "quantitative",
-          "scale": {
-            "domain": [
-              0,
-              1
-            ]
-          }
+          "datum": 0.97,
+          "type": "quantitative"
         },
         "y": {
-          "field": "y",
-          "type": "quantitative",
-          "scale": {
-            "domain": [
-              0,
-              1
-            ]
-          }
+          "datum": 0.1,
+          "type": "quantitative"
         },
         "text": {
-          "field": "label"
+          "field": "lbl20",
+          "type": "nominal"
         }
       }
     }

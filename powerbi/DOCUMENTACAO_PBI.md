@@ -255,9 +255,10 @@ posicionados por cima.
 |---|---|---|---|
 | `16953eb3…` | HTML Content | 0,0 · 1280×720 | Background/chrome P2 + diagnóstico (`_BG Pagina 2`) |
 | `p2_uf` | Deneb | 16,192 · 416×224 | **Evolução mensal** |
-| `cohort_heatmap` | Deneb | 432,192 · 416×224 | **Retenção por safra** (cohort) |
-| `review_uf` | Deneb | 848,192 · 416×224 | **Risco de review por UF** (preditivo) |
-| `p2_funil` | Deneb | 16,464 · 416×208 | **Funil de recorrência** |
+| `p2_ano_slicer` | Slicer (dropdown) | 228,197 · 100×28 | Filtro de **Ano** — escopo restrito à Evolução mensal (ver interações) |
+| `cohort_heatmap` | Deneb | 432,192 · 416×224 | **Retenção por safra** (cohort, sem M+0; escala de cor no range real) |
+| `review_uf` | Deneb | 848,192 · 416×224 | **Risco de review por UF** (preditivo, com linha de média nacional) |
+| `p2_funil` | Deneb | 16,464 · 416×208 | **Funil de recorrência** (barra = taxa de conversão da etapa anterior) |
 | `p2_review_cluster` | Deneb | 432,464 · 416×208 | **Receita em risco por segmento** |
 | `p2_review_recency` | HTML Content | 848,464 · 416×208 | **Plano de ação** (`_Plano Acao`) |
 | `11af4980…` | Action Button | 560,16 · 144×48 | Navegação → Visão Executiva |
@@ -268,6 +269,9 @@ posicionados por cima.
 **Interações de visual configuradas** (`page.json` da P2): o seletor de cluster (`p2_review_cluster`)
 e o de UF (`review_uf`) cruzam-filtram `p2_uf`/`p2_funil` via `DataFilter`, e ficam `NoFilter`
 sobre `cohort_heatmap` e entre si — para evitar realçar/zerar visuais que não fazem sentido cruzar.
+O `p2_ano_slicer` filtra **apenas** `p2_uf` (`DataFilter`); todos os demais alvos estão em `NoFilter`
+explícito, porque `dim_calendario` só alcança `fato_pedidos` no modelo — deixar o padrão criaria
+um estado "meio filtrado" silencioso (funil/receita em risco/plano não reagiriam de qualquer forma).
 
 ### 5.3 Deneb (Vega-Lite)
 
