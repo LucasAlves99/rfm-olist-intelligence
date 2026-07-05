@@ -286,11 +286,16 @@ pré-calculados) — o visual trafega ~200 linhas em vez dos 93.358 clientes, de
 
 ## 6. Atualização de dados (refresh)
 
-As 6 tabelas leem CSV por **caminho absoluto** dentro do Power Query:
+As tabelas leem CSV via o **parâmetro `CaminhoDados`** (`expressions.tmdl`), que aponta
+para a pasta dos datamarts:
 
 ```
-C:\Users\Luk\Desktop\RFM-Projeto\data\powerbi\<tabela>.csv
+CaminhoDados = C:\Users\Luk\Desktop\RFM-Projeto\data\powerbi   (padrão)
+Partições:     File.Contents(CaminhoDados & "\<tabela>.csv")
 ```
+
+Em outra máquina/Service, basta alterar o parâmetro (Transform data → Manage parameters,
+ou Settings do dataset no Service) — sem tocar nas 7 partições.
 
 Fluxo de atualização:
 
@@ -301,9 +306,9 @@ Fluxo de atualização:
    ```
 2. No Power BI Desktop: **Home → Refresh**.
 
-> Em outra máquina, os caminhos absolutos **quebram**. Ajustar a fonte em
-> *Transform data → Data source settings* (ou parametrizar com `File.Contents`). Encoding é
-> `65001` (UTF-8) com delimitador `;` — não alterar, sob risco de erro de parsing dos números BR.
+> Em outra máquina, basta ajustar o parâmetro **`CaminhoDados`** (as partições não têm mais
+> caminho fixo). Encoding é `65001` (UTF-8) com delimitador `;` — não alterar, sob risco de
+> erro de parsing dos números BR.
 
 ---
 
@@ -338,7 +343,8 @@ grid, espaçamento e rationale: [`GUIA_DESIGN_DASHBOARD.md`](./GUIA_DESIGN_DASHB
   `activePageName`, `visualInteractions`).
 - **Medidas HTML** (`_Background`) são frágeis a edição manual — aspas duplas DAX (`""`) e
   entidades HTML (`&#225;`) precisam ser preservadas. Alterar com cuidado.
-- **Caminhos absolutos** nas fontes — primeiro item a corrigir ao mover o projeto.
+- **Fontes parametrizadas** via `CaminhoDados` (`expressions.tmdl`) — ao mover o projeto,
+  alterar só o parâmetro.
 - **`fato_cohort` sem relacionamento**: filtros de página não a atingem por contexto; só por
   medida. Intencional.
 - Botões de navegação dependem de **bookmarks/page navigation** — ao adicionar páginas,

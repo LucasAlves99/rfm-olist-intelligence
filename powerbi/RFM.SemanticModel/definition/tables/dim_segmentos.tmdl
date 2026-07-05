@@ -54,7 +54,7 @@ table dim_segmentos
 		mode: import
 		source =
 				let
-				    Fonte = Csv.Document(File.Contents("C:\Users\Luk\Desktop\RFM-Projeto\data\powerbi\dim_segmentos.csv"),[Delimiter=";", Columns=6, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    Fonte = Csv.Document(File.Contents(CaminhoDados & "\dim_segmentos.csv"),[Delimiter=";", Columns=6, Encoding=65001, QuoteStyle=QuoteStyle.None]),
 				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
 				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"Cluster_Name", type text}, {"Descricao", type text}, {"Cor_Hex", type text}, {"Acao_CRM", type text}, {"Prioridade", Int64.Type}, {"Cor_Power_BI", type text}})
 				in

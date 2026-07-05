@@ -229,6 +229,19 @@
             }
           }
         }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Barras comparando ticket atual e CLV projetado em 12 meses por cluster; só Campeões projetam retorno acima do ticket'"
+                }
+              }
+            }
+          }
+        }
       ]
     },
     "drillFilterOtherVisuals": true

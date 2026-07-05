@@ -59,7 +59,7 @@ table fato_cohort
 		mode: import
 		source =
 				let
-				    Fonte = Csv.Document(File.Contents("C:\Users\Luk\Desktop\RFM-Projeto\data\powerbi\fato_cohort.csv"),[Delimiter=";", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    Fonte = Csv.Document(File.Contents(CaminhoDados & "\fato_cohort.csv"),[Delimiter=";", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.None]),
 				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
 				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"Safra", type text}, {"MesIndice", Int64.Type}, {"Clientes_Retidos", Int64.Type}, {"Tamanho_Safra", Int64.Type}, {"Pct_Retencao", type number}}),
 				    #"Semestre Adicionado" = Table.AddColumn(#"Tipo Alterado", "Semestre", each Text.Start([Safra],4) & (if Number.FromText(Text.End([Safra],2)) <= 6 then "-S1" else "-S2"), type text)

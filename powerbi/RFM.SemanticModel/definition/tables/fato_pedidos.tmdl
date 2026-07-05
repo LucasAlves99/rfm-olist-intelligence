@@ -113,7 +113,7 @@ table fato_pedidos
 		mode: import
 		source =
 				let
-				    Fonte = Csv.Document(File.Contents("C:\Users\Luk\Desktop\RFM-Projeto\data\powerbi\fato_pedidos.csv"),[Delimiter=";", Columns=14, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    Fonte = Csv.Document(File.Contents(CaminhoDados & "\fato_pedidos.csv"),[Delimiter=";", Columns=14, Encoding=65001, QuoteStyle=QuoteStyle.None]),
 				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
 				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"order_id", type text}, {"customer_id", type text}, {"order_purchase_timestamp", type date}, {"total_items_value", type number}, {"n_items", Int64.Type}, {"total_payment", type number}, {"n_payments", Int64.Type}, {"review_score", Int64.Type}, {"customer_unique_id", type text}, {"customer_state", type text}, {"monetary_value", type number}, {"product_category", type text}, {"Cluster", Int64.Type}, {"Cluster_Name", type text}}),
 				    #"Colunas Removidas" = Table.RemoveColumns(#"Tipo Alterado",{"Cluster", "Cluster_Name"})

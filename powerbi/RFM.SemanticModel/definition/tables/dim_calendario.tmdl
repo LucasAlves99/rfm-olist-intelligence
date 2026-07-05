@@ -94,7 +94,7 @@ table dim_calendario
 		mode: import
 		source =
 				let
-				    Fonte = Csv.Document(File.Contents("C:\Users\Luk\Desktop\RFM-Projeto\data\powerbi\dim_calendario.csv"),[Delimiter=";", Columns=10, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    Fonte = Csv.Document(File.Contents(CaminhoDados & "\dim_calendario.csv"),[Delimiter=";", Columns=10, Encoding=65001, QuoteStyle=QuoteStyle.None]),
 				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
 				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"Data", type date}, {"Ano", Int64.Type}, {"Mes", Int64.Type}, {"Dia", Int64.Type}, {"Trimestre", Int64.Type}, {"AnoMes", type text}, {"NomeMes", type text}, {"DiaSemana", type text}, {"NumDiaSemana", Int64.Type}, {"FimDeSemana", type logical}})
 				in

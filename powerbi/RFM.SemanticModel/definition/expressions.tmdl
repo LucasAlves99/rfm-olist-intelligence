@@ -1,0 +1,4 @@
+expression CaminhoDados = "C:\Users\Luk\Desktop\RFM-Projeto\data\powerbi" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 8f4c1a2e-6b3d-4e9f-a1c7-5d2e8b9f0a31
+
+	annotation PBI_ResultType = Text

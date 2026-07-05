@@ -213,7 +213,7 @@ table fato_rfm_clientes
 		mode: import
 		source =
 				let
-				    Fonte = Csv.Document(File.Contents("C:\Users\Luk\Desktop\RFM-Projeto\data\powerbi\fato_rfm_clientes.csv"),[Delimiter=";", Columns=23, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    Fonte = Csv.Document(File.Contents(CaminhoDados & "\fato_rfm_clientes.csv"),[Delimiter=";", Columns=23, Encoding=65001, QuoteStyle=QuoteStyle.None]),
 				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
 				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"customer_unique_id", type text}, {"Recency", Int64.Type}, {"Frequency", Int64.Type}, {"Monetary", type number}, {"Avg_Order_Value", type number}, {"Items", Int64.Type}, {"Avg_Review", type number}, {"R_score", Int64.Type}, {"F_score", Int64.Type}, {"M_score", Int64.Type}, {"RFM_bucket", Int64.Type}, {"RFM_score", Int64.Type}, {"RFM_segment", type text}, {"cum_revenue_pct", type number}, {"Revenue_segment", type text}, {"Recency_segment", type text}, {"Strategic_segment", type text}, {"Cluster", Int64.Type}, {"Cluster_Name", type text}, {"Freq_Mensal", type number}, {"CLV_12m", type number}, {"dt_exportacao", type date}, {"versao_modelo", type text}})
 				in
