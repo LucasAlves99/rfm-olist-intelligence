@@ -37,23 +37,5 @@
       }
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "b750908b22909f295e4c",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_Background"
-              }
-            },
-            "Property": "_BG Pagina 1"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }
