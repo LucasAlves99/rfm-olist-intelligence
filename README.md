@@ -25,9 +25,14 @@
 
 ---
 
+![Visão Executiva — KPIs com sparklines, treemap por cluster, Pareto/Lorenz, CLV vs Ticket e o card do Analista IA](docs/screenshots/dashboard-visao-executiva.png)
+
+---
+
 ## Sumário
 
 - [Visão Geral](#visão-geral)
+- [Interface](#interface)
 - [Arquitetura](#arquitetura)
 - [Resultados](#resultados)
 - [Stack Técnica](#stack-técnica)
@@ -55,6 +60,18 @@ Este projeto entrega uma solução completa de **inteligência de clientes** sob
 4. **Agente conversacional** — chatbot baseado em Claude Haiku 4.5 com Prompt Caching e Tool Use nativo, capaz de consultar os datamarts em tempo real via DuckDB. **Publicado como app Streamlit** e acessível direto do dashboard (card "Analista RFM" + botão), fechando o ciclo análise → pergunta.
 
 O diferencial arquitetural é a **integração híbrida BI + IA generativa**: o usuário navega pelos gráficos e, a um clique, conversa com um analista virtual sobre os mesmos dados — com custo operacional de ~R$ 0,07 por pergunta.
+
+---
+
+## Interface
+
+**Análise Detalhada** — diagnóstico gerencial dinâmico, cohort de retenção, risco preditivo por UF com média nacional, funil de recorrência em escala log e plano de ação priorizado:
+
+![Análise Detalhada — diagnóstico, cohort, risco por UF, funil e plano de ação](docs/screenshots/dashboard-analise-detalhada.png)
+
+**Analista RFM** — o agente conversacional (Claude Haiku 4.5 + DuckDB) com a mesma identidade visual do dashboard, acessível pelo botão "Abrir Analista":
+
+![Agente Analista RFM — chat com sugestões rápidas e tracking de custo em tempo real](docs/screenshots/agente-analista-rfm.png)
 
 ---
 
@@ -432,10 +449,7 @@ O footer da aplicação Streamlit exibe o custo da sessão em tempo real, com tr
 - [x] Repositório publicado no GitHub
 - [x] Deploy do agente em Streamlit Community Cloud
 - [x] Publicação do dashboard no Power BI Service
-
-### Em andamento
-
-- [ ] Screenshots/GIF atualizados no README (pós-publicação)
+- [x] Screenshots do dashboard e do agente no README
 
 ### Backlog
 
