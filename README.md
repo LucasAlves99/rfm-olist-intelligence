@@ -96,13 +96,14 @@ O diferencial arquitetural é a **integração híbrida BI + IA generativa**: o 
          │
          ▼
 ┌─────────────────────────────────────────────────────┐
-│  6 DATAMARTS                                        │
+│  7 DATAMARTS                                        │
 │                                                     │
 │  fato_rfm_clientes    (1 linha/cliente)             │
 │  fato_pedidos         (1 linha/pedido)              │
 │  dim_segmentos        (1 linha/cluster)             │
 │  dim_calendario       (1 linha/dia)                 │
 │  fato_cohort          (retenção por cohort)         │
+│  dim_lorenz           (curva de concentração)       │
 │  risco_review_uf      (risco de review por UF)      │
 │                                                     │
 │  CSV UTF-8-SIG para PBI · Parquet Snappy para Agent │
@@ -129,7 +130,7 @@ O diferencial arquitetural é a **integração híbrida BI + IA generativa**: o 
 | Clientes únicos | 93.358 |
 | Receita total | R$ 15,42 mi |
 | Pedidos processados | 96.478 (`status = delivered`) |
-| Período | 24 meses (Set/2016 – Set/2018) |
+| Período | 24 meses (Set/2016 – Ago/2018 · snapshot 04/09/2018) |
 | Coeficiente de Gini | 0,48 (concentração moderada) |
 | Pareto observado | Top 20% dos clientes gera 54% da receita |
 | Silhouette score (K=4) | 0,369 (separação aceitável) |
@@ -167,7 +168,7 @@ Operacionalizado em lote (`score_review_risk.py`) → tabela de **risco por esta
 |---|---|
 | Análise e modelagem | Python 3.13, pandas 2.2, NumPy, scikit-learn 1.6, joblib, PyYAML |
 | Modelos preditivos | scikit-learn (RandomForest, HistGradientBoosting, LogisticRegression), imbalanced-learn (SMOTE) |
-| Qualidade | pytest 8.3 (73 testes), ruff, black |
+| Qualidade | pytest 8.3 (75 testes), ruff, black |
 | Visualização | Power BI (PBIR/TMDL), DAX, Deneb (Vega-Lite), HTML Content visual (AppSource) |
 | Agente conversacional | Streamlit 1.32+, Anthropic SDK 0.40+, Claude Haiku 4.5, DuckDB 1.0+, PyArrow 14+ |
 | Hospedagem | Streamlit Community Cloud (free tier), Power BI Service |
@@ -228,6 +229,7 @@ ls data/powerbi/
 # dim_segmentos.csv
 # dim_calendario.csv
 # fato_cohort.csv
+# dim_lorenz.csv
 # risco_review_uf.csv
 
 # Abrir o dashboard pronto no Power BI Desktop:
@@ -246,7 +248,7 @@ rfm-olist-intelligence/
 │
 ├── data/
 │   ├── raw/                        5 CSVs Olist (gitignored)
-│   └── powerbi/                    6 datamarts CSV tipados (UTF-8-SIG)
+│   └── powerbi/                    7 datamarts CSV tipados (UTF-8-SIG)
 │
 ├── models/                         (.pkl gitignored — gerados pelos scripts)
 │   ├── model_metadata.json         Silhouette, K, snapshot, training date
@@ -275,6 +277,7 @@ rfm-olist-intelligence/
 │
 ├── pipeline/
 │   ├── run_pipeline.py             Orquestrador RFM end-to-end
+│   ├── ml_common.py                Infra de treino compartilhada (CV, threshold, lift)
 │   ├── train_review_model.py       Modelo de review ruim (sem leakage)
 │   ├── train_repeat_model.py       Estudo de propensão à recompra
 │   └── score_review_risk.py        Scoring em lote → risco por UF
@@ -468,7 +471,7 @@ complementares ficam **junto do código**:
 | Documento | Público-alvo |
 |---|---|
 | [`powerbi/DOCUMENTACAO_PBI.md`](./powerbi/DOCUMENTACAO_PBI.md) | Analistas BI — referência técnica do artefato Power BI (modelo, 45 medidas DAX, relacionamentos, mapa de visuais) |
-| [`powerbi/dicionario_dados.md`](./powerbi/dicionario_dados.md) | Analistas BI — schema completo dos 6 datamarts |
+| [`powerbi/dicionario_dados.md`](./powerbi/dicionario_dados.md) | Analistas BI — schema completo dos 7 datamarts |
 | [`powerbi/GUIA_DESIGN_DASHBOARD.md`](./powerbi/GUIA_DESIGN_DASHBOARD.md) | Analistas BI — rationale de design (medidas DAX, theme JSON, visuais Deneb) |
 | [`streamlit_agent/README.md`](./streamlit_agent/README.md) | Setup e deploy do agente de IA |
 
