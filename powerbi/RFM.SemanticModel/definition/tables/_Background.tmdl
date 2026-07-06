@@ -46,7 +46,7 @@ table _Background
 			    --bg-base: #08090A;
 			    --bg-elev-1: #0E0F11;
 			    --bg-elev-2: #131418;
-			    --bg-card: rgba(20, 22, 30, 0.6);
+			    --bg-card: rgba(20, 22, 30, 0.85);
 			    --bg-card-solid: #14151D;
 			    --border: rgba(255, 255, 255, 0.06);
 			    --border-hover: rgba(255, 255, 255, 0.14);
@@ -72,7 +72,7 @@ table _Background
 			
 			  body {
 			    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-			    background: var(--bg-base);
+			    background: radial-gradient(900px 600px at 12% 8%, rgba(191,111,248,0.10), transparent 65%), radial-gradient(800px 550px at 88% 92%, rgba(94,106,210,0.09), transparent 65%), radial-gradient(700px 500px at 55% 45%, rgba(191,111,248,0.05), transparent 60%), var(--bg-base);
 			    color: var(--text-1);
 			    -webkit-font-smoothing: antialiased;
 			    position: relative;
@@ -80,66 +80,6 @@ table _Background
 			
 			  /* &#9472;&#9472;&#9472; Background aurora animada &#9472;&#9472;&#9472; */
 			  .bg-mesh { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-			  .blob { position: absolute; border-radius: 50%; filter: blur(110px); will-change: transform; }
-			  .blob.a {
-			    width: 800px; height: 800px; background: var(--big-spenders); opacity: 0.22;
-			    top: -200px; left: -200px; animation: floatA 22s infinite ease-in-out;
-			  }
-			  .blob.b {
-			    width: 700px; height: 700px; background: var(--champions); opacity: 0.16;
-			    bottom: -180px; right: -180px; animation: floatB 20s infinite ease-in-out;
-			  }
-			  .blob.c {
-			    width: 600px; height: 600px; background: var(--big-spenders); opacity: 0.13;
-			    top: 35%; left: 38%; animation: floatC 24s infinite ease-in-out;
-			  }
-			  .blob.d {
-			    width: 500px; height: 500px; background: var(--novos); opacity: 0.09;
-			    top: 10%; right: 25%; animation: floatD 26s infinite ease-in-out;
-			  }
-			  .blob.e {
-			    width: 450px; height: 450px; background: var(--em-risco); opacity: 0.08;
-			    bottom: 15%; left: 20%; animation: floatE 28s infinite ease-in-out;
-			  }
-			  @keyframes floatA {
-			    0%, 100% { transform: translate(0, 0) scale(1); }
-			    33% { transform: translate(180px, 120px) scale(1.15); }
-			    66% { transform: translate(-80px, 200px) scale(0.95); }
-			  }
-			  @keyframes floatB {
-			    0%, 100% { transform: translate(0, 0) scale(1); }
-			    50% { transform: translate(-220px, -140px) scale(1.2); }
-			  }
-			  @keyframes floatC {
-			    0%, 100% { transform: translate(0, 0) scale(1); }
-			    40% { transform: translate(140px, -160px) scale(1.1); }
-			    70% { transform: translate(-120px, 100px) scale(0.9); }
-			  }
-			  @keyframes floatD {
-			    0%, 100% { transform: translate(0, 0) scale(1); }
-			    50% { transform: translate(-200px, 180px) scale(1.25); }
-			  }
-			  @keyframes floatE {
-			    0%, 100% { transform: translate(0, 0) scale(1); }
-			    50% { transform: translate(160px, -120px) scale(1.15); }
-			  }
-			  .bg-mesh::before {
-			    content: ''; position: absolute;
-			    top: 30%; left: -50%; width: 200%; height: 1px;
-			    background: linear-gradient(90deg,
-			      transparent 0%,
-			      rgba(191, 111, 248, 0.4) 30%,
-			      rgba(94, 106, 210, 0.4) 50%,
-			      rgba(191, 111, 248, 0.4) 70%,
-			      transparent 100%);
-			    filter: blur(1px);
-			    animation: shimmer 12s ease-in-out infinite;
-			    opacity: 0.6;
-			  }
-			  @keyframes shimmer {
-			    0%, 100% { transform: translateX(0) translateY(0); opacity: 0.3; }
-			    50% { transform: translateX(-20%) translateY(40vh); opacity: 0.8; }
-			  }
 			  .bg-mesh::after {
 			    content: ''; position: absolute; inset: 0;
 			    background: radial-gradient(ellipse at center, transparent 30%, rgba(8, 9, 10, 0.55) 100%);
@@ -159,7 +99,7 @@ table _Background
 			    display: grid; grid-template-columns: auto 1fr auto; align-items: center;
 			    gap: 20px; padding: 0 16px;
 			    background: var(--bg-card);
-			    backdrop-filter: blur(20px) saturate(140%);
+			    
 			    border: 1px solid var(--border); border-radius: 12px;
 			  }
 			  .brand { display: flex; align-items: center; gap: 12px; }
@@ -203,7 +143,7 @@ table _Background
 			  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 			  .kpi {
 			    background: var(--bg-card);
-			    backdrop-filter: blur(20px) saturate(140%);
+			    
 			    border: 1px solid var(--border);
 			    border-radius: 12px;
 			    padding: 10px 14px;
@@ -253,7 +193,7 @@ table _Background
 			  /* &#9472;&#9472;&#9472; Panel &#8212; header s&#243;, corpo vazio (visual PBI por cima) &#9472;&#9472;&#9472; */
 			  .panel {
 			    background: var(--bg-card);
-			    backdrop-filter: blur(20px) saturate(140%);
+			    
 			    border: 1px solid var(--border);
 			    border-radius: 12px;
 			    padding: 5px 12px 10px 12px;
@@ -276,7 +216,7 @@ table _Background
 			  /* &#9472;&#9472;&#9472; AI panel &#8212; header s&#243; &#9472;&#9472;&#9472; */
 			  .ai-panel {
 			    background: var(--bg-card);
-			    backdrop-filter: blur(20px) saturate(140%);
+			    
 			    border: 1px solid var(--border);
 			    border-radius: 16px;
 			    display: flex; flex-direction: column;
@@ -339,18 +279,12 @@ table _Background
 			
 			  @media (prefers-reduced-motion: reduce) {
 			    *, *::before, *::after { animation: none !important; transition: none !important; }
-			    .blob { display: none; }
 			  }
 			</style>
 			</head>
 			<body>
 			
 			<div class=""bg-mesh"">
-			  <div class=""blob a""></div>
-			  <div class=""blob b""></div>
-			  <div class=""blob c""></div>
-			  <div class=""blob d""></div>
-			  <div class=""blob e""></div>
 			</div>
 			
 			<div class=""dashboard"">
@@ -459,7 +393,7 @@ table _Background
 						    --bg-base: #08090A;
 						    --bg-elev-1: #0E0F11;
 						    --bg-elev-2: #131418;
-						    --bg-card: rgba(20, 22, 30, 0.6);
+						    --bg-card: rgba(20, 22, 30, 0.85);
 						    --bg-card-solid: #14151D;
 						    --border: rgba(255, 255, 255, 0.06);
 						    --border-hover: rgba(255, 255, 255, 0.14);
@@ -485,7 +419,7 @@ table _Background
 			
 						  body {
 						    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-						    background: var(--bg-base);
+						    background: radial-gradient(900px 600px at 12% 8%, rgba(191,111,248,0.10), transparent 65%), radial-gradient(800px 550px at 88% 92%, rgba(94,106,210,0.09), transparent 65%), radial-gradient(700px 500px at 55% 45%, rgba(191,111,248,0.05), transparent 60%), var(--bg-base);
 						    color: var(--text-1);
 						    -webkit-font-smoothing: antialiased;
 						    position: relative;
@@ -493,66 +427,6 @@ table _Background
 			
 						  /* &#9472;&#9472;&#9472; Background aurora animada &#9472;&#9472;&#9472; */
 						  .bg-mesh { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-						  .blob { position: absolute; border-radius: 50%; filter: blur(110px); will-change: transform; }
-						  .blob.a {
-						    width: 800px; height: 800px; background: var(--big-spenders); opacity: 0.22;
-						    top: -200px; left: -200px; animation: floatA 22s infinite ease-in-out;
-						  }
-						  .blob.b {
-						    width: 700px; height: 700px; background: var(--champions); opacity: 0.16;
-						    bottom: -180px; right: -180px; animation: floatB 20s infinite ease-in-out;
-						  }
-						  .blob.c {
-						    width: 600px; height: 600px; background: var(--big-spenders); opacity: 0.13;
-						    top: 35%; left: 38%; animation: floatC 24s infinite ease-in-out;
-						  }
-						  .blob.d {
-						    width: 500px; height: 500px; background: var(--novos); opacity: 0.09;
-						    top: 10%; right: 25%; animation: floatD 26s infinite ease-in-out;
-						  }
-						  .blob.e {
-						    width: 450px; height: 450px; background: var(--em-risco); opacity: 0.08;
-						    bottom: 15%; left: 20%; animation: floatE 28s infinite ease-in-out;
-						  }
-						  @keyframes floatA {
-						    0%, 100% { transform: translate(0, 0) scale(1); }
-						    33% { transform: translate(180px, 120px) scale(1.15); }
-						    66% { transform: translate(-80px, 200px) scale(0.95); }
-						  }
-						  @keyframes floatB {
-						    0%, 100% { transform: translate(0, 0) scale(1); }
-						    50% { transform: translate(-220px, -140px) scale(1.2); }
-						  }
-						  @keyframes floatC {
-						    0%, 100% { transform: translate(0, 0) scale(1); }
-						    40% { transform: translate(140px, -160px) scale(1.1); }
-						    70% { transform: translate(-120px, 100px) scale(0.9); }
-						  }
-						  @keyframes floatD {
-						    0%, 100% { transform: translate(0, 0) scale(1); }
-						    50% { transform: translate(-200px, 180px) scale(1.25); }
-						  }
-						  @keyframes floatE {
-						    0%, 100% { transform: translate(0, 0) scale(1); }
-						    50% { transform: translate(160px, -120px) scale(1.15); }
-						  }
-						  .bg-mesh::before {
-						    content: ''; position: absolute;
-						    top: 30%; left: -50%; width: 200%; height: 1px;
-						    background: linear-gradient(90deg,
-						      transparent 0%,
-						      rgba(191, 111, 248, 0.4) 30%,
-						      rgba(94, 106, 210, 0.4) 50%,
-						      rgba(191, 111, 248, 0.4) 70%,
-						      transparent 100%);
-						    filter: blur(1px);
-						    animation: shimmer 12s ease-in-out infinite;
-						    opacity: 0.6;
-						  }
-						  @keyframes shimmer {
-						    0%, 100% { transform: translateX(0) translateY(0); opacity: 0.3; }
-						    50% { transform: translateX(-20%) translateY(40vh); opacity: 0.8; }
-						  }
 						  .bg-mesh::after {
 						    content: ''; position: absolute; inset: 0;
 						    background: radial-gradient(ellipse at center, transparent 30%, rgba(8, 9, 10, 0.55) 100%);
@@ -572,7 +446,7 @@ table _Background
 						    display: grid; grid-template-columns: auto 1fr auto; align-items: center;
 						    gap: 20px; padding: 0 16px;
 						    background: var(--bg-card);
-						    backdrop-filter: blur(20px) saturate(140%);
+						    
 						    border: 1px solid var(--border); border-radius: 12px;
 						  }
 						  .brand { display: flex; align-items: center; gap: 12px; }
@@ -616,7 +490,7 @@ table _Background
 						  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 						  .kpi {
 						    background: var(--bg-card);
-						    backdrop-filter: blur(20px) saturate(140%);
+						    
 						    border: 1px solid var(--border);
 						    border-radius: 12px;
 						    padding: 10px 14px;
@@ -644,14 +518,14 @@ table _Background
 						  .kpi.em-risco .dot, .kpi.em-risco .dot::after { background: var(--em-risco); }
 						  .kpi .label { font-size: 11px; color: var(--text-2); font-weight: 500; letter-spacing: 0.3px; }
 			
-						  .diagnostic-bar { display: flex; align-items: center; gap: 14px; background: var(--bg-card); backdrop-filter: blur(20px) saturate(140%); border: 1px solid var(--border); border-left: 3px solid var(--em-risco); border-radius: 12px; padding: 9px 18px; height: 70px; overflow: hidden; } .diag-icon { flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; background: var(--em-risco-soft); color: var(--em-risco); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; } .diag-text { display: flex; flex-direction: column; gap: 3px; } .diag-title { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--em-risco); } .diag-body { font-size: 11.5px; line-height: 1.3; color: var(--text-2); } .diag-body b { color: var(--text-1); font-weight: 700; } /* &#9472;&#9472;&#9472; Page 2 layout &#8212; 3 colunas &#215; 2 linhas &#9472;&#9472;&#9472; */
+						  .diagnostic-bar { display: flex; align-items: center; gap: 14px; background: var(--bg-card);  border: 1px solid var(--border); border-left: 3px solid var(--em-risco); border-radius: 12px; padding: 9px 18px; height: 70px; overflow: hidden; } .diag-icon { flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; background: var(--em-risco-soft); color: var(--em-risco); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; } .diag-text { display: flex; flex-direction: column; gap: 3px; } .diag-title { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--em-risco); } .diag-body { font-size: 11.5px; line-height: 1.3; color: var(--text-2); } .diag-body b { color: var(--text-1); font-weight: 700; } /* &#9472;&#9472;&#9472; Page 2 layout &#8212; 3 colunas &#215; 2 linhas &#9472;&#9472;&#9472; */
 						  .content { display: grid; grid-template-rows: 1fr 1fr; gap: 8px; min-height: 0; }
 						  .visual-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; min-height: 0; }
 			
 						  /* &#9472;&#9472;&#9472; Panel &#8212; header s&#243;, corpo vazio &#9472;&#9472;&#9472; */
 						  .panel {
 						    background: var(--bg-card);
-						    backdrop-filter: blur(20px) saturate(140%);
+						    
 						    border: 1px solid var(--border);
 						    border-radius: 12px;
 						    padding: 10px 12px;
@@ -680,18 +554,12 @@ table _Background
 			
 						  @media (prefers-reduced-motion: reduce) {
 						    *, *::before, *::after { animation: none !important; transition: none !important; }
-						    .blob { display: none; }
 						  }
 						</style>
 						</head>
 						<body>
 			
 						<div class=""bg-mesh"">
-						  <div class=""blob a""></div>
-						  <div class=""blob b""></div>
-						  <div class=""blob c""></div>
-						  <div class=""blob d""></div>
-						  <div class=""blob e""></div>
 						</div>
 			
 						<div class=""dashboard"">
