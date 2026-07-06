@@ -75,22 +75,32 @@ CATEG = ["cat", "customer_state", "payment_type"]
 
 
 # ─────────────────────── 1. Feature engineering (até a entrega) ───────────────────────
-def build_features() -> tuple[pd.DataFrame, pd.Series]:
-    orders = pd.read_csv(RAW / "olist_orders_dataset.csv")
-    items = pd.read_csv(RAW / "olist_order_items_dataset.csv")
-    pays = pd.read_csv(RAW / "olist_order_payments_dataset.csv")
-    revs = pd.read_csv(RAW / "olist_order_reviews_dataset.csv")
-    custs = pd.read_csv(RAW / "olist_customers_dataset.csv")
-    prods = pd.read_csv(RAW / "olist_products_dataset.csv")
-    trans = pd.read_csv(RAW / "product_category_name_translation.csv")
+def _load_raw() -> dict[str, pd.DataFrame]:
+    """Lê os 7 CSVs brutos da Olist usados pelo modelo."""
+    return {
+        "orders": pd.read_csv(RAW / "olist_orders_dataset.csv"),
+        "items": pd.read_csv(RAW / "olist_order_items_dataset.csv"),
+        "pays": pd.read_csv(RAW / "olist_order_payments_dataset.csv"),
+        "revs": pd.read_csv(RAW / "olist_order_reviews_dataset.csv"),
+        "custs": pd.read_csv(RAW / "olist_customers_dataset.csv"),
+        "prods": pd.read_csv(RAW / "olist_products_dataset.csv"),
+        "trans": pd.read_csv(RAW / "product_category_name_translation.csv"),
+    }
 
-    # só pedidos entregues e com datas válidas
+
+def _delivered_orders_with_time_features(orders: pd.DataFrame) -> pd.DataFrame:
+    """Filtra pedidos entregues com datas válidas e deriva as features de tempo.
+
+    As features de tempo (atraso, prazos, sazonalidade) são as mais preditivas
+    do modelo — todas conhecidas no momento da entrega (sem leakage).
+    """
     for c in [
         "order_purchase_timestamp",
         "order_delivered_customer_date",
         "order_estimated_delivery_date",
     ]:
         orders[c] = pd.to_datetime(orders[c], errors="coerce")
+
     o = (
         orders[orders["order_status"] == "delivered"]
         .dropna(
@@ -115,11 +125,21 @@ def build_features() -> tuple[pd.DataFrame, pd.Series]:
     o["atrasou"] = (o["atraso_dias"] > 0).astype(int)
     o["mes"] = o["order_purchase_timestamp"].dt.month
     o["dow"] = o["order_purchase_timestamp"].dt.dayofweek
+    return o
 
-    # itens: agrega por pedido + categoria dominante (maior preço)
+
+def _order_item_aggregates(
+    items: pd.DataFrame, prods: pd.DataFrame, trans: pd.DataFrame
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Agrega itens por pedido e deriva a categoria dominante (a do item mais caro).
+
+    Returns:
+        Tupla (agg, cat): agregados numéricos por order_id e categoria por order_id.
+    """
     prods = prods.merge(trans, on="product_category_name", how="left")
     prods["cat"] = prods["product_category_name_english"].fillna("desconhecida")
     items = items.merge(prods[["product_id", "cat"]], on="product_id", how="left")
+
     agg = (
         items.groupby("order_id")
         .agg(
@@ -134,8 +154,15 @@ def build_features() -> tuple[pd.DataFrame, pd.Series]:
     cat = items.sort_values("price", ascending=False).drop_duplicates("order_id")[
         ["order_id", "cat"]
     ]
+    return agg, cat
 
-    # pagamentos
+
+def _payment_aggregates(pays: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Agrega pagamentos por pedido e identifica o método de maior valor.
+
+    Returns:
+        Tupla (pa, ptype): agregados numéricos por order_id e payment_type dominante.
+    """
     pa = (
         pays.groupby("order_id")
         .agg(
@@ -148,12 +175,29 @@ def build_features() -> tuple[pd.DataFrame, pd.Series]:
     ptype = pays.sort_values("payment_value", ascending=False).drop_duplicates("order_id")[
         ["order_id", "payment_type"]
     ]
+    return pa, ptype
+
+
+def build_features() -> tuple[pd.DataFrame, pd.Series]:
+    """Monta X (features conhecidas até a entrega) e y (review_score <= 2).
+
+    Etapas: pedidos entregues + tempo → agregados de itens/pagamentos →
+    join com UF e review (o review entra APENAS como alvo, nunca como feature).
+
+    Returns:
+        Tupla (feats, y): DataFrame com NUMERIC + CATEG e Série binária do alvo.
+    """
+    raw = _load_raw()
+
+    o = _delivered_orders_with_time_features(raw["orders"])
+    agg, cat = _order_item_aggregates(raw["items"], raw["prods"], raw["trans"])
+    pa, ptype = _payment_aggregates(raw["pays"])
 
     # reviews (alvo): dedup por pedido
-    rv = revs.drop_duplicates("order_id")[["order_id", "review_score"]]
+    rv = raw["revs"].drop_duplicates("order_id")[["order_id", "review_score"]]
 
     # UF do cliente
-    o = o.merge(custs[["customer_id", "customer_state"]], on="customer_id", how="left")
+    o = o.merge(raw["custs"][["customer_id", "customer_state"]], on="customer_id", how="left")
 
     df = (
         o.merge(agg, on="order_id", how="inner")
@@ -163,14 +207,14 @@ def build_features() -> tuple[pd.DataFrame, pd.Series]:
         .merge(rv, on="order_id", how="inner")
     )
 
+    # Razões derivadas (replace(0, nan) evita divisão por zero; NaN é imputado depois)
     df["freight_ratio"] = df["freight_total"] / df["price_total"].replace(0, np.nan)
     df["valor_por_item"] = df["price_total"] / df["n_items"].replace(0, np.nan)
 
     y = (df["review_score"] <= 2).astype(int).rename("review_ruim")
     feats = df[NUMERIC + CATEG].copy()
-    feats["cat"] = feats["cat"].astype(str)
-    feats["customer_state"] = feats["customer_state"].astype(str)
-    feats["payment_type"] = feats["payment_type"].astype(str)
+    for col in CATEG:
+        feats[col] = feats[col].astype(str)
     return feats, y
 
 
@@ -230,7 +274,13 @@ def main() -> None:
     best_thr = tune_threshold(best, X_tr, y_tr, cv)
 
     proba, test_metrics = evaluate_holdout(
-        best, X_tr, y_tr, X_te, y_te, best_thr, best_name,
+        best,
+        X_tr,
+        y_tr,
+        X_te,
+        y_te,
+        best_thr,
+        best_name,
         target_names=["ok", "review_ruim"],
     )
     print(f"(baseline PR-AUC = taxa positiva = {y.mean():.3f})")

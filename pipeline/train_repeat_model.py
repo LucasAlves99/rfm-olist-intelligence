@@ -154,7 +154,13 @@ def main() -> None:
     best_thr = tune_threshold(best, X_tr, y_tr, cv)
 
     proba_te, test_metrics = evaluate_holdout(
-        best, X_tr, y_tr, X_te, y_te, best_thr, best_name,
+        best,
+        X_tr,
+        y_tr,
+        X_te,
+        y_te,
+        best_thr,
+        best_name,
         target_names=["nao_recompra", "recompra"],
     )
     print(

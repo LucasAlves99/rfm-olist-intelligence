@@ -30,9 +30,7 @@ def dataset():
     x2 = rng.normal(0, 1, n)
     logit = 1.5 * x1 - 1.0 * x2
     y = (logit + rng.normal(0, 0.5, n) > 0).astype(int)
-    X = pd.DataFrame(
-        {"x1": x1, "x2": x2, "g": rng.choice(["a", "b", "c"], n)}
-    )
+    X = pd.DataFrame({"x1": x1, "x2": x2, "g": rng.choice(["a", "b", "c"], n)})
     return X, pd.Series(y, name="target")
 
 
@@ -80,13 +78,14 @@ def test_scoring_tem_metricas_primarias():
 def test_fluxo_end_to_end(dataset, tmp_path):
     """Smoke do fluxo completo com um único modelo leve."""
     X, y = dataset
-    X_tr, X_te, y_tr, y_te = train_test_split(
-        X, y, test_size=0.25, stratify=y, random_state=42
-    )
+    X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.25, stratify=y, random_state=42)
     cv = StratifiedKFold(n_splits=3, shuffle=True, random_state=42)
     models = {
         "LogisticRegression": Pipeline(
-            [("pre", mc.make_preprocessor(NUMERIC, CATEG)), ("clf", LogisticRegression(max_iter=500))]
+            [
+                ("pre", mc.make_preprocessor(NUMERIC, CATEG)),
+                ("clf", LogisticRegression(max_iter=500)),
+            ]
         )
     }
 

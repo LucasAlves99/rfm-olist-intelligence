@@ -34,48 +34,20 @@ table _KPIs
 		displayFolder: Qualidade
 		lineageTag: 6fcc1240-8205-48a2-ba84-c0c8af5dd03b
 
-	measure 'Receita MoM %' =
-			VAR maxd = MAX(fato_pedidos[order_purchase_timestamp])
-			VAR refDate = IF(maxd < EOMONTH(maxd, 0), EOMONTH(maxd, -1), maxd)
-			VAR y = YEAR(refDate)
-			VAR m = MONTH(refDate)
-			VAR pm = IF(m=1,12,m-1)
-			VAR py = IF(m=1,y-1,y)
-			VAR a = CALCULATE(SUM(fato_pedidos[monetary_value]), FILTER(ALL(dim_calendario), dim_calendario[Ano]=y && dim_calendario[Mes]=m))
-			VAR b = CALCULATE(SUM(fato_pedidos[monetary_value]), FILTER(ALL(dim_calendario), dim_calendario[Ano]=py && dim_calendario[Mes]=pm))
-			RETURN DIVIDE(a-b, b)
+	/// Variação da receita: último mês fechado vs mês anterior (compõe [Receita Mes] e [Receita Mes Anterior])
+	measure 'Receita MoM %' = DIVIDE([Receita Mes] - [Receita Mes Anterior], [Receita Mes Anterior])
 		formatString: +0.0%;-0.0%;0.0%
 		displayFolder: Tendência
 		lineageTag: 3e46bd13-6578-4c8e-831f-7425a118232c
 
-	measure 'Ticket MoM %' =
-			VAR maxd = MAX(fato_pedidos[order_purchase_timestamp])
-			VAR refDate = IF(maxd < EOMONTH(maxd, 0), EOMONTH(maxd, -1), maxd)
-			VAR y = YEAR(refDate)
-			VAR m = MONTH(refDate)
-			VAR pm = IF(m=1,12,m-1)
-			VAR py = IF(m=1,y-1,y)
-			VAR ra = CALCULATE(SUM(fato_pedidos[monetary_value]), FILTER(ALL(dim_calendario), dim_calendario[Ano]=y && dim_calendario[Mes]=m))
-			VAR rb = CALCULATE(SUM(fato_pedidos[monetary_value]), FILTER(ALL(dim_calendario), dim_calendario[Ano]=py && dim_calendario[Mes]=pm))
-			VAR pa = CALCULATE(COUNTROWS(fato_pedidos), FILTER(ALL(dim_calendario), dim_calendario[Ano]=y && dim_calendario[Mes]=m))
-			VAR pb = CALCULATE(COUNTROWS(fato_pedidos), FILTER(ALL(dim_calendario), dim_calendario[Ano]=py && dim_calendario[Mes]=pm))
-			VAR ta = DIVIDE(ra, pa)
-			VAR tb = DIVIDE(rb, pb)
-			RETURN DIVIDE(ta-tb, tb)
+	/// Variação do ticket médio (receita/pedidos): último mês fechado vs anterior
+	measure 'Ticket MoM %' = DIVIDE([Ticket Mes] - [Ticket Mes Anterior], [Ticket Mes Anterior])
 		formatString: +0.0%;-0.0%;0.0%
 		displayFolder: Tendência
 		lineageTag: d470f743-7c45-4284-9dd1-bc4dfddd566a
 
-	measure 'Clientes Ativos MoM %' =
-			VAR maxd = MAX(fato_pedidos[order_purchase_timestamp])
-			VAR refDate = IF(maxd < EOMONTH(maxd, 0), EOMONTH(maxd, -1), maxd)
-			VAR y = YEAR(refDate)
-			VAR m = MONTH(refDate)
-			VAR pm = IF(m=1,12,m-1)
-			VAR py = IF(m=1,y-1,y)
-			VAR a = CALCULATE(DISTINCTCOUNT(fato_pedidos[customer_unique_id]), FILTER(ALL(dim_calendario), dim_calendario[Ano]=y && dim_calendario[Mes]=m))
-			VAR b = CALCULATE(DISTINCTCOUNT(fato_pedidos[customer_unique_id]), FILTER(ALL(dim_calendario), dim_calendario[Ano]=py && dim_calendario[Mes]=pm))
-			RETURN DIVIDE(a-b, b)
+	/// Variação de clientes ativos: último mês fechado vs mês anterior
+	measure 'Clientes Ativos MoM %' = DIVIDE([Clientes Ativos Mes] - [Clientes Ativos Mes Anterior], [Clientes Ativos Mes Anterior])
 		formatString: +0.0%;-0.0%;0.0%
 		displayFolder: Tendência
 		lineageTag: a4add5b7-47a4-4e0f-952c-c446fd76e061
@@ -94,6 +66,7 @@ table _KPIs
 		displayFolder: Temporal
 		lineageTag: 54c4f138-0004-408c-b52f-ce152c2914f2
 
+	/// Receita do último mês fechado (recua um mês se o mês corrente estiver parcial)
 	measure 'Receita Mes' =
 			VAR maxd = MAX(fato_pedidos[order_purchase_timestamp])
 			VAR refDate = IF(maxd < EOMONTH(maxd, 0), EOMONTH(maxd, -1), maxd)
@@ -104,6 +77,7 @@ table _KPIs
 		displayFolder: Mensal
 		lineageTag: 7b2c0010-0001-4aaa-9bbb-000000000010
 
+	/// Pedidos do último mês fechado (recua um mês se o mês corrente estiver parcial)
 	measure 'Pedidos Mes' =
 			VAR maxd = MAX(fato_pedidos[order_purchase_timestamp])
 			VAR refDate = IF(maxd < EOMONTH(maxd, 0), EOMONTH(maxd, -1), maxd)
@@ -114,6 +88,7 @@ table _KPIs
 		displayFolder: Mensal
 		lineageTag: 7b2c0010-0002-4aaa-9bbb-000000000011
 
+	/// Clientes ativos do último mês fechado (recua um mês se o mês corrente estiver parcial)
 	measure 'Clientes Ativos Mes' =
 			VAR maxd = MAX(fato_pedidos[order_purchase_timestamp])
 			VAR refDate = IF(maxd < EOMONTH(maxd, 0), EOMONTH(maxd, -1), maxd)
@@ -124,21 +99,59 @@ table _KPIs
 		displayFolder: Mensal
 		lineageTag: 7b2c0010-0003-4aaa-9bbb-000000000012
 
+	/// Ticket médio do último mês fechado
 	measure 'Ticket Mes' = DIVIDE([Receita Mes], [Pedidos Mes])
 		formatString: "R$ "#,0.00
 		displayFolder: Mensal
 		lineageTag: 7b2c0010-0004-4aaa-9bbb-000000000013
 
-	measure 'Pedidos MoM %' =
+	/// Receita do mês anterior ao último mês fechado (base das medidas MoM)
+	measure 'Receita Mes Anterior' =
 			VAR maxd = MAX(fato_pedidos[order_purchase_timestamp])
 			VAR refDate = IF(maxd < EOMONTH(maxd, 0), EOMONTH(maxd, -1), maxd)
 			VAR y = YEAR(refDate)
 			VAR m = MONTH(refDate)
 			VAR pm = IF(m=1,12,m-1)
 			VAR py = IF(m=1,y-1,y)
-			VAR a = CALCULATE(COUNTROWS(fato_pedidos), FILTER(ALL(dim_calendario), dim_calendario[Ano]=y && dim_calendario[Mes]=m))
-			VAR bb = CALCULATE(COUNTROWS(fato_pedidos), FILTER(ALL(dim_calendario), dim_calendario[Ano]=py && dim_calendario[Mes]=pm))
-			RETURN DIVIDE(a-bb, bb)
+			RETURN CALCULATE(SUM(fato_pedidos[monetary_value]), FILTER(ALL(dim_calendario), dim_calendario[Ano]=py && dim_calendario[Mes]=pm))
+		formatString: "R$ "#,0
+		displayFolder: Mensal
+		lineageTag: 7b2c0010-0006-4aaa-9bbb-000000000015
+
+	/// Pedidos do mês anterior ao último mês fechado (base das medidas MoM)
+	measure 'Pedidos Mes Anterior' =
+			VAR maxd = MAX(fato_pedidos[order_purchase_timestamp])
+			VAR refDate = IF(maxd < EOMONTH(maxd, 0), EOMONTH(maxd, -1), maxd)
+			VAR y = YEAR(refDate)
+			VAR m = MONTH(refDate)
+			VAR pm = IF(m=1,12,m-1)
+			VAR py = IF(m=1,y-1,y)
+			RETURN CALCULATE(COUNTROWS(fato_pedidos), FILTER(ALL(dim_calendario), dim_calendario[Ano]=py && dim_calendario[Mes]=pm))
+		formatString: #,0
+		displayFolder: Mensal
+		lineageTag: 7b2c0010-0007-4aaa-9bbb-000000000016
+
+	/// Clientes ativos do mês anterior ao último mês fechado (base das medidas MoM)
+	measure 'Clientes Ativos Mes Anterior' =
+			VAR maxd = MAX(fato_pedidos[order_purchase_timestamp])
+			VAR refDate = IF(maxd < EOMONTH(maxd, 0), EOMONTH(maxd, -1), maxd)
+			VAR y = YEAR(refDate)
+			VAR m = MONTH(refDate)
+			VAR pm = IF(m=1,12,m-1)
+			VAR py = IF(m=1,y-1,y)
+			RETURN CALCULATE(DISTINCTCOUNT(fato_pedidos[customer_unique_id]), FILTER(ALL(dim_calendario), dim_calendario[Ano]=py && dim_calendario[Mes]=pm))
+		formatString: #,0
+		displayFolder: Mensal
+		lineageTag: 7b2c0010-0008-4aaa-9bbb-000000000017
+
+	/// Ticket médio do mês anterior ao último mês fechado (base das medidas MoM)
+	measure 'Ticket Mes Anterior' = DIVIDE([Receita Mes Anterior], [Pedidos Mes Anterior])
+		formatString: "R$ "#,0.00
+		displayFolder: Mensal
+		lineageTag: 7b2c0010-0009-4aaa-9bbb-000000000018
+
+	/// Variação de pedidos: último mês fechado vs mês anterior
+	measure 'Pedidos MoM %' = DIVIDE([Pedidos Mes] - [Pedidos Mes Anterior], [Pedidos Mes Anterior])
 		formatString: +0.0%;-0.0%;0.0%
 		displayFolder: Mensal
 		lineageTag: 7b2c0010-0005-4aaa-9bbb-000000000014

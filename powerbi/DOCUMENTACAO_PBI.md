@@ -22,7 +22,7 @@ modelo em pastas de texto (TMDL/PBIR) — versionáveis em Git e editáveis sem 
 | Time Intelligence automática | Desabilitada (`__PBI_TimeIntelligenceEnabled = 0`) |
 | Páginas | 2 — Visão Executiva · Análise Detalhada (1280×720, FitToPage) |
 | Tabelas | 7 de dados + 4 de medidas |
-| Medidas DAX | 32 |
+| Medidas DAX | 45 (23 `_KPIs` · 13 `_Saude` · 2 `_Concentracao` · 7 `_Background`) |
 | Relacionamentos | 4 (todos 1→N, single direction) |
 | Tema | `dashboard_theme.json` (dark executivo) |
 | Custom visuals | Deneb (Vega-Lite) · HTML Content (chrome/KPIs) |
@@ -162,9 +162,11 @@ Deneb da curva de Lorenz (página 1), substituindo o cálculo por-linha sobre os
 ## 4. Tabelas de medidas (DAX)
 
 4 tabelas-calculadas vazias (`source = { BLANK() }`) que apenas hospedam medidas, organizadas
-por domínio. Total: **32 medidas**.
+por domínio. Total: **45 medidas**. As medidas de tendência seguem o padrão composto:
+`X Mes` / `X Mes Anterior` (último mês fechado vs anterior, recuando se o mês corrente
+estiver parcial) e `X MoM % = DIVIDE([X Mes] - [X Mes Anterior], [X Mes Anterior])`.
 
-### 4.1 `_KPIs` — indicadores executivos (14 medidas)
+### 4.1 `_KPIs` — indicadores executivos (23 medidas)
 
 | Medida | Expressão (resumo) | Formato | Pasta |
 |---|---|---|---|
@@ -183,9 +185,11 @@ por domínio. Total: **32 medidas**.
 | `Ticket MoM %` | Variação MoM do ticket (receita/pedidos) | +0.0% | Tendência |
 | `Clientes Ativos MoM %` | Variação MoM de clientes ativos | +0.0% | Tendência |
 
-> **Padrão das medidas MoM.** Detectam o último mês com `MAX(order_purchase_timestamp)`; se
-> ele não for o fim do mês (`EOMONTH`), recuam para o mês fechado anterior para evitar comparar
-> um mês parcial. Comparam mês `m` com `m-1` via `FILTER(ALL(dim_calendario), …)`.
+> **Padrão das medidas MoM (refatorado).** A detecção do último mês fechado
+> (`MAX(order_purchase_timestamp)` + `EOMONTH`, recuando se o mês estiver parcial) vive nas
+> medidas-base `X Mes` / `X Mes Anterior`; as `X MoM %` são pura composição
+> `DIVIDE([X Mes] - [X Mes Anterior], [X Mes Anterior])` — a lógica de calendário existe em
+> um único lugar.
 
 ### 4.2 `_Saude` — saúde da base e funil (13 medidas)
 
@@ -217,7 +221,7 @@ por domínio. Total: **32 medidas**.
 > a curva agora é **pré-calculada no pipeline** (tabela `dim_lorenz`, ~200 pontos), eliminando
 > o DAX pesado e o tráfego de 93k linhas pro visual Deneb.
 
-### 4.4 `_Background` — chrome HTML e cards (3 medidas)
+### 4.4 `_Background` — chrome HTML, cards e sparklines (7 medidas)
 
 | Medida | Papel |
 |---|---|

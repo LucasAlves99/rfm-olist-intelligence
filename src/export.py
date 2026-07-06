@@ -226,12 +226,16 @@ def build_lorenz_curve(rfm: pd.DataFrame, n_points: int = 200) -> pd.DataFrame:
     pct_cli = np.concatenate([[0.0], pct_cli_full[idx]])
     pct_rev = np.concatenate([[0.0], cum_rev[idx]])
 
-    df = pd.DataFrame(
-        {
-            "pct_clientes": np.round(pct_cli, 5).astype("float32"),
-            "pct_receita": np.round(pct_rev, 5).astype("float32"),
-        }
-    ).drop_duplicates("pct_clientes").reset_index(drop=True)
+    df = (
+        pd.DataFrame(
+            {
+                "pct_clientes": np.round(pct_cli, 5).astype("float32"),
+                "pct_receita": np.round(pct_rev, 5).astype("float32"),
+            }
+        )
+        .drop_duplicates("pct_clientes")
+        .reset_index(drop=True)
+    )
     df.insert(0, "ordem", np.arange(len(df), dtype="int16"))
 
     logger.info(f"dim_lorenz criada: {len(df):,} pontos (de {n:,} clientes)")
