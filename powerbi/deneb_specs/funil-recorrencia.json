@@ -10,7 +10,7 @@
   "width": "container",
   "height": "container",
   "title": {
-    "text": "Clientes acumulados por nº de compras · largura em escala log · % = conversão da etapa anterior",
+    "text": "Barras em escala log · rótulo = clientes · % que avança da etapa",
     "fontSize": 9,
     "fontWeight": 400,
     "color": "#A1A1AA",

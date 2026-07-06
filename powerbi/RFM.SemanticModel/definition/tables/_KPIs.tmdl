@@ -105,6 +105,12 @@ table _KPIs
 		displayFolder: Mensal
 		lineageTag: 7b2c0010-0004-4aaa-9bbb-000000000013
 
+	/// Variação de pedidos: último mês fechado vs mês anterior
+	measure 'Pedidos MoM %' = DIVIDE([Pedidos Mes] - [Pedidos Mes Anterior], [Pedidos Mes Anterior])
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Mensal
+		lineageTag: 7b2c0010-0005-4aaa-9bbb-000000000014
+
 	/// Receita do mês anterior ao último mês fechado (base das medidas MoM)
 	measure 'Receita Mes Anterior' =
 			VAR maxd = MAX(fato_pedidos[order_purchase_timestamp])
@@ -149,12 +155,6 @@ table _KPIs
 		formatString: "R$ "#,0.00
 		displayFolder: Mensal
 		lineageTag: 7b2c0010-0009-4aaa-9bbb-000000000018
-
-	/// Variação de pedidos: último mês fechado vs mês anterior
-	measure 'Pedidos MoM %' = DIVIDE([Pedidos Mes] - [Pedidos Mes Anterior], [Pedidos Mes Anterior])
-		formatString: +0.0%;-0.0%;0.0%
-		displayFolder: Mensal
-		lineageTag: 7b2c0010-0005-4aaa-9bbb-000000000014
 
 	column _
 		lineageTag: 59dbd32a-6823-4319-8cf0-46a109642445

@@ -361,7 +361,7 @@ table _Background
 			      <div class=""logo""></div>
 			      <div>
 			        <h1>RFM Olist Intelligence</h1>
-			        <div class=""sub"">BASE OLIST 2016&#8211;2018 &#183; SEGMENTA&#199;&#195;O &#183; CLUSTERIZA&#199;&#195;O &#183; IA EMBARCADA</div>
+			        <div class=""sub"">BASE OLIST &#183; SET/16 &#8211; AGO/18</div>
 			      </div>
 			    </div>
 			    <div class=""tabs"">
@@ -390,8 +390,7 @@ table _Background
 			              <h2 class=""panel-title"">Distribui&#231;&#227;o de receita por cluster</h2>
 			
 			            </div>
-			            <div class=""panel-badge badge-purple"">Treemap</div>
-			          </div>
+			            			          </div>
 			        </div>
 			
 			        <div class=""visual-bottom"">
@@ -401,8 +400,7 @@ table _Background
 			              <div>
 			                <h2 class=""panel-title"">Concentra&#231;&#227;o de receita</h2>
 			              </div>
-			              <div class=""panel-badge badge-gold"">Pareto</div>
-			            </div>
+			              			            </div>
 			          </div>
 			          <!-- Painel: CLV vs AOV -->
 			          <div class=""panel"">
@@ -410,8 +408,7 @@ table _Background
 			              <div>
 			                <h2 class=""panel-title"">CLV projetado vs Ticket atual</h2>
 			                			              </div>
-			              <div class=""panel-badge badge-green"">Projeção</div>
-			            </div>
+			              			            </div>
 			          </div>
 			        </div>
 			
@@ -435,8 +432,7 @@ table _Background
 			            <div class=""eg"">&rsaquo; Como proteger os Campe&#245;es?</div>
 			          </div>
 			          <div class=""ai-cta"">&#10022; Abrir Analista (IA) &rarr;</div>
-			          <div class=""ai-foot"">Tool Use + DuckDB &#183; ~R$ 0,07 / pergunta</div>
-			        </div>
+			          			        </div>
 			      </aside>
 			
 			    </main>
@@ -706,7 +702,7 @@ table _Background
 						      <div class=""logo""></div>
 						      <div>
 						        <h1>RFM Olist Intelligence</h1>
-						        <div class=""sub"">BASE OLIST 2016&#8211;2018 &#183; SEGMENTA&#199;&#195;O &#183; CLUSTERIZA&#199;&#195;O &#183; IA EMBARCADA</div>
+						        <div class=""sub"">BASE OLIST &#183; SET/16 &#8211; AGO/18</div>
 						      </div>
 						    </div>
 						    <div class=""tabs"">
@@ -747,8 +743,7 @@ table _Background
 						            <div>
 						              <h2 class=""panel-title"">Evolu&#231;&#227;o mensal</h2>
 			            </div>
-			            <div class=""panel-badge badge-purple"">Timeline</div>
-						          </div>
+			            						          </div>
 						        </div>
 						        <!-- Painel: Evolu&#231;&#227;o mensal -->
 						        <div class=""panel"">
@@ -756,8 +751,7 @@ table _Background
 						            <div>
 						              <h2 class=""panel-title"">Reten&#231;&#227;o por safra</h2>
 			            </div>
-			            <div class=""panel-badge badge-purple"">Cohort</div>
-						          </div>
+			            						          </div>
 						        </div>
 						        <!-- Painel: Cohort de reten&#231;&#227;o -->
 						        <div class=""panel"">
@@ -765,8 +759,7 @@ table _Background
 						            <div>
 						              <h2 class=""panel-title"">Risco de review por UF</h2>
 			            </div>
-			            <div class=""panel-badge badge-red"">Preditivo</div>
-						          </div>
+			            						          </div>
 						        </div>
 						      </div>
 			
@@ -777,8 +770,7 @@ table _Background
 						            <div>
 						              <h2 class=""panel-title"">Funil de recorr&#234;ncia</h2>
 			            </div>
-			            <div class=""panel-badge badge-purple"">Recorr&#234;ncia</div>
-						          </div>
+			            						          </div>
 						        </div>
 						        <!-- Painel: Funil de convers&#227;o -->
 						        <div class=""panel"">
@@ -786,8 +778,7 @@ table _Background
 						            <div>
 						              <h2 class=""panel-title"">Receita em risco por segmento</h2>
 			            </div>
-			            <div class=""panel-badge badge-red"">Churn R$</div>
-						          </div>
+			            						          </div>
 						        </div>
 						        <!-- Painel: Review &#215; Risco de churn -->
 						        <div class=""panel"">
@@ -795,8 +786,7 @@ table _Background
 						            <div>
 						              <h2 class=""panel-title"">Plano de a&#231;&#227;o</h2>
 			            </div>
-			            <div class=""panel-badge badge-green"">A&#231;&#227;o</div>
-						          </div>
+			            						          </div>
 						        </div>
 						      </div>
 			

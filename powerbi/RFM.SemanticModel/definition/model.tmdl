@@ -8,7 +8,7 @@ model Model
 
 annotation __PBI_TimeIntelligenceEnabled = 0
 
-annotation PBI_QueryOrder = ["dim_calendario","dim_segmentos","fato_pedidos","fato_rfm_clientes","fato_cohort","risco_review_uf","dim_lorenz"]
+annotation PBI_QueryOrder = ["dim_calendario","dim_segmentos","fato_pedidos","fato_rfm_clientes","fato_cohort","risco_review_uf","dim_lorenz","CaminhoDados"]
 
 annotation PBI_ProTooling = ["DevMode"]
 

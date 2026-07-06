@@ -5,7 +5,7 @@
   "width": "container",
   "height": "container",
   "title": {
-    "text": "% de pedidos com alta prob. de avaliação ≤ 2 · linha tracejada = média nacional",
+    "text": "Previsão do modelo · % de pedidos com risco de nota baixa · linha = média BR",
     "fontSize": 9,
     "fontWeight": 400,
     "color": "#A1A1AA",
