@@ -227,7 +227,8 @@ estiver parcial) e `X MoM % = DIVIDE([X Mes] - [X Mes Anterior], [X Mes Anterior
 |---|---|
 | `_BG Pagina 1` | HTML completo do "chrome" da página 1 (topbar com período da base "2016–2018", 4 KPIs-herói da base — Receita total, Pedidos, Ticket médio, Clientes — com sparkline de tendência 12m, painéis vazios, card do Analista). Renderizado no visual **HTML Content** de fundo. Injeta valores via DAX (`FORMAT`). |
 | `_BG Pagina 2` | HTML do chrome da página 2 + **barra de diagnóstico gerencial** com números calculados ao vivo (% compra única, retenção mês 1, receita em risco). |
-| `_Plano Acao` | HTML do card "Plano de ação" (página 2): 4 linhas priorizadas por cluster com receita associada e ação de CRM. Pasta *Cards SVG*. |
+| `_Plano Acao` | HTML do card "Plano de ação" (página 2): 4 linhas priorizadas (1-4) por cluster com receita associada e ação de CRM. Pasta *Cards SVG*. |
+| `_Spark Receita` / `_Spark Pedidos` / `_Spark Ticket` / `_Spark Clientes` | Sparklines SVG de 12 meses dos KPIs-herói da P1 — a medida calcula a série mensal e monta a `<polyline>` inline. Pasta *Sparklines*. |
 
 > Estas medidas devolvem **strings HTML** consumidas pelo custom visual **HTML Content**
 > (Daniel Marsh-Patrick). O layout é responsivo via `aspect-ratio: 16/9`, então o chrome
@@ -248,8 +249,8 @@ posicionados por cima.
 |---|---|---|---|
 | `64a069a5…` | HTML Content | 0,0 · 1280×720 | Background/chrome P1 + KPIs (`_BG Pagina 1`) |
 | `2963ce1e…` | Deneb | 26,220 · 894×232 | **Treemap** — receita por cluster |
-| `p1_concentracao` | Deneb | 16,512 · 416×160 | **Curva de Lorenz / Pareto** (Gini) |
-| `p1_clv_ticket` | Deneb | 432,496 · 512×192 | **CLV projetado vs Ticket** atual |
+| `p1_concentracao` | Deneb | 16,515 · 416×163 | **Curva de Lorenz / Pareto** (anotação do top 20% calculada de `dim_lorenz`) |
+| `p1_clv_ticket` | Deneb | 432,531 · 512×147 | **CLV projetado vs Ticket** atual (barras pareadas + multiplicador; frase de leitura no título do spec) |
 | `btn_abrir_analista` | Action Button | 960,592 · 303×48 | Abre o **Analista RFM** (app Streamlit) |
 | `c369ff5d…` | Action Button | 704,16 · 160×48 | Aba/navegação → Análise Detalhada |
 
@@ -259,7 +260,7 @@ posicionados por cima.
 |---|---|---|---|
 | `16953eb3…` | HTML Content | 0,0 · 1280×720 | Background/chrome P2 + diagnóstico (`_BG Pagina 2`) |
 | `p2_uf` | Deneb | 16,192 · 416×224 | **Evolução mensal** |
-| `p2_ano_slicer` | Slicer (dropdown) | 228,197 · 100×28 | Filtro de **Ano** — escopo restrito à Evolução mensal (ver interações) |
+| `p2_ano_slicer` | Slicer (botões) | 160,160 · 176×48 | Filtro de **Ano** — escopo restrito à Evolução mensal (ver interações) |
 | `cohort_heatmap` | Deneb | 432,192 · 416×224 | **Retenção por safra** (cohort, sem M+0; escala de cor no range real) |
 | `review_uf` | Deneb | 848,192 · 416×224 | **Risco de review por UF** (preditivo, com linha de média nacional) |
 | `p2_funil` | Deneb | 16,464 · 416×208 | **Funil de recorrência** (barra = taxa de conversão da etapa anterior) |
@@ -334,6 +335,13 @@ As cores por cluster nos visuais vêm de `dim_segmentos[Cor_Hex]` (Format by fie
 garantindo consistência mesmo se os IDs do KMeans permutarem entre re-treinos. Detalhes de
 grid, espaçamento e rationale: [`GUIA_DESIGN_DASHBOARD.md`](./GUIA_DESIGN_DASHBOARD.md).
 
+> **Performance do chrome (modo leve, 2026-07):** o fundo animado usa uma única camada
+> (`.bg-mesh::before`) animando apenas `transform` + `opacity` (compositor da GPU, sem repaint),
+> com drift horizontal de 12s e `prefers-reduced-motion` respeitado. Sem `backdrop-filter` nos
+> cards (fundo `rgba(20,22,30,0.85)` compensa o contraste). O texto decorativo foi removido
+> (badges de canto, rodapé técnico) — cada dizer restante orienta leitura. A mesma estética e o
+> mesmo modo leve estão replicados no app Streamlit do Analista (`streamlit_agent/app.py`).
+
 > ⚠️ O `GUIA_DESIGN_DASHBOARD.md` cita um canvas legado de **1920×1080** com coordenadas
 > antigas. O estado atual implementado é **1280×720** com chrome HTML responsivo — use as
 > coordenadas da §5 deste documento como fonte de verdade.
@@ -371,4 +379,4 @@ grid, espaçamento e rationale: [`GUIA_DESIGN_DASHBOARD.md`](./GUIA_DESIGN_DASHB
 
 ---
 
-*Gerado a partir da inspeção do TMDL/PBIR em 2026-06-21. Ao alterar o modelo, atualizar §3–§5.*
+*Gerado a partir da inspeção do TMDL/PBIR; última revisão completa em 2026-07-06. Ao alterar o modelo, atualizar §3–§5.*

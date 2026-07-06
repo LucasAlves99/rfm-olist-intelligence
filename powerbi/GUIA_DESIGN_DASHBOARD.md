@@ -16,12 +16,15 @@ O dashboard já está montado em **`RFM.pbip`** (formato PBIP — pastas `RFM.Re
 
 - **2 páginas**: "Visão Executiva" e "Análise Detalhada", 1280×720, fundo via **HTML Content visual**
   (medidas `_BG Pagina 1` / `_BG Pagina 2` na tabela `_Background`) — não usa o PNG estático.
-- **20 visuais**, sendo **7 em Deneb (Vega-Lite/Vega)** com specs embutidos:
-  treemap, Lorenz (área de Gini), CLV vs Ticket, geo/UF, evolução mensal, funil, scatter.
-  Specs versionados em `powerbi/deneb_specs/*.json`.
-- **~30 medidas DAX** em 4 tabelas de medidas: `_KPIs`, `_Saude`, `_Concentracao`, `_Background`.
+- **15 visuais**, sendo **8 em Deneb (Vega-Lite)** com specs embutidos:
+  treemap, Lorenz (área de Gini), CLV vs Ticket, evolução mensal, cohort, risco por UF,
+  funil (escala log) e receita em risco. Specs versionados em `powerbi/deneb_specs/*.json`.
+- **45 medidas DAX** em 4 tabelas de medidas: `_KPIs`, `_Saude`, `_Concentracao`, `_Background`
+  (inclui as medidas compostas `X Mes` / `X Mes Anterior` / `X MoM %` e as sparklines SVG).
 - **Tema** aplicado a partir de **`dashboard_theme.json`** (já existe como arquivo nesta pasta).
 - Cores por cluster fixadas via `dim_segmentos[Cor_Hex]` (Format by field value).
+- **Modo leve (2026-07)**: chrome sem `backdrop-filter` e com aurora única compositor-only
+  (`transform`+`opacity`); badges decorativos removidos; fontes parametrizadas via `CaminhoDados`.
 
 > ⚠️ **Editar com o Desktop fechado:** o PBI Desktop reescreve os `.Report/*.json` ao salvar.
 > Para editar visuais via arquivo/pbi-cli, feche o Desktop primeiro.

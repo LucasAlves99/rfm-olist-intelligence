@@ -110,6 +110,25 @@ Coluna nova: **`product_category`** (string) — categoria do produto traduzida 
 
 ---
 
+## risco_review_uf.csv (novo 2026-06)
+
+**Granularidade**: 1 linha por UF
+**Função**: Saída do modelo preditivo de review ruim, agregada por estado — alimenta o visual
+"Risco de review por UF" (página 2)
+
+| Coluna | Tipo | Descrição |
+|---|---|---|
+| `UF` | string | Sigla do estado (PK) |
+| `Pedidos` | int32 | Total de pedidos entregues escorados no estado |
+| `Alto_Risco` | int32 | Pedidos com probabilidade ≥ threshold de review ≤ 2 |
+| `Pct_Alto_Risco` | float32 | `Alto_Risco / Pedidos` (0–1) |
+
+> Gerada por `pipeline/score_review_risk.py` (requer `models/review_model.pkl` treinado por
+> `train_review_model.py`). Relaciona-se com `fato_pedidos[customer_state]` (1 → N).
+> A média nacional exibida no visual é ponderada por pedidos e calculada no próprio spec Deneb.
+
+---
+
 ## dim_calendario.csv
 
 **Granularidade**: 1 linha por dia
@@ -133,8 +152,12 @@ Coluna nova: **`product_category`** (string) — categoria do produto traduzida 
 ## Relacionamentos no Star Schema
 
 ```
-dim_calendario (Data)         1 → N   fato_rfm_clientes (order_purchase via fato_pedidos)
-dim_segmentos (Cluster_Name)  1 → N   fato_rfm_clientes (Cluster_Name)
+dim_segmentos (Cluster_Name)     1 → N   fato_rfm_clientes (Cluster_Name)
+fato_rfm_clientes (customer_id)  1 → N   fato_pedidos (customer_unique_id)
+dim_calendario (Data)            1 → N   fato_pedidos (order_purchase_timestamp)
+risco_review_uf (UF)             1 → N   fato_pedidos (customer_state)
+
+fato_cohort e dim_lorenz: sem relacionamento (standalone — consumidas por medida/spec)
 ```
 
 ---

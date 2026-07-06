@@ -5,7 +5,7 @@
 **Segmentação estratégica de clientes com pipeline reproduzível, dashboard Power BI e agente conversacional publicado.**
 
 [![CI](https://github.com/LucasAlves99/rfm-olist-intelligence/actions/workflows/ci.yml/badge.svg)](https://github.com/LucasAlves99/rfm-olist-intelligence/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/tests-73%20passing-brightgreen?style=flat-square)](./tests)
+[![Tests](https://img.shields.io/badge/tests-75%20passing-brightgreen?style=flat-square)](./tests)
 [![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen?style=flat-square)](./tests)
 [![Python](https://img.shields.io/badge/python-3.13-blue?style=flat-square&logo=python&logoColor=white)](https://www.python.org)
 [![Pandas](https://img.shields.io/badge/pandas-2.2-150458?style=flat-square&logo=pandas&logoColor=white)](https://pandas.pydata.org)
@@ -46,11 +46,11 @@
 
 Este projeto entrega uma solução completa de **inteligência de clientes** sobre a base pública da Olist (e-commerce brasileiro, ~100 mil pedidos), combinando quatro componentes integrados:
 
-1. **Pipeline analítico** — código Python modular que transforma 5 CSVs brutos em datamarts tipados, aplicando segmentação RFM, clusterização KMeans e projeção de Customer Lifetime Value. Validado por 73 testes automatizados.
+1. **Pipeline analítico** — código Python modular que transforma 5 CSVs brutos em datamarts tipados, aplicando segmentação RFM, clusterização KMeans e projeção de Customer Lifetime Value. Validado por 75 testes automatizados.
 
 2. **Modelos preditivos (ML)** — classificação supervisionada com rigor metodológico (comparação multi-algoritmo, validação cruzada estratificada, diagnóstico de overfit, tuning de threshold e análise de lift, **sem data leakage**). O modelo principal prevê **review ruim** no momento da entrega, habilitando *service recovery* proativo (alavanca de NPS/retenção).
 
-3. **Dashboard executivo** — interface Power BI dark com Star Schema, medidas DAX customizadas e duas páginas (Visão Executiva + Análise Detalhada). Os visuais avançados (Lorenz com Gini, treemap, evolução por cluster, funil) são construídos em **Deneb (Vega-Lite)** para um acabamento que o visual nativo não alcança.
+3. **Dashboard executivo** — interface Power BI dark com Star Schema, 45 medidas DAX e duas páginas (Visão Executiva + Análise Detalhada), desenhadas para leitura de diretoria: funil de recorrência em escala log, cohort com escala de cor no range real, média nacional de referência no risco preditivo, plano de ação priorizado e números 100% dinâmicos. Os visuais avançados são construídos em **Deneb (Vega-Lite)**; fontes parametrizadas (`CaminhoDados`), altText de acessibilidade nos visuais de dados e chrome com animação *compositor-only* (custo de GPU ~zero).
 
 4. **Agente conversacional** — chatbot baseado em Claude Haiku 4.5 com Prompt Caching e Tool Use nativo, capaz de consultar os datamarts em tempo real via DuckDB. **Publicado como app Streamlit** e acessível direto do dashboard (card "Analista RFM" + botão), fechando o ciclo análise → pergunta.
 
@@ -74,7 +74,7 @@ O diferencial arquitetural é a **integração híbrida BI + IA generativa**: o 
 │  → clustering (KMeans) → CLV → export              │
 │                                                    │
 │  Orquestrado por pipeline/run_pipeline.py          │
-│  Validado por 73 testes pytest                     │
+│  Validado por 75 testes pytest                     │
 └────────┬───────────────────────────────────────────┘
          │
          ▼
@@ -116,7 +116,7 @@ O diferencial arquitetural é a **integração híbrida BI + IA generativa**: o 
 | Coeficiente de Gini | 0,48 (concentração moderada) |
 | Pareto observado | Top 20% dos clientes gera 54% da receita |
 | Silhouette score (K=4) | 0,369 (separação aceitável) |
-| Cobertura de testes | 73/73 passando · 90% |
+| Cobertura de testes | 75/75 passando · 90% |
 
 ### Segmentos identificados
 
@@ -245,12 +245,12 @@ rfm-olist-intelligence/
 │   ├── clustering.py               Pipeline KMeans, serialização, elbow
 │   └── export.py                   Exportação tipada para Power BI
 │
-├── tests/                          73 testes pytest
+├── tests/                          75 testes pytest
 │   ├── test_clustering.py           5 testes
 │   ├── test_config.py               3 testes
 │   ├── test_data_loader.py          4 testes
 │   ├── test_data_quality.py        11 testes
-│   ├── test_export.py               5 testes
+│   ├── test_export.py               7 testes
 │   ├── test_ml_common.py            5 testes
 │   ├── test_rfm.py                  8 testes
 │   ├── test_segmentation.py        20 testes
@@ -306,19 +306,19 @@ pytest tests/ -v
 ```
 ========================== test session starts ==========================
 platform win32 -- Python 3.13.5, pytest-8.3.4, pluggy-1.5.0
-collected 73 items
+collected 75 items
 
 tests/test_clustering.py .....             [  6%]    5 passed
 tests/test_config.py ...                   [ 10%]    3 passed
 tests/test_data_loader.py ....             [ 16%]    4 passed
-tests/test_data_quality.py ...........     [ 31%]   11 passed
-tests/test_export.py .....                 [ 38%]    5 passed
-tests/test_ml_common.py .....              [ 45%]    5 passed
-tests/test_rfm.py ........                 [ 56%]    8 passed
-tests/test_segmentation.py ...............  [ 83%]   20 passed
+tests/test_data_quality.py ...........     [ 30%]   11 passed
+tests/test_export.py .......               [ 40%]    7 passed
+tests/test_ml_common.py .....              [ 46%]    5 passed
+tests/test_rfm.py ........                 [ 57%]    8 passed
+tests/test_segmentation.py ...............  [ 84%]   20 passed
 tests/test_utils.py ............           [100%]   12 passed
 
-========================== 73 passed in 27.3s ===========================
+========================== 75 passed in 18.4s ===========================
 ```
 
 Destaque para o teste `test_robust_to_id_permutation`, que valida a invariância dos nomes de cluster em relação aos IDs aleatórios do KMeans — propriedade fundamental para reprodutibilidade entre re-treinos.
@@ -418,20 +418,24 @@ O footer da aplicação Streamlit exibe o custo da sessão em tempo real, com tr
 
 ### Concluído
 
-- [x] Pipeline RFM modular com 73 testes pytest
+- [x] Pipeline RFM modular com 75 testes pytest
 - [x] Cluster naming robusto (derivado do perfil R/F/M)
-- [x] 6 datamarts tipados em CSV (Power BI) · 5 em Parquet (Agent)
+- [x] 7 datamarts tipados em CSV (Power BI) · 5 em Parquet (Agent)
 - [x] Modelos preditivos validados (review ruim + estudo de recompra), sem leakage
 - [x] Dashboard Power BI (PBIP/TMDL) — 2 páginas, visuais em Deneb, tema dark
-- [x] Agente Streamlit com Claude Haiku 4.5 + 7 tools DuckDB validadas
+- [x] Passe de UX executivo — funil em escala log, cohort legível, média nacional de referência, plano de ação priorizado, números validados contra os datamarts via DuckDB
+- [x] Fontes parametrizadas (`CaminhoDados`) + altText de acessibilidade nos visuais
+- [x] Performance do chrome — animação compositor-only (transform+opacity), sem backdrop-filter
+- [x] Agente Streamlit com Claude Haiku 4.5 + 7 tools DuckDB validadas — estética unificada com o dashboard
 - [x] Tracking de custo em tempo real
 - [x] Conformidade WCAG AA (focus rings, ARIA, reduced-motion)
 - [x] Repositório publicado no GitHub
 - [x] Deploy do agente em Streamlit Community Cloud
+- [x] Publicação do dashboard no Power BI Service
 
 ### Em andamento
 
-- [ ] Publicação do dashboard no Power BI Service (+ screenshots/GIF no README)
+- [ ] Screenshots/GIF atualizados no README (pós-publicação)
 
 ### Backlog
 
@@ -449,7 +453,7 @@ complementares ficam **junto do código**:
 
 | Documento | Público-alvo |
 |---|---|
-| [`powerbi/DOCUMENTACAO_PBI.md`](./powerbi/DOCUMENTACAO_PBI.md) | Analistas BI — referência técnica do artefato Power BI (modelo, 34 medidas DAX, relacionamentos, mapa de visuais) |
+| [`powerbi/DOCUMENTACAO_PBI.md`](./powerbi/DOCUMENTACAO_PBI.md) | Analistas BI — referência técnica do artefato Power BI (modelo, 45 medidas DAX, relacionamentos, mapa de visuais) |
 | [`powerbi/dicionario_dados.md`](./powerbi/dicionario_dados.md) | Analistas BI — schema completo dos 6 datamarts |
 | [`powerbi/GUIA_DESIGN_DASHBOARD.md`](./powerbi/GUIA_DESIGN_DASHBOARD.md) | Analistas BI — rationale de design (medidas DAX, theme JSON, visuais Deneb) |
 | [`streamlit_agent/README.md`](./streamlit_agent/README.md) | Setup e deploy do agente de IA |
