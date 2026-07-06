@@ -430,9 +430,9 @@ table _Background
 			
 						  /* &#9472;&#9472;&#9472; Background aurora animada &#9472;&#9472;&#9472; */
 						  .bg-mesh { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-			  /* Aurora leve: camada unica, so transform+opacity (compositor GPU, sem repaint) */
-			  .bg-mesh::before { content: ''; position: absolute; inset: -20%; background: radial-gradient(700px 500px at 20% 15%, rgba(191,111,248,0.14), transparent 60%), radial-gradient(600px 450px at 80% 85%, rgba(94,106,210,0.12), transparent 60%); animation: aurora 26s ease-in-out infinite alternate; will-change: transform, opacity; }
-			  @keyframes aurora { 0% { transform: translate3d(-2%, -1%, 0); opacity: 0.55; } 100% { transform: translate3d(2%, 2%, 0); opacity: 1; } }
+						  /* Aurora leve: camada unica, so transform+opacity (compositor GPU, sem repaint) */
+						  .bg-mesh::before { content: ''; position: absolute; inset: -20%; background: radial-gradient(700px 500px at 20% 15%, rgba(191,111,248,0.14), transparent 60%), radial-gradient(600px 450px at 80% 85%, rgba(94,106,210,0.12), transparent 60%); animation: aurora 26s ease-in-out infinite alternate; will-change: transform, opacity; }
+						  @keyframes aurora { 0% { transform: translate3d(-2%, -1%, 0); opacity: 0.55; } 100% { transform: translate3d(2%, 2%, 0); opacity: 1; } }
 						  .bg-mesh::after {
 						    content: ''; position: absolute; inset: 0;
 						    background: radial-gradient(ellipse at center, transparent 30%, rgba(8, 9, 10, 0.55) 100%);
