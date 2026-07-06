@@ -62,13 +62,34 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    /* Reset e fundo Aurora */
+    /* Reset e fundo — base estática + vinheta (mesma do dashboard) */
     .stApp {
         background: #08090A;
         background-image:
-            radial-gradient(at 20% 10%, rgba(191, 111, 248, 0.18) 0%, transparent 50%),
-            radial-gradient(at 80% 80%, rgba(94, 106, 210, 0.13) 0%, transparent 50%),
-            radial-gradient(at 50% 50%, rgba(191, 111, 248, 0.10) 0%, transparent 50%);
+            radial-gradient(at 20% 10%, rgba(191, 111, 248, 0.10) 0%, transparent 50%),
+            radial-gradient(at 80% 80%, rgba(94, 106, 210, 0.08) 0%, transparent 50%),
+            radial-gradient(ellipse at center, transparent 40%, rgba(8, 9, 10, 0.55) 100%);
+    }
+    /* Aurora leve — idêntica à do dashboard: camada única animando só
+       transform+opacity (compositor GPU, sem repaint) */
+    .stApp::before {
+        content: '';
+        position: fixed;
+        inset: -25%;
+        pointer-events: none;
+        background:
+            radial-gradient(760px 540px at 28% 22%, rgba(191, 111, 248, 0.30), transparent 62%),
+            radial-gradient(680px 500px at 72% 72%, rgba(94, 106, 210, 0.26), transparent 62%),
+            radial-gradient(520px 400px at 50% 45%, rgba(191, 111, 248, 0.10), transparent 60%);
+        animation: aurora 12s ease-in-out infinite alternate;
+        will-change: transform, opacity;
+    }
+    @keyframes aurora {
+        0%   { transform: translate3d(-5%, 0, 0); opacity: 0.40; }
+        100% { transform: translate3d(5%, 0, 0);  opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .stApp::before { animation: none; }
     }
     /* Esconde header padrão do Streamlit */
     header[data-testid="stHeader"] { background: transparent; }
@@ -81,17 +102,16 @@ st.markdown(
         max-width: 100%;
     }
 
-    /* Mensagens — bot */
+    /* Mensagens — bot (card sólido, sem backdrop-filter: mesmo modo leve do dashboard) */
     [data-testid="stChatMessage"] {
-        background: rgba(20, 22, 30, 0.6);
-        backdrop-filter: blur(20px) saturate(140%);
+        background: rgba(20, 22, 30, 0.85);
         border: 1px solid rgba(255, 255, 255, 0.06);
         border-radius: 12px;
     }
 
     /* Input do chat */
     [data-testid="stChatInput"] {
-        background: rgba(20, 22, 30, 0.6) !important;
+        background: rgba(20, 22, 30, 0.85) !important;
         border: 1px solid rgba(255, 255, 255, 0.06) !important;
         border-radius: 10px !important;
     }
@@ -127,8 +147,7 @@ st.markdown(
         align-items: center;
         gap: 12px;
         padding: 14px 18px;
-        background: rgba(20, 22, 30, 0.6);
-        backdrop-filter: blur(20px) saturate(140%);
+        background: rgba(20, 22, 30, 0.85);
         border: 1px solid rgba(255, 255, 255, 0.06);
         border-radius: 14px;
         margin-bottom: 14px;
@@ -204,7 +223,7 @@ st.markdown(
         align-items: center;
         gap: 5px;
         padding: 10px 14px;
-        background: rgba(20, 22, 30, 0.6);
+        background: rgba(20, 22, 30, 0.85);
         border: 1px solid rgba(255, 255, 255, 0.06);
         border-radius: 14px;
         border-bottom-left-radius: 4px;
