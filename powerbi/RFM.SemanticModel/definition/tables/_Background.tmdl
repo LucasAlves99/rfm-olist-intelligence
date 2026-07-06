@@ -80,6 +80,9 @@ table _Background
 			
 			  /* &#9472;&#9472;&#9472; Background aurora animada &#9472;&#9472;&#9472; */
 			  .bg-mesh { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+			  /* Aurora leve: camada unica, so transform+opacity (compositor GPU, sem repaint) */
+			  .bg-mesh::before { content: ''; position: absolute; inset: -20%; background: radial-gradient(700px 500px at 20% 15%, rgba(191,111,248,0.14), transparent 60%), radial-gradient(600px 450px at 80% 85%, rgba(94,106,210,0.12), transparent 60%); animation: aurora 26s ease-in-out infinite alternate; will-change: transform, opacity; }
+			  @keyframes aurora { 0% { transform: translate3d(-2%, -1%, 0); opacity: 0.55; } 100% { transform: translate3d(2%, 2%, 0); opacity: 1; } }
 			  .bg-mesh::after {
 			    content: ''; position: absolute; inset: 0;
 			    background: radial-gradient(ellipse at center, transparent 30%, rgba(8, 9, 10, 0.55) 100%);
@@ -99,7 +102,7 @@ table _Background
 			    display: grid; grid-template-columns: auto 1fr auto; align-items: center;
 			    gap: 20px; padding: 0 16px;
 			    background: var(--bg-card);
-			    
+			
 			    border: 1px solid var(--border); border-radius: 12px;
 			  }
 			  .brand { display: flex; align-items: center; gap: 12px; }
@@ -143,7 +146,7 @@ table _Background
 			  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 			  .kpi {
 			    background: var(--bg-card);
-			    
+			
 			    border: 1px solid var(--border);
 			    border-radius: 12px;
 			    padding: 10px 14px;
@@ -193,7 +196,7 @@ table _Background
 			  /* &#9472;&#9472;&#9472; Panel &#8212; header s&#243;, corpo vazio (visual PBI por cima) &#9472;&#9472;&#9472; */
 			  .panel {
 			    background: var(--bg-card);
-			    
+			
 			    border: 1px solid var(--border);
 			    border-radius: 12px;
 			    padding: 5px 12px 10px 12px;
@@ -216,7 +219,7 @@ table _Background
 			  /* &#9472;&#9472;&#9472; AI panel &#8212; header s&#243; &#9472;&#9472;&#9472; */
 			  .ai-panel {
 			    background: var(--bg-card);
-			    
+			
 			    border: 1px solid var(--border);
 			    border-radius: 16px;
 			    display: flex; flex-direction: column;
@@ -427,6 +430,9 @@ table _Background
 			
 						  /* &#9472;&#9472;&#9472; Background aurora animada &#9472;&#9472;&#9472; */
 						  .bg-mesh { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+			  /* Aurora leve: camada unica, so transform+opacity (compositor GPU, sem repaint) */
+			  .bg-mesh::before { content: ''; position: absolute; inset: -20%; background: radial-gradient(700px 500px at 20% 15%, rgba(191,111,248,0.14), transparent 60%), radial-gradient(600px 450px at 80% 85%, rgba(94,106,210,0.12), transparent 60%); animation: aurora 26s ease-in-out infinite alternate; will-change: transform, opacity; }
+			  @keyframes aurora { 0% { transform: translate3d(-2%, -1%, 0); opacity: 0.55; } 100% { transform: translate3d(2%, 2%, 0); opacity: 1; } }
 						  .bg-mesh::after {
 						    content: ''; position: absolute; inset: 0;
 						    background: radial-gradient(ellipse at center, transparent 30%, rgba(8, 9, 10, 0.55) 100%);
@@ -446,7 +452,7 @@ table _Background
 						    display: grid; grid-template-columns: auto 1fr auto; align-items: center;
 						    gap: 20px; padding: 0 16px;
 						    background: var(--bg-card);
-						    
+			
 						    border: 1px solid var(--border); border-radius: 12px;
 						  }
 						  .brand { display: flex; align-items: center; gap: 12px; }
@@ -490,7 +496,7 @@ table _Background
 						  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 						  .kpi {
 						    background: var(--bg-card);
-						    
+			
 						    border: 1px solid var(--border);
 						    border-radius: 12px;
 						    padding: 10px 14px;
@@ -525,7 +531,7 @@ table _Background
 						  /* &#9472;&#9472;&#9472; Panel &#8212; header s&#243;, corpo vazio &#9472;&#9472;&#9472; */
 						  .panel {
 						    background: var(--bg-card);
-						    
+			
 						    border: 1px solid var(--border);
 						    border-radius: 12px;
 						    padding: 10px 12px;

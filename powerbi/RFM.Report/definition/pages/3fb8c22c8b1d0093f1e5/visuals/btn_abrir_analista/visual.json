@@ -3,10 +3,10 @@
   "name": "btn_abrir_analista",
   "position": {
     "x": 960,
-    "y": 592,
+    "y": 624,
     "z": 9500,
-    "height": 48.000000000000007,
-    "width": 303.99999999999994,
+    "height": 48,
+    "width": 304,
     "tabOrder": 4000
   },
   "visual": {
