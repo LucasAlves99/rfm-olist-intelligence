@@ -42,7 +42,6 @@
 - [Qualidade e CI](#qualidade-e-ci)
 - [Decisões Técnicas](#decisões-técnicas)
 - [Custo Operacional](#custo-operacional)
-- [Roadmap](#roadmap)
 - [Documentação](#documentação)
 - [Licença](#licença)
 
@@ -360,8 +359,6 @@ Para o caso de uso específico (análise de dados estruturados, tool use e respo
 | Sonnet 4.5 | US$ 0,05 (R$ 0,27) |
 | **Haiku 4.5** | **US$ 0,012 (R$ 0,07)** |
 
-Sonnet/Opus ficam reservados para um futuro "modo aprofundado" opcional, acionável pelo usuário quando o problema demandar raciocínio multi-step complexo.
-
 ### 3. Ausência intencional de RAG vetorial
 
 O contexto necessário para o agente cabe em ~1.500 tokens — comparado à janela de 200.000 tokens do Claude, não há razão para introduzir um pipeline de embeddings + vector store + retrieval. A análise foi:
@@ -422,35 +419,6 @@ O resultado é um CSV que o Power BI importa sem precisar inferir tipos, elimina
 | **Total** | **~R$ 35/mês** |
 
 O footer da aplicação Streamlit exibe o custo da sessão em tempo real, com tracking separado de input tokens, output tokens, cache reads e cache writes.
-
----
-
-## Roadmap
-
-### Concluído
-
-- [x] Pipeline RFM modular com 75 testes pytest
-- [x] Cluster naming robusto (derivado do perfil R/F/M)
-- [x] 7 datamarts tipados em CSV (Power BI) · 5 em Parquet (Agent)
-- [x] Modelos preditivos validados (review ruim + estudo de recompra), sem leakage
-- [x] Dashboard Power BI (PBIP/TMDL) — 2 páginas, visuais em Deneb, tema dark
-- [x] Passe de UX executivo — funil em escala log, cohort legível, média nacional de referência, plano de ação priorizado, números validados contra os datamarts via DuckDB
-- [x] Fontes parametrizadas (`CaminhoDados`) + altText de acessibilidade nos visuais
-- [x] Performance do chrome — animação compositor-only (transform+opacity), sem backdrop-filter
-- [x] Agente Streamlit com Claude Haiku 4.5 + 7 tools DuckDB validadas — estética unificada com o dashboard
-- [x] Tracking de custo em tempo real
-- [x] Conformidade WCAG AA (focus rings, ARIA, reduced-motion)
-- [x] Repositório publicado no GitHub
-- [x] Deploy do agente em Streamlit Community Cloud
-- [x] Publicação do dashboard no Power BI Service
-- [x] Screenshots do dashboard e do agente no README
-
-### Backlog
-
-- [ ] CLV probabilístico via biblioteca `lifetimes` (BG/NBD + Gamma-Gamma)
-- [ ] Modo "aprofundado" que roteia para Sonnet 4.5 sob demanda do usuário
-- [ ] Experimento A/B das ações de CRM por cluster
-- [ ] Webhook para alertas (ex: `% em risco > 35%`)
 
 ---
 

@@ -342,34 +342,4 @@ O `dashboard_background_dark.svg` é um arquivo vetorial padrão. Pode abrir em 
 
 ---
 
-## 8. Checklist final antes de publicar o dashboard
-
-- [ ] Background aplicado (Format → Canvas background)
-- [ ] Tamanho da página em 1920×1080 custom
-- [ ] Theme JSON importado
-- [ ] 4 KPIs posicionados e formatados (transparentes em cima dos slots)
-- [ ] 6 visuais principais alinhados aos slots
-- [ ] Filtros (Cluster, UF, Período) configurados como **Slicers** no canto superior direito
-- [ ] Drill-through configurado: clicar num cluster filtra todos os outros visuais
-- [ ] Cores dos visuais batem com `dim_segmentos[Cor_Hex]`
-- [ ] Tooltip customizado nos visuais (mostra Recency, Frequency, Monetary do cliente/cluster)
-- [ ] Página renomeada para "Visão Executiva"
-- [ ] Publicar no Power BI Service e gerar link compartilhável
-- [ ] Screenshot/GIF do dashboard final → adicionar ao README do GitHub
-
----
-
-## 9. Próximas páginas do dashboard (sugestão)
-
-A página atual (com o background pronto) é a **Visão Executiva**. Para um projeto completo, considerar mais 2-3 páginas:
-
-1. **Visão Executiva** ← já desenhada
-2. **Detalhamento por Cluster** — drill-down focado em 1 cluster (selecionado via slicer)
-3. **Saúde da Base** — métricas de churn, migração entre clusters mês a mês
-4. **Análise Geográfica** — mapa do Brasil + breakdown por UF/cidade
-
-Para cada página adicional, pode-se reutilizar o mesmo background (modificando apenas o título "VISÃO EXECUTIVA" → "DETALHAMENTO POR CLUSTER", etc.) — o script `_make_png_background.py` aceita parametrização fácil.
-
----
-
-*Última atualização: 2026-05-10. Combinar com `dicionario_dados.md` ao construir as medidas DAX.*
+*Última atualização: 2026-07-12. Referência de medidas, modelo e mapa de visuais em [`DOCUMENTACAO_PBI.md`](./DOCUMENTACAO_PBI.md).*
