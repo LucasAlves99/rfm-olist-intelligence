@@ -75,3 +75,7 @@ def load_all_data(raw_dir: str = "data/raw") -> dict:
             logger.warning(f"Opcional ausente (categoria desabilitada): {path}")
 
     return data
+
+
+# Alias retrocompatível: o notebook REFATORADO importa load_from_project_root.
+load_from_project_root = load_all_data
