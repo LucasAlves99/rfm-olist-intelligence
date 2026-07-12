@@ -2,24 +2,24 @@
 
 # RFM Olist Intelligence
 
-**Segmentação estratégica de clientes com pipeline reproduzível, dashboard Power BI e agente conversacional publicado.**
+**Dashboard executivo Power BI de segmentação estratégica de clientes (RFM + clusterização), com agente conversacional publicado e pipeline reproduzível.**
 
 [![CI](https://github.com/LucasAlves99/rfm-olist-intelligence/actions/workflows/ci.yml/badge.svg)](https://github.com/LucasAlves99/rfm-olist-intelligence/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/tests-75%20passing-brightgreen?style=flat-square)](./tests)
-[![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen?style=flat-square)](./tests)
+[![Power BI](https://img.shields.io/badge/Power_BI-F2C811?style=flat-square&logo=power-bi&logoColor=black)](https://powerbi.microsoft.com)
 [![Python](https://img.shields.io/badge/python-3.13-blue?style=flat-square&logo=python&logoColor=white)](https://www.python.org)
 [![Pandas](https://img.shields.io/badge/pandas-2.2-150458?style=flat-square&logo=pandas&logoColor=white)](https://pandas.pydata.org)
 [![Scikit-Learn](https://img.shields.io/badge/scikit--learn-1.6-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.32%2B-FF4B4B?style=flat-square&logo=streamlit&logoColor=white)](https://streamlit.io)
 [![Anthropic](https://img.shields.io/badge/Claude-Haiku%204.5-D97757?style=flat-square)](https://www.anthropic.com)
-[![Power BI](https://img.shields.io/badge/Power_BI-F2C811?style=flat-square&logo=power-bi&logoColor=black)](https://powerbi.microsoft.com)
 [![DuckDB](https://img.shields.io/badge/DuckDB-FFF000?style=flat-square&logo=duckdb&logoColor=black)](https://duckdb.org)
+[![Tests](https://img.shields.io/badge/tests-75%20passing-brightgreen?style=flat-square)](./tests)
+[![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen?style=flat-square)](./tests)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](./LICENSE)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
 
 **🤖 [Experimente o agente de IA ao vivo →](https://rfm-olist-intelligence.streamlit.app)**
 
-[Visão Geral](#visão-geral) · [Arquitetura](#arquitetura) · [Resultados](#resultados) · [Decisões Técnicas](#decisões-técnicas)
+[Visão Geral](#visão-geral) · [Dashboard](#dashboard-power-bi) · [Resultados](#resultados) · [Decisões Técnicas](#decisões-técnicas)
 
 </div>
 
@@ -33,12 +33,13 @@
 
 - [Visão Geral](#visão-geral)
 - [Interface](#interface)
-- [Arquitetura](#arquitetura)
+- [Dashboard Power BI](#dashboard-power-bi)
 - [Resultados](#resultados)
+- [Arquitetura](#arquitetura)
 - [Stack Técnica](#stack-técnica)
 - [Instalação](#instalação)
 - [Estrutura do Projeto](#estrutura-do-projeto)
-- [Testes](#testes)
+- [Qualidade e CI](#qualidade-e-ci)
 - [Decisões Técnicas](#decisões-técnicas)
 - [Custo Operacional](#custo-operacional)
 - [Roadmap](#roadmap)
@@ -51,13 +52,13 @@
 
 Este projeto entrega uma solução completa de **inteligência de clientes** sobre a base pública da Olist (e-commerce brasileiro, ~100 mil pedidos), combinando quatro componentes integrados:
 
-1. **Pipeline analítico** — código Python modular que transforma 5 CSVs brutos em datamarts tipados, aplicando segmentação RFM, clusterização KMeans e projeção de Customer Lifetime Value. Validado por 75 testes automatizados.
+1. **Dashboard executivo** — interface Power BI dark com Star Schema, 45 medidas DAX e duas páginas (Visão Executiva + Análise Detalhada), desenhadas para leitura de diretoria: funil de recorrência em escala log, cohort com escala de cor no range real, média nacional de referência no risco preditivo, plano de ação priorizado e números 100% dinâmicos. Os visuais avançados são construídos em **Deneb (Vega-Lite)**; fontes parametrizadas (`CaminhoDados`), altText de acessibilidade nos visuais de dados e chrome com animação *compositor-only* (custo de GPU ~zero).
 
-2. **Modelos preditivos (ML)** — classificação supervisionada com rigor metodológico (comparação multi-algoritmo, validação cruzada estratificada, diagnóstico de overfit, tuning de threshold e análise de lift, **sem data leakage**). O modelo principal prevê **review ruim** no momento da entrega, habilitando *service recovery* proativo (alavanca de NPS/retenção).
+2. **Agente conversacional** — chatbot baseado em Claude Haiku 4.5 com Prompt Caching e Tool Use nativo, capaz de consultar os datamarts em tempo real via DuckDB. **Publicado como app Streamlit** e acessível direto do dashboard (card "Analista RFM" + botão), fechando o ciclo análise → pergunta.
 
-3. **Dashboard executivo** — interface Power BI dark com Star Schema, 45 medidas DAX e duas páginas (Visão Executiva + Análise Detalhada), desenhadas para leitura de diretoria: funil de recorrência em escala log, cohort com escala de cor no range real, média nacional de referência no risco preditivo, plano de ação priorizado e números 100% dinâmicos. Os visuais avançados são construídos em **Deneb (Vega-Lite)**; fontes parametrizadas (`CaminhoDados`), altText de acessibilidade nos visuais de dados e chrome com animação *compositor-only* (custo de GPU ~zero).
+3. **Pipeline analítico** — código Python modular que transforma 5 CSVs brutos em datamarts tipados, aplicando segmentação RFM, clusterização KMeans e projeção de Customer Lifetime Value.
 
-4. **Agente conversacional** — chatbot baseado em Claude Haiku 4.5 com Prompt Caching e Tool Use nativo, capaz de consultar os datamarts em tempo real via DuckDB. **Publicado como app Streamlit** e acessível direto do dashboard (card "Analista RFM" + botão), fechando o ciclo análise → pergunta.
+4. **Modelos preditivos (ML)** — classificação supervisionada com rigor metodológico (comparação multi-algoritmo, validação cruzada estratificada, diagnóstico de overfit, tuning de threshold e análise de lift, **sem data leakage**). O modelo principal prevê **review ruim** no momento da entrega, habilitando *service recovery* proativo (alavanca de NPS/retenção).
 
 O diferencial arquitetural é a **integração híbrida BI + IA generativa**: o usuário navega pelos gráficos e, a um clique, conversa com um analista virtual sobre os mesmos dados — com custo operacional de ~R$ 0,07 por pergunta.
 
@@ -72,6 +73,64 @@ O diferencial arquitetural é a **integração híbrida BI + IA generativa**: o 
 **Analista RFM** — o agente conversacional (Claude Haiku 4.5 + DuckDB) com a mesma identidade visual do dashboard, acessível pelo botão "Abrir Analista":
 
 ![Agente Analista RFM — chat com sugestões rápidas e tracking de custo em tempo real](docs/screenshots/agente-analista-rfm.png)
+
+---
+
+## Dashboard Power BI
+
+A camada de BI é o produto central do projeto: um artefato **PBIP/TMDL versionável** (modelo e relatório em texto, diff-áveis no git), com modelo dimensional e medidas organizadas por domínio.
+
+| Componente | Detalhe |
+|---|---|
+| Modelo | Star Schema — 7 tabelas de dados + 4 tabelas de medidas |
+| Medidas DAX | 45, por domínio: `_KPIs` (23) · `_Saude` (13) · `_Concentracao` (2) · `_Background` (7) |
+| Páginas | **Visão Executiva** (KPIs com sparklines, treemap, Pareto/Lorenz, CLV vs Ticket) · **Análise Detalhada** (cohort, risco por UF, funil, plano de ação) |
+| Visuais avançados | Deneb (Vega-Lite), com specs versionadas em `powerbi/deneb_specs/` |
+| Design | Tema dark próprio (`dashboard_theme.json`), identidade visual unificada com o agente, altText de acessibilidade |
+| Fontes de dados | Parametrizadas via `CaminhoDados` — repoint sem editar M code |
+
+As escolhas de leitura executiva — funil de recorrência em escala log (a base é dominada por compra única), cohort com escala de cor no range real dos dados e média nacional como referência no risco preditivo — estão detalhadas em [`powerbi/GUIA_DESIGN_DASHBOARD.md`](./powerbi/GUIA_DESIGN_DASHBOARD.md). Referência técnica completa do artefato (modelo, medidas, mapa de visuais): [`powerbi/DOCUMENTACAO_PBI.md`](./powerbi/DOCUMENTACAO_PBI.md).
+
+---
+
+## Resultados
+
+### Métricas da base analisada
+
+| Indicador | Valor |
+|---|---|
+| Clientes únicos | 93.358 |
+| Receita total | R$ 15,42 mi |
+| Pedidos processados | 96.478 (`status = delivered`) |
+| Período | 24 meses (Set/2016 – Ago/2018 · snapshot 04/09/2018) |
+| Coeficiente de Gini | 0,48 (concentração moderada) |
+| Pareto observado | Top 20% dos clientes gera 54% da receita |
+| Silhouette score (K=4) | 0,369 (separação aceitável) |
+| Cobertura de testes | 75/75 passando · 90% |
+
+### Segmentos identificados
+
+| Cluster | n | % | Recency | Frequency | Monetary | CLV 12m |
+|---|---|---|---|---|---|---|
+| Campeões | 2.801 | 3,0% | 225d | **2,11** | R$ 309 | R$ 154 |
+| Big Spenders (Não-Recorrentes) | 27.634 | 29,6% | 179d | 1,00 | R$ 320 | R$ 160 |
+| Novos / Ocasionais | 35.872 | 38,4% | 152d | 1,00 | R$ 69 | R$ 35 |
+| Em Risco / Hibernando | 27.051 | 29,0% | **430d** | 1,00 | R$ 119 | R$ 60 |
+
+Os nomes dos clusters são **derivados automaticamente do perfil R/F/M médio** de cada grupo, garantindo invariância em relação aos IDs aleatórios atribuídos pelo KMeans entre execuções (ver [Decisões Técnicas](#decisões-técnicas)).
+
+### Modelo preditivo de review ruim
+
+Classificação supervisionada para antecipar insatisfação (`review_score ≤ 2`, ~12,8% de positivos) **com features conhecidas só até a entrega** — sem vazamento.
+
+| Métrica | Valor |
+|---|---|
+| Melhor modelo | RandomForest (selecionado por F1-CV penalizando overfit) |
+| F1 (teste) | 0,47 · **ROC-AUC** 0,76 · **PR-AUC** 0,46 (baseline 0,13 → 3,6×) |
+| Lift de negócio | Top 10% de risco captura **~42%** dos reviews ruins (lift 4,2×) |
+| Feature dominante | `atraso_dias` (atraso de entrega) — coerente com o negócio |
+
+Operacionalizado em lote (`score_review_risk.py`) → tabela de **risco por estado** que alimenta o dashboard, fechando o ciclo **previsão → ação** (onde priorizar atendimento).
 
 ---
 
@@ -118,47 +177,6 @@ O diferencial arquitetural é a **integração híbrida BI + IA generativa**: o 
 │  Theme dark  │           │  Tool Use + DuckDB      │
 └──────────────┘           └─────────────────────────┘
 ```
-
----
-
-## Resultados
-
-### Métricas da base analisada
-
-| Indicador | Valor |
-|---|---|
-| Clientes únicos | 93.358 |
-| Receita total | R$ 15,42 mi |
-| Pedidos processados | 96.478 (`status = delivered`) |
-| Período | 24 meses (Set/2016 – Ago/2018 · snapshot 04/09/2018) |
-| Coeficiente de Gini | 0,48 (concentração moderada) |
-| Pareto observado | Top 20% dos clientes gera 54% da receita |
-| Silhouette score (K=4) | 0,369 (separação aceitável) |
-| Cobertura de testes | 75/75 passando · 90% |
-
-### Segmentos identificados
-
-| Cluster | n | % | Recency | Frequency | Monetary | CLV 12m |
-|---|---|---|---|---|---|---|
-| Campeões | 2.801 | 3,0% | 225d | **2,11** | R$ 309 | R$ 154 |
-| Big Spenders (Não-Recorrentes) | 27.634 | 29,6% | 179d | 1,00 | R$ 320 | R$ 160 |
-| Novos / Ocasionais | 35.872 | 38,4% | 152d | 1,00 | R$ 69 | R$ 35 |
-| Em Risco / Hibernando | 27.051 | 29,0% | **430d** | 1,00 | R$ 119 | R$ 60 |
-
-Os nomes dos clusters são **derivados automaticamente do perfil R/F/M médio** de cada grupo, garantindo invariância em relação aos IDs aleatórios atribuídos pelo KMeans entre execuções (ver [Decisões Técnicas](#decisões-técnicas)).
-
-### Modelo preditivo de review ruim
-
-Classificação supervisionada para antecipar insatisfação (`review_score ≤ 2`, ~12,8% de positivos) **com features conhecidas só até a entrega** — sem vazamento.
-
-| Métrica | Valor |
-|---|---|
-| Melhor modelo | RandomForest (selecionado por F1-CV penalizando overfit) |
-| F1 (teste) | 0,47 · **ROC-AUC** 0,76 · **PR-AUC** 0,46 (baseline 0,13 → 3,6×) |
-| Lift de negócio | Top 10% de risco captura **~42%** dos reviews ruins (lift 4,2×) |
-| Feature dominante | `atraso_dias` (atraso de entrega) — coerente com o negócio |
-
-Operacionalizado em lote (`score_review_risk.py`) → tabela de **risco por estado** que alimenta o dashboard, fechando o ciclo **previsão → ação** (onde priorizar atendimento).
 
 ---
 
@@ -264,16 +282,7 @@ rfm-olist-intelligence/
 │   ├── clustering.py               Pipeline KMeans, serialização, elbow
 │   └── export.py                   Exportação tipada para Power BI
 │
-├── tests/                          75 testes pytest
-│   ├── test_clustering.py           5 testes
-│   ├── test_config.py               3 testes
-│   ├── test_data_loader.py          4 testes
-│   ├── test_data_quality.py        11 testes
-│   ├── test_export.py               7 testes
-│   ├── test_ml_common.py            5 testes
-│   ├── test_rfm.py                  8 testes
-│   ├── test_segmentation.py        20 testes
-│   └── test_utils.py               12 testes
+├── tests/                          75 testes pytest (9 módulos)
 │
 ├── pipeline/
 │   ├── run_pipeline.py             Orquestrador RFM end-to-end
@@ -317,31 +326,13 @@ rfm-olist-intelligence/
 
 ---
 
-## Testes
+## Qualidade e CI
+
+O pipeline que alimenta o dashboard é coberto por **75 testes pytest** (~90% de cobertura), executados a cada push via GitHub Actions: unitários para os cálculos (Gini, Lorenz, RFM), invariantes de domínio, regras de negócio da segmentação e contrato de formato dos exports para o Power BI (separador, decimal e encoding BR). Destaque para `test_robust_to_id_permutation`, que garante nomes de cluster derivados do perfil R/F/M — e não dos IDs aleatórios do KMeans — mantendo os rótulos estáveis entre re-treinos.
 
 ```bash
-pytest tests/ -v
+pytest tests/ -v   # 75 passed
 ```
-
-```
-========================== test session starts ==========================
-platform win32 -- Python 3.13.5, pytest-8.3.4, pluggy-1.5.0
-collected 75 items
-
-tests/test_clustering.py .....             [  6%]    5 passed
-tests/test_config.py ...                   [ 10%]    3 passed
-tests/test_data_loader.py ....             [ 16%]    4 passed
-tests/test_data_quality.py ...........     [ 30%]   11 passed
-tests/test_export.py .......               [ 40%]    7 passed
-tests/test_ml_common.py .....              [ 46%]    5 passed
-tests/test_rfm.py ........                 [ 57%]    8 passed
-tests/test_segmentation.py ...............  [ 84%]   20 passed
-tests/test_utils.py ............           [100%]   12 passed
-
-========================== 75 passed in 18.4s ===========================
-```
-
-Destaque para o teste `test_robust_to_id_permutation`, que valida a invariância dos nomes de cluster em relação aos IDs aleatórios do KMeans — propriedade fundamental para reprodutibilidade entre re-treinos.
 
 ---
 
