@@ -93,3 +93,6 @@ streamlit_agent/.streamlit/secrets.toml
 
 # Scripts geradores one-off do dashboard (ficam locais, fora do Git)
 powerbi/_*.py
+
+# Impeccable — deps locais do detector (instaladas via npm, não versionadas)
+.claude/skills/impeccable/node_modules/
