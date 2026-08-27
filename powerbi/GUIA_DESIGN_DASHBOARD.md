@@ -23,8 +23,11 @@ O dashboard já está montado em **`RFM.pbip`** (formato PBIP — pastas `RFM.Re
   (inclui as medidas compostas `X Mes` / `X Mes Anterior` / `X MoM %` e as sparklines SVG).
 - **Tema** aplicado a partir de **`dashboard_theme.json`** (já existe como arquivo nesta pasta).
 - Cores por cluster fixadas via `dim_segmentos[Cor_Hex]` (Format by field value).
-- **Modo leve (2026-07)**: chrome sem `backdrop-filter` e com aurora única compositor-only
-  (`transform`+`opacity`); badges decorativos removidos; fontes parametrizadas via `CaminhoDados`.
+- **Modo leve (2026-07)**: chrome sem `backdrop-filter`; badges decorativos removidos; fontes
+  parametrizadas via `CaminhoDados`.
+- **Mundo visual "Petrol" (2026-08)**: campo teal dessaturado estático, cards escuros com fio
+  de 1px, ciano reservado à ação e paleta de dado ouro/lilás/sage/rosa. Nenhuma animação no
+  chrome. Ver `AUDITORIA_IMPECCABLE.md`.
 
 > ⚠️ **Editar com o Desktop fechado:** o PBI Desktop reescreve os `.Report/*.json` ao salvar.
 > Para editar visuais via arquivo/pbi-cli, feche o Desktop primeiro.
@@ -82,26 +85,26 @@ Para garantir que **todos os visuais** sigam a paleta de clusters automaticament
 {
   "name": "RFM Olist Dark Executive",
   "dataColors": [
-    "#5E6AD2",
-    "#BF6FF8",
-    "#F2C94C",
-    "#E5484D",
-    "#A1A1AA",
-    "#08090A"
+    "#E0AB6A",
+    "#A38ADB",
+    "#79C9A4",
+    "#E8879A",
+    "#A6BBBC",
+    "#05080A"
   ],
-  "background": "#131418",
-  "foreground": "#F4F4F5",
-  "tableAccent": "#5E6AD2",
-  "good": "#5E6AD2",
-  "neutral": "#F2C94C",
-  "bad": "#E5484D",
-  "maximum": "#5E6AD2",
-  "center": "#F2C94C",
-  "minimum": "#E5484D",
-  "null": "#8B8B92",
+  "background": "#0B1315",
+  "foreground": "#EAF2F2",
+  "tableAccent": "#E0AB6A",
+  "good": "#E0AB6A",
+  "neutral": "#79C9A4",
+  "bad": "#E8879A",
+  "maximum": "#E0AB6A",
+  "center": "#79C9A4",
+  "minimum": "#E8879A",
+  "null": "#8AA0A2",
   "textClasses": {
-    "title": { "fontSize": 18, "fontFace": "Segoe UI", "color": "#F4F4F5" },
-    "label": { "fontSize": 11, "fontFace": "Segoe UI", "color": "#A1A1AA" }
+    "title": { "fontSize": 18, "fontFace": "Segoe UI", "color": "#EAF2F2" },
+    "label": { "fontSize": 11, "fontFace": "Segoe UI", "color": "#A6BBBC" }
   }
 }
 ```
@@ -120,16 +123,16 @@ Aplicar no Power BI:
 
 | Visual | Posição (X, Y) | Tamanho (W × H) | Cor accent |
 |---|---|---|---|
-| Card Total Clientes | (40, 170) | 445 × 110 | #5E6AD2 (Verde) |
-| Card Receita Total | (505, 170) | 445 × 110 | #BF6FF8 (Azul) |
-| Card Ticket Médio | (970, 170) | 445 × 110 | #F2C94C (Âmbar) |
-| Card % Em Risco | (1435, 170) | 445 × 110 | #E5484D (Vermelho) |
+| Card Total Clientes | (40, 170) | 445 × 110 | #E0AB6A (Verde) |
+| Card Receita Total | (505, 170) | 445 × 110 | #A38ADB (Azul) |
+| Card Ticket Médio | (970, 170) | 445 × 110 | #79C9A4 (Âmbar) |
+| Card % Em Risco | (1435, 170) | 445 × 110 | #E8879A (Vermelho) |
 
 **Configuração de cada card**:
 - Visual type: **Card** (cartão simples) ou **Multi-row card**
 - Background: **Off** (transparente — o background já desenha o card)
 - Title: **Off** (o label já está no background)
-- Data label: tamanho 36-40, cor #F4F4F5, font-weight 700
+- Data label: tamanho 36-40, cor #EAF2F2, font-weight 700
 - Posicionar a label exatamente no centro do slot
 
 ### Row 1 — Visuais principais (Y=310, altura=350)
@@ -163,10 +166,10 @@ Aplicar no Power BI:
 - Border: **Off**
 - Title: **Off**
 - Data colors: usar a paleta da `dim_segmentos[Cor_Hex]` (manualmente):
-  - Campeões → #5E6AD2
-  - Big Spenders → #BF6FF8
-  - Novos / Ocasionais → #F2C94C
-  - Em Risco / Hibernando → #E5484D
+  - Campeões → #E0AB6A
+  - Big Spenders → #A38ADB
+  - Novos / Ocasionais → #79C9A4
+  - Em Risco / Hibernando → #E8879A
 
 ### 4.2 Curva de Lorenz (Pareto)
 
@@ -174,7 +177,7 @@ Aplicar no Power BI:
 - Axis: percentil acumulado de clientes (medida calculada)
 - Values: percentil acumulado de receita
 - Adicionar **linha de igualdade perfeita** (45°) como referência
-- Cor da curva: #F2C94C (Âmbar)
+- Cor da curva: #79C9A4 (Âmbar)
 
 **Medida DAX para a curva**:
 ```dax
@@ -230,7 +233,7 @@ RETURN DIVIDE(ClientesAteAtual, Total)
 - Sort: `[CLV_12m]` desc
 - Top N: 50
 - Colunas: customer_unique_id, customer_state, Monetary, Frequency, Recency, CLV_12m
-- Format CLV column: cor verde (#5E6AD2) com data bars
+- Format CLV column: cor verde (#E0AB6A) com data bars
 
 ---
 
@@ -289,13 +292,24 @@ CLV Médio Cluster = AVERAGE(fato_rfm_clientes[CLV_12m])
 3. **Fadiga visual menor** em apresentações de longa duração
 4. **Diferenciação** — destaca o projeto vs templates "padrão Power BI" claros
 
-### Por que faixa colorida no topo?
+### Por que um ponto de categoria, e não uma borda lateral colorida?
 
-A faixa de 4 cores no topo do header (`#5E6AD2` → `#BF6FF8` → `#F2C94C` → `#E5484D`) **resume a paleta** que será usada em todo o dashboard. Quem olha já entende: "isso aqui tem 4 categorias, cada uma com sua cor".
+A borda esquerda colorida em card é o tell mais reconhecível de UI gerada por IA, e o detector
+do Impeccable a sinaliza (`side-tab`). Cada KPI e a barra de diagnóstico marcam a categoria com
+um ponto de 8px na cor do segmento: mesma informação, sem o clichê e sem roubar largura do visual.
 
-### Por que cards com borda esquerda colorida?
+### Por que ciano só na ação?
 
-A borda lateral colorida nos KPIs e nos cards de gráficos é um padrão de **dashboards executivos** (estilo Stripe, Linear, Notion). Marca categoria sem ocupar espaço de visual.
+`#74CBD1` aparece em um único lugar por página — o botão que abre o Analista — com tinta escura
+por cima (9,8:1). Cor rara é cor com força: o olho encontra a ação sem que nada mais compita.
+As quatro cores de dado (ouro, lilás, sage, rosa) ficam a ~50° de distância do ciano em matiz,
+então categoria e ação nunca se confundem.
+
+### Por que o chrome não anima?
+
+O fundo fica atrás de seis visuais que já se movem a cada filtro. A versão anterior tinha aurora
+de 12s, halo pulsante no avatar e glow nos pontos de KPI — movimento decorativo competindo com
+dado vivo, e re-render a cada frame no WebView do Power BI. O campo teal agora é estático.
 
 ### Por que 1920×1080 (não Power BI default)?
 

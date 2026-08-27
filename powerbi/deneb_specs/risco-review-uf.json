@@ -8,7 +8,7 @@
     "text": "Previsão do modelo · % de pedidos com risco de nota baixa · linha = média BR",
     "fontSize": 9,
     "fontWeight": 400,
-    "color": "#A1A1AA",
+    "color": "#A6BBBC",
     "anchor": "start",
     "offset": 4
   },
@@ -21,8 +21,8 @@
       "domain": false,
       "ticks": false,
       "gridColor": "rgba(255,255,255,0.06)",
-      "labelColor": "#C8C8D0",
-      "titleColor": "#9aa0aa",
+      "labelColor": "#C6D6D7",
+      "titleColor": "#8AA0A2",
       "labelFontSize": 10,
       "titleFontSize": 10
     },
@@ -119,8 +119,8 @@
           "type": "quantitative",
           "scale": {
             "range": [
-              "#F2C94C",
-              "#E5484D"
+              "#79C9A4",
+              "#E8879A"
             ]
           },
           "legend": null
@@ -154,7 +154,7 @@
         "type": "text",
         "align": "left",
         "dx": 6,
-        "color": "#C8C8D0",
+        "color": "#C6D6D7",
         "fontSize": 10
       },
       "encoding": {
@@ -196,7 +196,7 @@
       ],
       "mark": {
         "type": "rule",
-        "color": "#F4F4F5",
+        "color": "#EAF2F2",
         "strokeDash": [
           3,
           3
@@ -222,8 +222,8 @@
         "baseline": "top",
         "dx": 4,
         "fontSize": 8,
-        "color": "#08090A",
-        "stroke": "#08090A",
+        "color": "#05080A",
+        "stroke": "#05080A",
         "strokeWidth": 3,
         "strokeJoin": "round"
       },
@@ -253,7 +253,7 @@
         "baseline": "top",
         "dx": 4,
         "fontSize": 8,
-        "color": "#E4E4E7"
+        "color": "#DCE7E7"
       },
       "encoding": {
         "x": {

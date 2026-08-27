@@ -64,32 +64,21 @@ st.markdown(
     <style>
     /* Reset e fundo — base estática + vinheta (mesma do dashboard) */
     .stApp {
-        background: #08090A;
+        background: #05080A;
         background-image:
-            radial-gradient(at 20% 10%, rgba(191, 111, 248, 0.10) 0%, transparent 50%),
-            radial-gradient(at 80% 80%, rgba(94, 106, 210, 0.08) 0%, transparent 50%),
-            radial-gradient(ellipse at center, transparent 40%, rgba(8, 9, 10, 0.55) 100%);
+            radial-gradient(1200px 820px at 34% 24%, #1C2C2C 0%, #0C1517 46%, transparent 74%),
+            radial-gradient(ellipse at center, transparent 30%, rgba(3, 6, 7, 0.74) 100%);
     }
-    /* Aurora leve — idêntica à do dashboard: camada única animando só
-       transform+opacity (compositor GPU, sem repaint) */
+    /* Campo teal estático — mesma decisão do dashboard: nada anima atrás
+       de conteúdo vivo, o dado é que se move */
     .stApp::before {
         content: '';
         position: fixed;
-        inset: -25%;
+        inset: 0;
         pointer-events: none;
         background:
-            radial-gradient(760px 540px at 28% 22%, rgba(191, 111, 248, 0.30), transparent 62%),
-            radial-gradient(680px 500px at 72% 72%, rgba(94, 106, 210, 0.26), transparent 62%),
-            radial-gradient(520px 400px at 50% 45%, rgba(191, 111, 248, 0.10), transparent 60%);
-        animation: aurora 12s ease-in-out infinite alternate;
-        will-change: transform, opacity;
-    }
-    @keyframes aurora {
-        0%   { transform: translate3d(-5%, 0, 0); opacity: 0.40; }
-        100% { transform: translate3d(5%, 0, 0);  opacity: 1; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-        .stApp::before { animation: none; }
+            radial-gradient(900px 620px at 30% 22%, rgba(116, 176, 178, 0.22), transparent 62%),
+            radial-gradient(760px 570px at 76% 78%, rgba(116, 176, 178, 0.13), transparent 66%);
     }
     /* Esconde header padrão do Streamlit */
     header[data-testid="stHeader"] { background: transparent; }
@@ -104,42 +93,42 @@ st.markdown(
 
     /* Mensagens — bot (card sólido, sem backdrop-filter: mesmo modo leve do dashboard) */
     [data-testid="stChatMessage"] {
-        background: rgba(20, 22, 30, 0.85);
-        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: rgba(8, 14, 16, 0.90);
+        border: 1px solid rgba(154, 200, 205, 0.15);
         border-radius: 12px;
     }
 
     /* Input do chat */
     [data-testid="stChatInput"] {
-        background: rgba(20, 22, 30, 0.85) !important;
-        border: 1px solid rgba(255, 255, 255, 0.06) !important;
+        background: rgba(8, 14, 16, 0.90) !important;
+        border: 1px solid rgba(154, 200, 205, 0.15) !important;
         border-radius: 10px !important;
     }
     [data-testid="stChatInput"] textarea {
-        color: #F4F4F5 !important;
+        color: #EAF2F2 !important;
     }
 
     /* Botões quick action */
     .stButton button {
-        background: rgba(255, 255, 255, 0.025) !important;
-        border: 1px solid rgba(255, 255, 255, 0.06) !important;
-        color: #F4F4F5 !important;
+        background: rgba(154, 200, 205, 0.04) !important;
+        border: 1px solid rgba(154, 200, 205, 0.15) !important;
+        color: #EAF2F2 !important;
         border-radius: 9px !important;
-        font-size: 12px !important;
+        font-size: 14px !important;
         padding: 8px 12px !important;
         text-align: left !important;
         width: 100% !important;
-        transition: all 0.2s !important;
+        transition: background-color 0.18s ease-out, border-color 0.18s ease-out !important;
     }
     .stButton button:hover {
-        background: rgba(191, 111, 248, 0.12) !important;
-        border-color: rgba(191, 111, 248, 0.3) !important;
+        background: rgba(116, 203, 209, 0.14) !important;
+        border-color: rgba(116, 203, 209, 0.35) !important;
         transform: translateX(2px) !important;
     }
 
     /* Typography */
-    body, .stApp, p, span, div { color: #F4F4F5; }
-    h1, h2, h3 { color: #F4F4F5 !important; letter-spacing: -0.5px; }
+    body, .stApp, p, span, div { color: #EAF2F2; }
+    h1, h2, h3 { color: #EAF2F2 !important; letter-spacing: -0.5px; }
 
     /* Header customizado */
     .agent-header {
@@ -147,43 +136,29 @@ st.markdown(
         align-items: center;
         gap: 12px;
         padding: 14px 18px;
-        background: rgba(20, 22, 30, 0.85);
-        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: rgba(8, 14, 16, 0.90);
+        border: 1px solid rgba(154, 200, 205, 0.15);
         border-radius: 14px;
         margin-bottom: 14px;
     }
     .agent-avatar {
         width: 36px; height: 36px;
         border-radius: 10px;
-        background: linear-gradient(135deg, #1F2030, #14151D);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(116, 203, 209, 0.12);
+        border: 1px solid rgba(116, 203, 209, 0.28);
         display: flex; align-items: center; justify-content: center;
-        font-size: 16px; font-weight: 600; color: #5E6AD2;
-        position: relative;
+        flex-shrink: 0;
     }
-    .agent-avatar::before {
-        content: '';
-        position: absolute;
-        inset: -6px;
-        border-radius: 16px;
-        background: radial-gradient(circle, #5E6AD2 0%, transparent 70%);
-        opacity: 0.15;
-        animation: pulse 4s ease-in-out infinite;
-        z-index: -1;
-    }
-    @keyframes pulse {
-        0%, 100% { opacity: 0.10; transform: scale(1); }
-        50% { opacity: 0.25; transform: scale(1.15); }
-    }
+    .agent-avatar svg { width: 18px; height: 18px; display: block; }
     .agent-name {
         font-size: 14px;
         font-weight: 600;
-        color: #F4F4F5;
+        color: #EAF2F2;
         letter-spacing: -0.2px;
     }
     .agent-status {
-        font-size: 11px;
-        color: #5E6AD2;
+        font-size: 14px;
+        color: #E0AB6A;
         margin-top: 2px;
         display: flex;
         align-items: center;
@@ -192,19 +167,15 @@ st.markdown(
     .agent-status::before {
         content: '';
         width: 6px; height: 6px;
-        background: #5E6AD2;
+        background: #79C9A4;
         border-radius: 50%;
-        animation: dot-pulse 2s infinite;
-    }
-    @keyframes dot-pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.3; }
+        flex-shrink: 0;
     }
 
     /* Footer */
     .agent-footer {
-        font-size: 10px;
-        color: #71717A;
+        font-size: 11px;
+        color: #7A8E90;
         text-align: center;
         margin-top: 10px;
     }
@@ -213,7 +184,7 @@ st.markdown(
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(154, 200, 205, 0.24);
         border-radius: 3px;
     }
 
@@ -223,8 +194,8 @@ st.markdown(
         align-items: center;
         gap: 5px;
         padding: 10px 14px;
-        background: rgba(20, 22, 30, 0.85);
-        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: rgba(8, 14, 16, 0.90);
+        border: 1px solid rgba(154, 200, 205, 0.15);
         border-radius: 14px;
         border-bottom-left-radius: 4px;
         margin: -12px 0 0 0;
@@ -232,23 +203,28 @@ st.markdown(
         top: -8px;
     }
     .typing-bubble .dot {
-        width: 8px; height: 8px;
-        background: #BF6FF8;
+        width: 7px; height: 7px;
+        background: #74CBD1;
         border-radius: 50%;
-        animation: typing-bounce 1.3s infinite;
-        box-shadow: 0 0 8px rgba(191, 111, 248, 0.5);
+        opacity: 0.35;
+        animation: typing-fade 1.3s cubic-bezier(0.16, 1, 0.3, 1) infinite;
     }
     .typing-bubble .dot:nth-child(2) { animation-delay: 0.18s; }
     .typing-bubble .dot:nth-child(3) { animation-delay: 0.36s; }
     .typing-label {
         margin-left: 10px;
-        color: #A1A1AA;
-        font-size: 13px;
+        color: #A6BBBC;
+        font-size: 14px;
         font-style: italic;
     }
-    @keyframes typing-bounce {
-        0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-        30% { transform: translateY(-5px); opacity: 1; }
+    @keyframes typing-fade {
+        0%, 60%, 100% { opacity: 0.30; }
+        30% { opacity: 1; }
+    }
+    /* O indicador comunica estado real (o agente está pensando): sob
+       reduced-motion vira um estado estático legível, não desaparece */
+    @media (prefers-reduced-motion: reduce) {
+        .typing-bubble .dot { animation: none; opacity: 0.75; }
     }
 
     </style>
@@ -289,7 +265,7 @@ def warmup_duckdb():
 st.markdown(
     """
     <div class="agent-header">
-        <div class="agent-avatar">✦</div>
+        <div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="#74CBD1" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16l5-5 4 3 6.5-7"/><path d="M19.5 7V11"/><path d="M19.5 7H15.5"/></svg></div>
         <div>
             <div class="agent-name">Analista RFM</div>
             <div class="agent-status">Claude Haiku 4.5 · Online</div>
@@ -386,7 +362,7 @@ QUICK_ACTIONS = {
 
 if api_ready and len(st.session_state.messages) <= 1:
     st.markdown(
-        '<div style="font-size: 10px; color: #71717A; letter-spacing: 1.2px; '
+        '<div style="font-size: 10px; color: #7A8E90; letter-spacing: 1.2px; '
         'font-weight: 600; text-transform: uppercase; margin: 10px 0;">'
         "Sugestões rápidas</div>",
         unsafe_allow_html=True,
@@ -473,7 +449,7 @@ st.markdown(
     f"""
     <div class="agent-footer">
         Claude Haiku 4.5 · Prompt caching + Tool use + DuckDB
-        <span style="margin-left: 12px; padding: 2px 8px; background: rgba(167,139,250,0.1); border-radius: 5px; color: #BF6FF8;">
+        <span style="margin-left: 12px; padding: 2px 8px; background: rgba(116,203,209,0.12); border-radius: 5px; color: #A38ADB;">
             {n_msgs} perguntas · ${cost:.4f} (≈ R$ {cost_brl:.3f})
         </span>
     </div>

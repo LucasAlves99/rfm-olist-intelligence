@@ -179,7 +179,7 @@ def build_dim_segmentos() -> pd.DataFrame:
                 "Compra única recente, valor baixo — maior parte da base Olist",
                 "Recência alta, sem comprar há muito — alto risco de churn",
             ],
-            "Cor_Hex": ["#5E6AD2", "#BF6FF8", "#F2C94C", "#E5484D"],
+            "Cor_Hex": ["#E0AB6A", "#A38ADB", "#79C9A4", "#E8879A"],
             "Acao_CRM": [
                 "Programa VIP, ofertas exclusivas, embaixadores da marca",
                 "Conversão para recorrência: ofertas categoria-aderentes, upsell pós-venda",
@@ -187,7 +187,7 @@ def build_dim_segmentos() -> pd.DataFrame:
                 "Win-back urgente: e-mail de reativação, desconto agressivo, pesquisa de churn",
             ],
             "Prioridade": [1, 1, 3, 2],
-            "Cor_Power_BI": ["Iris", "Mauve", "Gold", "Radish"],
+            "Cor_Power_BI": ["Amber", "Lilac", "Sage", "Rose"],
         }
     )
 

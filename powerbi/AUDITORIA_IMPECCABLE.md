@@ -2,6 +2,9 @@
 
 `/impeccable audit` · skill [Impeccable](https://github.com/pbakaus/impeccable) v4.1.2 · 2026-08-27
 
+> **Estado:** corrigido em 2026-08-27 pelo redesign "Petrol". O detector passou de **25 → 0**
+> anti-padrões. O laudo abaixo é o "antes"; o que mudou está em [Depois](#depois--redesign-petrol).
+
 ## Escopo
 
 O background do dashboard **não é um arquivo de imagem nem um tema do Power BI**. Ele é
@@ -70,11 +73,15 @@ qualquer SaaS. Cinco regras de *slop* dispararam sobre essa mesma pilha.
 - **Comando**: `/impeccable colorize`
 
 ### [P1] Vermelho semântico sobre fundo tingido falha AA
-- **Local**: `_Background.tmdl:527` (`.diag-icon`, `.diag-title`) e `:183` (`.kpi .pill.down`)
+- **Local**: `_Background.tmdl:527` (`.diag-icon`, `.diag-title`)
 - **Categoria**: Acessibilidade
-- **Medição**: `#E5484D` sobre `--em-risco-soft` composto = **4,22:1**; sobre `#3a1416` = **4,15:1**.
+- **Medição**: `#E5484D` sobre `--em-risco-soft` composto = **4,22:1**. Texto de 11px exige 4,5:1.
 - **Impacto**: justamente o estado de alerta ("Em risco") é o menos legível dos quatro.
-- **Observação**: `.pill.up` (7,0:1) e `.pill.warn` (8,12:1) passam — só a variante vermelha falha.
+- **Correção de rota**: a primeira versão deste laudo listava também `.kpi .pill.down` (4,15:1)
+  como falha viva. Verificação no navegador mostrou que `.pill`, `.bar` e as variantes
+  `.up/.down/.warn/.flat` **não têm marcação correspondente** — a measure calcula as VARs
+  `pillX`/`colX`/`fX` e as descarta. É CSS morto, não uma falha de acessibilidade. Ver o P3
+  de código morto abaixo.
 - **Correção**: clarear o vermelho de texto para ~`#FF7B7F` mantendo `#E5484D` como cor de
   preenchimento (barra, ponto, borda).
 - **Comando**: `/impeccable colorize`
@@ -131,6 +138,20 @@ qualquer SaaS. Cinco regras de *slop* dispararam sobre essa mesma pilha.
 - **Correção**: adicionar `--sucesso`, `--sucesso-soft`, `--em-risco-bg`, `--novos-bg`, `--neutro-bg`.
 - **Comando**: `/impeccable extract`
 
+### [P3] Código morto: um terço do CSS não tem marcação
+- **Local**: página 1 — `.pill`, `.up/.down/.warn/.flat`, `.bar`, `.bar-fill`, `.bar-tick`,
+  `.panel-badge`, `.badge-*`, `.panel-sub`, `.ai-foot`, `.footer`; página 2 — todo o bloco
+  `.kpi*` mais `.panel-badge`, `.badge-*`, `.footer`
+- **Categoria**: Implementação
+- **Verificação**: renderizado em Chromium a 1280×720, comparando as classes declaradas nas
+  folhas com as presentes no DOM.
+- **Impacto**: a measure `_BG Pagina 1` computa ~20 VARs (`pillCli`, `colRec`, `fTic`, `clsRis`…)
+  que nunca entram no HTML — cada uma dispara avaliação de medida a cada refresh. E o CSS morto
+  fez esta auditoria reportar falhas de contraste que ninguém vê.
+- **Correção**: as regras de pill/bar/badge foram mantidas e realinhadas ao novo sistema (a
+  marcação pode voltar); `.footer` e `.ai-foot` foram removidos. As VARs mortas em DAX ficaram
+  como estão — mexer em lógica de medida sem o Power BI para testar não se paga.
+
 ### [P3] `.footer` é CSS morto — e reviver como está falharia AA
 - **Local**: `:277-281` e `:555-559` (regra `.footer`), `:57` / `:407` (`--text-muted: #6B6B73`)
 - **Categoria**: Theming
@@ -182,4 +203,79 @@ qualquer SaaS. Cinco regras de *slop* dispararam sobre essa mesma pilha.
 4. **[P2] `/impeccable extract`** — tokens em measure única e cores soltas viram tokens.
 5. **[P2] `/impeccable polish`** — passada final e realinhamento com `streamlit_agent/app.py`.
 
-Rode `/impeccable audit` de novo depois das correções para ver o score subir.
+---
+
+## Depois — redesign "Petrol"
+
+Mundo visual derivado de uma referência em vídeo (Fuselab Creative, *Control AI Policy
+Platform*): campo teal dessaturado, cards escuros com fio de 1px, ouro como acento quente,
+ciano exclusivo da ação, rosa só para alerta.
+
+### Resultado
+
+| | Antes | Depois |
+|---|---|---|
+| Detector (2 páginas) | 25 achados | **0** |
+| Contraste do CTA principal | 3,07:1 ❌ | **9,81:1** ✅ |
+| Menor contraste de token sobre card | 3,48:1 ❌ | **6,2:1** ✅ |
+| Anti-padrões de *AI slop* | 5 regras | **0** |
+| Tamanhos de fonte | 9 (9→16px, faixa 1,8:1) | **4** (11/14/18/26) |
+| Animações no chrome | 4 loops infinitos | **0** |
+
+### Paleta
+
+| Papel | Antes | Depois | Contraste sobre o card |
+|---|---|---|---|
+| Canvas | `#08090A` + aurora roxa animada | `#05080A` + campo teal estático | — |
+| Superfície | `rgba(20,22,30,.85)` | `rgba(8,14,16,.90)` | — |
+| Texto 1 / 2 / 3 | `#F4F4F5` / `#A1A1AA` / `#8B8B92` | `#EAF2F2` / `#A6BBBC` / `#8AA0A2` | 15,9 / 9,0 / 6,6 |
+| **Ação (IA)** | — (era roxo do gradiente) | **`#74CBD1`** com tinta `#04171A` | **9,8** |
+| Champions | `#5E6AD2` índigo | `#E0AB6A` ouro | 8,8 |
+| Big Spenders | `#BF6FF8` roxo | `#A38ADB` lilás | 6,2 |
+| Novos | `#F2C94C` amarelo | `#79C9A4` sage | 9,2 |
+| Em Risco | `#E5484D` vermelho | `#E8879A` rosa | 7,2 |
+
+O ciano da ação fica a ~50° de matiz das quatro cores de dado, então categoria e ação nunca
+se confundem. Deltas positivos reusam o sage e negativos o rosa, em vez de dois verdes e dois
+vermelhos soltos fora do sistema.
+
+### O que saiu
+
+- **`radial-halo`** — halo roxo atrás do avatar da IA
+- **`dark-glow`** — `box-shadow` colorido sob o CTA (virou elevação neutra com offset e blur)
+- **`pulsing-dot`** — o dot de status pulsando sobre texto estático, e os 4 dots de KPI com
+  `filter: blur` + `dotPulse`
+- **`side-tab`** — `border-left: 3px` na barra de diagnóstico (virou ponto de categoria)
+- **Aurora de 12s** — o chrome fica atrás de seis visuais que já se movem a cada filtro
+- **Cards aninhados** na lista de exemplos do painel de IA (viraram linhas com fio)
+- **Glifos Unicode como ícone** (`✦`, `→`, `›`) — viraram SVG desenhado
+- **`.footer` / `.ai-foot`** — regras órfãs
+
+### Restrição que guiou o trabalho
+
+O relatório é um canvas fixo de **1280×720** e os visuais nativos são posicionados em pixel
+absoluto **por cima** do chrome (`p1_concentracao` em y=515, o botão "Abrir Analista" em
+y=624, o slicer de ano da página 2 em x=160). Qualquer mudança de altura desalinha o
+dashboard. Cada passo foi renderizado em Chromium a 1280×720 e as caixas comparadas contra o
+baseline: **as 23 caixas que os visuais sobrepõem terminaram com deslocamento zero.**
+
+Duas colisões apareceram nessa verificação e foram corrigidas: título de painel a 18px passava
+por baixo do slicer de ano (voltou a 14px, com peso e cor carregando a hierarquia) e o seletor
+de abas centralizado na coluna `1fr` saía de baixo do action button (o topbar virou
+`1fr auto 1fr`, e agora o botão cobre a aba inteira — melhor que no original).
+
+### Um achado suprimido, com motivo
+
+`flat-type-hierarchy` continua disparando na página 2 (11/14/18px, faixa 1,6:1). É falso
+positivo: o chrome da página 2 é fundo, e a hierarquia visual dela é carregada pelos seis
+visuais nativos desenhados por cima. Registrado com `impeccable-disable` e a justificativa no
+próprio HTML.
+
+### Propagação
+
+O mesmo mapa de cor foi aplicado a `dashboard_theme.json` (e à cópia em `RegisteredResources`),
+aos 4 specs Deneb, a `dim_segmentos[Cor_Hex]` em `src/export.py`, ao `streamlit_agent/app.py`
+(que também perdeu a aurora, o halo, o dot pulsante e o `bounce-easing` do indicador de
+digitação) e a `.streamlit/config.toml`. O detector roda limpo no `app.py` também.
+
+Rode `/impeccable audit` de novo depois de qualquer mudança para conferir.

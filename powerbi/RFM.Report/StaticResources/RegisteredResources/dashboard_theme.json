@@ -1,38 +1,38 @@
 {
-  "name": "RFM Olist Dark Executive",
+  "name": "RFM Olist Petrol",
   "dataColors": [
-    "#5E6AD2",
-    "#BF6FF8",
-    "#F2C94C",
-    "#E5484D",
-    "#A1A1AA",
-    "#08090A"
+    "#E0AB6A",
+    "#A38ADB",
+    "#79C9A4",
+    "#E8879A",
+    "#A6BBBC",
+    "#05080A"
   ],
-  "background": "#131418",
-  "foreground": "#F4F4F5",
-  "tableAccent": "#5E6AD2",
-  "good": "#5E6AD2",
-  "neutral": "#F2C94C",
-  "bad": "#E5484D",
-  "maximum": "#5E6AD2",
-  "center": "#F2C94C",
-  "minimum": "#E5484D",
-  "null": "#8B8B92",
+  "background": "#0B1315",
+  "foreground": "#EAF2F2",
+  "tableAccent": "#E0AB6A",
+  "good": "#E0AB6A",
+  "neutral": "#79C9A4",
+  "bad": "#E8879A",
+  "maximum": "#E0AB6A",
+  "center": "#79C9A4",
+  "minimum": "#E8879A",
+  "null": "#8AA0A2",
   "textClasses": {
     "title": {
       "fontSize": 14,
       "fontFace": "Segoe UI Semibold",
-      "color": "#F4F4F5"
+      "color": "#EAF2F2"
     },
     "label": {
       "fontSize": 11,
       "fontFace": "Segoe UI",
-      "color": "#A1A1AA"
+      "color": "#A6BBBC"
     },
     "callout": {
       "fontSize": 28,
       "fontFace": "Segoe UI Semibold",
-      "color": "#F4F4F5"
+      "color": "#EAF2F2"
     }
   },
   "visualStyles": {

@@ -13,7 +13,7 @@
     "text": "Barras em escala log · rótulo = clientes · % que avança da etapa",
     "fontSize": 9,
     "fontWeight": 400,
-    "color": "#A1A1AA",
+    "color": "#A6BBBC",
     "anchor": "start",
     "offset": 4
   },
@@ -26,8 +26,8 @@
       "domain": false,
       "ticks": false,
       "gridColor": "rgba(255,255,255,0.06)",
-      "labelColor": "#C8C8D0",
-      "titleColor": "#C8C8D0",
+      "labelColor": "#C6D6D7",
+      "titleColor": "#C6D6D7",
       "labelFontSize": 10,
       "titleFontSize": 10
     }
@@ -148,11 +148,11 @@
           "stops": [
             {
               "offset": 0,
-              "color": "#5E6AD2"
+              "color": "#E0AB6A"
             },
             {
               "offset": 1,
-              "color": "#A78BFA"
+              "color": "#A38ADB"
             }
           ]
         }
@@ -189,7 +189,7 @@
         "align": "left",
         "dx": 4,
         "fontSize": 9,
-        "color": "#C8C8D0"
+        "color": "#C6D6D7"
       },
       "encoding": {
         "x": {

@@ -324,12 +324,12 @@ no CSS dos backgrounds HTML e nos specs Deneb:
 
 | Token | Hex | Uso |
 |---|---|---|
-| Champions | `#5E6AD2` | Campeões / "good" |
-| Big Spenders | `#BF6FF8` | Big Spenders (Não-Recorrentes) |
-| Novos | `#F2C94C` | Novos / Ocasionais / "neutral" |
-| Em Risco | `#E5484D` | Em Risco / Hibernando / "bad" |
-| Fundo base | `#08090A` | Canvas |
-| Texto 1 / 2 | `#F4F4F5` / `#A1A1AA` | Primário / secundário |
+| Champions | `#E0AB6A` | Campeões / "good" |
+| Big Spenders | `#A38ADB` | Big Spenders (Não-Recorrentes) |
+| Novos | `#79C9A4` | Novos / Ocasionais / "neutral" |
+| Em Risco | `#E8879A` | Em Risco / Hibernando / "bad" |
+| Fundo base | `#05080A` | Canvas |
+| Texto 1 / 2 | `#EAF2F2` / `#A6BBBC` | Primário / secundário |
 
 As cores por cluster nos visuais vêm de `dim_segmentos[Cor_Hex]` (Format by field value),
 garantindo consistência mesmo se os IDs do KMeans permutarem entre re-treinos. Detalhes de

@@ -19,8 +19,8 @@
       "domain": false,
       "tickColor": "rgba(255,255,255,0.15)",
       "gridColor": "rgba(255,255,255,0.06)",
-      "labelColor": "#C8C8D0",
-      "titleColor": "#F4F4F5",
+      "labelColor": "#C6D6D7",
+      "titleColor": "#EAF2F2",
       "labelFontSize": 11,
       "titleFontSize": 12
     }
@@ -33,7 +33,7 @@
       "description": "area de Gini entre a diagonal e a curva",
       "mark": {
         "type": "area",
-        "color": "#F2C94C",
+        "color": "#79C9A4",
         "opacity": 0.16,
         "interpolate": "monotone",
         "clip": true
@@ -92,7 +92,7 @@
       },
       "mark": {
         "type": "line",
-        "color": "#71717A",
+        "color": "#7A8E90",
         "strokeDash": [
           4,
           4
@@ -127,7 +127,7 @@
       "description": "curva de Lorenz",
       "mark": {
         "type": "line",
-        "color": "#A78BFA",
+        "color": "#A38ADB",
         "strokeWidth": 2.5,
         "interpolate": "monotone",
         "tooltip": true,
@@ -209,7 +209,7 @@
       ],
       "mark": {
         "type": "text",
-        "color": "#F2C94C",
+        "color": "#79C9A4",
         "fontSize": 11,
         "fontWeight": 600,
         "align": "right",

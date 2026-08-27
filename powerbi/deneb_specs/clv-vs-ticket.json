@@ -13,7 +13,7 @@
     "text": "Só Campeões projetam retorno 12m acima do ticket atual — nos demais, a recompra é a alavanca",
     "fontSize": 9,
     "fontWeight": 400,
-    "color": "#A1A1AA",
+    "color": "#A6BBBC",
     "anchor": "start",
     "offset": 6
   },
@@ -25,12 +25,12 @@
     "axis": {
       "domain": false,
       "ticks": false,
-      "labelColor": "#C8C8D0",
-      "titleColor": "#C8C8D0",
+      "labelColor": "#C6D6D7",
+      "titleColor": "#C6D6D7",
       "labelFontSize": 10
     },
     "legend": {
-      "labelColor": "#E4E4E7",
+      "labelColor": "#DCE7E7",
       "labelFontSize": 10,
       "symbolType": "square",
       "symbolSize": 95,
@@ -114,8 +114,8 @@
               "CLV 12m"
             ],
             "range": [
-              "#A78BFA",
-              "#5E6AD2"
+              "#A38ADB",
+              "#E0AB6A"
             ]
           },
           "legend": {
@@ -175,7 +175,7 @@
         "baseline": "middle",
         "fontSize": 10,
         "fontWeight": 700,
-        "color": "#EDEDEF"
+        "color": "#E4EDED"
       },
       "encoding": {
         "x": {
@@ -212,7 +212,7 @@
           "as": "tag"
         },
         {
-          "calculate": "datum.mult >= 1 ? '#4ADE80' : '#F2C94C'",
+          "calculate": "datum.mult >= 1 ? '#79C9A4' : '#79C9A4'",
           "as": "cor"
         }
       ],
