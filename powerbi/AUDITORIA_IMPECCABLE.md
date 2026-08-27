@@ -278,4 +278,161 @@ aos 4 specs Deneb, a `dim_segmentos[Cor_Hex]` em `src/export.py`, ao `streamlit_
 (que também perdeu a aurora, o halo, o dot pulsante e o `bounce-easing` do indicador de
 digitação) e a `.streamlit/config.toml`. O detector roda limpo no `app.py` também.
 
+---
+
+# Auditoria 2 — pós-redesign
+
+`/impeccable audit` · 2026-08-27, após o commit `969f73c`
+
+## Como foi medido
+
+Não só pelo detector. As duas páginas foram renderizadas em Chromium a 1280×720 e:
+
+- **contraste medido em pixel**, não no CSS declarado: para cada nó de texto, a cor computada
+  contra o decil mais escuro dos pixels da própria caixa (o que sobrevive a gradiente, alpha e
+  ao campo teal por baixo) — 51 nós no total;
+- **paleta categórica simulada** para deuteranopia, protanopia e tritanopia (matrizes de
+  Machado et al., 2009);
+- **`_Plano Acao`** renderizado no tamanho real do visual (416×224) para checar corte de texto;
+- classes CSS sem marcação, animações ativas e tamanhos de fonte lidos do DOM computado.
+
+## Audit Health Score
+
+| # | Dimensão | Antes | Agora | Achado principal |
+|---|---|---|---|---|
+| 1 | Acessibilidade | 2/4 | **2/4** | Texto passou a excelente (0 falhas em 51 nós, piso 6,77:1), mas a paleta categórica quebrou sob daltonismo |
+| 2 | Performance | 3/4 | **3/4** | Zero animação no chrome; as ~20 VARs DAX mortas continuam sendo avaliadas |
+| 3 | Responsividade | 3/4 | **3/4** | Geometria verificada caixa a caixa; uma linha de texto passou a truncar |
+| 4 | Theming | 3/4 | **3/4** | Sistema de papéis coerente, mas `:root` ainda duplicado e um shorthand inválido derruba a fonte das abas |
+| 5 | Integridade de implementação | 2/4 | **4/4** | Zero anti-padrões, ícones desenhados, mundo visual com origem declarada |
+| **Total** | | **13/20** | **15/20** | **Good — resolver as dimensões fracas** |
+
+Detector determinístico: **0 achados** nas duas páginas e no `app.py` (exit 0).
+Esta auditoria encontrou **4 problemas que o detector não vê**, um deles uma regressão
+introduzida pelo próprio redesign.
+
+## Veredito de integridade — **PASSA**
+
+O chrome já não é intercambiável com outro produto. O mundo visual tem origem declarada (uma
+referência em vídeo), a relação de profundidade é uma decisão (campo iluminado, cards escuros),
+os ícones são desenhados e o ciano só aparece na ação. Nenhuma das 59 regras determinísticas
+dispara.
+
+## Achados
+
+### [P1] REGRESSÃO — a paleta de segmentos quebrou sob daltonismo
+
+- **Local**: `_Background.tmdl` (`:root`, ×2), `dashboard_theme.json`, `deneb_specs/*.json`,
+  `src/export.py` (`dim_segmentos[Cor_Hex]`)
+- **Categoria**: Acessibilidade — WCAG 1.4.1 (uso de cor)
+- **Medição**:
+
+  | Paleta | Faixa de luminância | Pares indistinguíveis (de 6) |
+  |---|---|---|
+  | | | normal · deuteranopia · protanopia · tritanopia |
+  | Anterior (índigo/roxo/amarelo/vermelho) | 0,173 – 0,612 (**3,5×**) | 0 · **0** · **0** · 0 |
+  | Atual (ouro/lilás/sage/rosa) | 0,311 – 0,485 (**1,6×**) | 0 · **2** · **2** · 1 |
+
+  Sob deuteranopia, ouro e sage ficam a 3° de matiz com razão de luminância 1,08 — ou seja,
+  a mesma cor. Sob protanopia, o mesmo par (1,20) e lilás × rosa (1,04).
+
+- **Causa**: peguei os quatro matizes das *esferas decorativas* do vídeo de referência. Ali a
+  cor é atmosférica e as esferas são propositalmente pastéis de luminância parecida. Transplantei
+  uma paleta atmosférica para um papel categórico — e o dashboard inteiro codifica os quatro
+  clusters por cor. A paleta antiga era feia perto dessa, mas separava por luminância, então
+  sobrevivia a qualquer tipo de daltonismo.
+- **Impacto**: ~8% dos homens não distinguem Campeões de Novos/Ocasionais nos visuais Deneb.
+  Nos cards de KPI o risco é menor (há rótulo de texto ao lado do ponto); concentra-se nos
+  gráficos em que a cor é o único código.
+- **Correção proposta** (matizes da referência preservados, luminância reespalhada):
+
+  | Segmento | Atual | Proposto | L | Sobre o card |
+  |---|---|---|---|---|
+  | Champions | `#E0AB6A` | `#E2C38C` | 0,572 | 11,2:1 |
+  | Big Spenders | `#A38ADB` | `#8C6BC6` | 0,203 | 4,6:1 |
+  | Novos | `#79C9A4` | `#3DA27D` | 0,286 | 6,1:1 |
+  | Em Risco | `#E8879A` | `#DC889D` | 0,355 | 7,3:1 |
+
+  Esse conjunto dá **0/6 pares indistinguíveis** nas três simulações. Números gerados por busca,
+  não validados a olho: `#8C6BC6` fica perto do piso AA para texto (4,6:1) e alguns pares ainda
+  se separam mais por luminância que por matiz. Passar por `/impeccable colorize` antes de adotar.
+- **Comando**: `/impeccable colorize`
+
+### [P1] O seletor de abas não usa a fonte, o tamanho nem o peso declarados
+
+- **Local**: `_Background.tmdl` — regra `.tab`, `font: 500 14px inherit`
+- **Categoria**: Theming / Implementação
+- **Medição**: computado no navegador, `.tab` renderiza **13,33px, peso 400, família Arial**.
+- **Causa**: `font: 500 14px inherit` é um shorthand **inválido** — `inherit` é palavra-chave
+  CSS-wide e não vale como `font-family` dentro do shorthand. O navegador descarta a declaração
+  inteira e o `<button>` cai no padrão do user agent. O bug é anterior ao redesign (era
+  `font: 500 13px inherit`), então a troca 13→14px da passada anterior **não teve efeito nenhum**.
+- **Impacto**: a navegação principal sai numa tipografia que não é a do resto do dashboard, e no
+  WebView do Power BI cai no padrão daquele runtime, não em Segoe UI. Também insere um quinto
+  tamanho (13,33px) numa escala projetada com quatro.
+- **Correção**: trocar por declarações separadas — `font-size: 14px; font-weight: 500;`
+  (a família já herda). Refazer a medição das abas depois: a largura congelada em 290px foi
+  calculada sobre a renderização errada.
+- **Comando**: `/impeccable typeset`
+
+### [P2] REGRESSÃO — uma ação de CRM passou a truncar
+
+- **Local**: `_Background.tmdl` — measure `_Plano Acao`, regra `.ac`
+- **Categoria**: Responsividade
+- **Medição**: visual renderizado a 416×224 (tamanho real de `p2_review_recency`). A linha
+  "Converter p/ recorrência: upsell pós-venda" estoura por **4px** e é cortada com reticências.
+  A 10px (antes do redesign) cabia.
+- **Impacto**: o painel existe para dizer o que fazer com cada segmento; a recomendação de Big
+  Spenders é justamente a que fica pela metade.
+- **Correção**: `.ac` volta a 10px, ou o texto encurta para "Upsell pós-venda p/ recorrência",
+  ou a linha ganha duas linhas de altura. Encurtar o texto é o que preserva a escala.
+- **Comando**: `/impeccable clarify`
+
+### [P2] Tokens ainda duplicados — agora em cinco lugares
+
+- **Local**: dois blocos `:root` (`_BG Pagina 1` e `_BG Pagina 2`), mais os hexes das quatro
+  categorias repetidos nas 4 measures `_Spark *` e nos `style=` inline de `_Plano Acao`
+- **Categoria**: Theming
+- **Nota**: o P2 da auditoria anterior continua de pé, e o redesign o ampliou — as measures de
+  sparkline e o plano de ação emitem HTML em documentos separados, onde `var(--token)` não
+  alcança. Trocar uma cor de segmento hoje exige editar cinco pontos, e a correção do P1 acima
+  vai passar por todos eles.
+- **Correção**: uma measure `_Cores` devolvendo os hexes, concatenada tanto no `:root` quanto
+  nos `style=` inline.
+- **Comando**: `/impeccable extract`
+
+### [P3] Código morto cresceu um pouco
+
+- **Local**: página 1 — 16 classes sem marcação (`pill`, `bar*`, `badge-*`, `panel-sub`,
+  `up/down/warn/flat`, `diagnostic-bar`); página 2 — 15, incluindo todo o bloco `.kpi*` e `.ai-panel`
+- **Nota**: a regra compartilhada de luz superior que adicionei lista `.diagnostic-bar` e
+  `.ai-panel` nas duas páginas, e cada uma só existe em uma. Custo real: zero. Ruído de
+  manutenção: real.
+
+### [P3] Um `!` tipográfico onde o resto são ícones desenhados
+
+- **Local**: `_Background.tmdl:595` — `<div class="diag-icon">&#33;</div>`
+- **Nota**: o logo, o avatar da IA e a seta do CTA viraram SVG nesta passada; o ícone de alerta
+  ficou como caractere. Inconsistente com o próprio sistema agora.
+
+## O que melhorou de fato
+
+- **Contraste de texto**: 51 nós medidos em pixel, **0 falhas**. O piso é 6,77:1 (`--text-3`
+  no painel de IA) e o topo 17,22:1. Três nós ficam entre 6,77 e 6,98 — subir `--text-3` de
+  `#8AA0A2` para ~`#93A9AB` levaria o sistema inteiro a AAA (7:1).
+- **CTA principal**: 3,07:1 → **9,81:1**, confirmado por amostragem do preenchimento renderizado.
+- **Movimento**: quatro loops infinitos → **zero animação e zero transição** no chrome.
+- **Geometria**: as 23 caixas que os visuais nativos sobrepõem seguem com deslocamento zero
+  contra o baseline pré-redesign.
+- **Anti-padrões**: 25 → 0.
+
+## Ações recomendadas
+
+1. **[P1] `/impeccable colorize`** — reespalhar a luminância das quatro categorias (a proposta
+   acima já passa nas três simulações de daltonismo).
+2. **[P1] `/impeccable typeset`** — corrigir o shorthand `font` das abas e refazer a medição.
+3. **[P2] `/impeccable clarify`** — encurtar a ação de Big Spenders que trunca.
+4. **[P2] `/impeccable extract`** — measure `_Cores` única, antes de mexer nas cores pelo item 1.
+5. **[P3] `/impeccable polish`** — ícone de alerta em SVG, limpeza do CSS morto, `--text-3` a AAA.
+
 Rode `/impeccable audit` de novo depois de qualquer mudança para conferir.

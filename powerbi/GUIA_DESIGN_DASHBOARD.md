@@ -302,8 +302,9 @@ um ponto de 8px na cor do segmento: mesma informação, sem o clichê e sem roub
 
 `#74CBD1` aparece em um único lugar por página — o botão que abre o Analista — com tinta escura
 por cima (9,8:1). Cor rara é cor com força: o olho encontra a ação sem que nada mais compita.
-As quatro cores de dado (ouro, lilás, sage, rosa) ficam a ~50° de distância do ciano em matiz,
-então categoria e ação nunca se confundem.
+As quatro cores de dado são ouro, lilás, sage e rosa. **Ressalva medida na auditoria 2:** o
+sage fica a apenas 32° do ciano e com luminância quase igual (razão 1,05), e a paleta perde
+separação sob daltonismo — ver o P1 em `AUDITORIA_IMPECCABLE.md` antes de tratá-la como final.
 
 ### Por que o chrome não anima?
 
