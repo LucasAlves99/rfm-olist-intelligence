@@ -96,3 +96,6 @@ powerbi/_*.py
 
 # Impeccable — deps locais do detector (instaladas via npm, não versionadas)
 .claude/skills/impeccable/node_modules/
+
+# Dependencias Node (ferramentas locais de verificacao)
+node_modules/
