@@ -324,10 +324,10 @@ no CSS dos backgrounds HTML e nos specs Deneb:
 
 | Token | Hex | Uso |
 |---|---|---|
-| Champions | `#E0AB6A` | Campeões / "good" |
-| Big Spenders | `#A38ADB` | Big Spenders (Não-Recorrentes) |
-| Novos | `#79C9A4` | Novos / Ocasionais / "neutral" |
-| Em Risco | `#E8879A` | Em Risco / Hibernando / "bad" |
+| Champions | `#C08933` | Campeões / "good" |
+| Big Spenders | `#A183D4` | Big Spenders (Não-Recorrentes) |
+| Novos | `#41A083` | Novos / Ocasionais / "neutral" |
+| Em Risco | `#A24756` | Em Risco / Hibernando / "bad" |
 | Fundo base | `#05080A` | Canvas |
 | Texto 1 / 2 | `#EAF2F2` / `#A6BBBC` | Primário / secundário |
 

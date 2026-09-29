@@ -85,22 +85,22 @@ Para garantir que **todos os visuais** sigam a paleta de clusters automaticament
 {
   "name": "RFM Olist Dark Executive",
   "dataColors": [
-    "#E0AB6A",
-    "#A38ADB",
-    "#79C9A4",
-    "#E8879A",
+    "#C08933",
+    "#A183D4",
+    "#41A083",
+    "#A24756",
     "#A6BBBC",
     "#05080A"
   ],
   "background": "#0B1315",
   "foreground": "#EAF2F2",
-  "tableAccent": "#E0AB6A",
-  "good": "#E0AB6A",
-  "neutral": "#79C9A4",
-  "bad": "#E8879A",
-  "maximum": "#E0AB6A",
-  "center": "#79C9A4",
-  "minimum": "#E8879A",
+  "tableAccent": "#C08933",
+  "good": "#C08933",
+  "neutral": "#41A083",
+  "bad": "#A24756",
+  "maximum": "#C08933",
+  "center": "#41A083",
+  "minimum": "#A24756",
   "null": "#8AA0A2",
   "textClasses": {
     "title": { "fontSize": 18, "fontFace": "Segoe UI", "color": "#EAF2F2" },
@@ -123,10 +123,10 @@ Aplicar no Power BI:
 
 | Visual | Posição (X, Y) | Tamanho (W × H) | Cor accent |
 |---|---|---|---|
-| Card Total Clientes | (40, 170) | 445 × 110 | #E0AB6A (Verde) |
-| Card Receita Total | (505, 170) | 445 × 110 | #A38ADB (Azul) |
-| Card Ticket Médio | (970, 170) | 445 × 110 | #79C9A4 (Âmbar) |
-| Card % Em Risco | (1435, 170) | 445 × 110 | #E8879A (Vermelho) |
+| Card Total Clientes | (40, 170) | 445 × 110 | #C08933 (Verde) |
+| Card Receita Total | (505, 170) | 445 × 110 | #A183D4 (Azul) |
+| Card Ticket Médio | (970, 170) | 445 × 110 | #41A083 (Âmbar) |
+| Card % Em Risco | (1435, 170) | 445 × 110 | #A24756 (Vermelho) |
 
 **Configuração de cada card**:
 - Visual type: **Card** (cartão simples) ou **Multi-row card**
@@ -166,10 +166,10 @@ Aplicar no Power BI:
 - Border: **Off**
 - Title: **Off**
 - Data colors: usar a paleta da `dim_segmentos[Cor_Hex]` (manualmente):
-  - Campeões → #E0AB6A
-  - Big Spenders → #A38ADB
-  - Novos / Ocasionais → #79C9A4
-  - Em Risco / Hibernando → #E8879A
+  - Campeões → #C08933
+  - Big Spenders → #A183D4
+  - Novos / Ocasionais → #41A083
+  - Em Risco / Hibernando → #A24756
 
 ### 4.2 Curva de Lorenz (Pareto)
 
@@ -177,7 +177,7 @@ Aplicar no Power BI:
 - Axis: percentil acumulado de clientes (medida calculada)
 - Values: percentil acumulado de receita
 - Adicionar **linha de igualdade perfeita** (45°) como referência
-- Cor da curva: #79C9A4 (Âmbar)
+- Cor da curva: #41A083 (Âmbar)
 
 **Medida DAX para a curva**:
 ```dax
@@ -233,7 +233,7 @@ RETURN DIVIDE(ClientesAteAtual, Total)
 - Sort: `[CLV_12m]` desc
 - Top N: 50
 - Colunas: customer_unique_id, customer_state, Monetary, Frequency, Recency, CLV_12m
-- Format CLV column: cor verde (#E0AB6A) com data bars
+- Format CLV column: cor verde (#C08933) com data bars
 
 ---
 
@@ -302,9 +302,12 @@ um ponto de 8px na cor do segmento: mesma informação, sem o clichê e sem roub
 
 `#74CBD1` aparece em um único lugar por página — o botão que abre o Analista — com tinta escura
 por cima (9,8:1). Cor rara é cor com força: o olho encontra a ação sem que nada mais compita.
-As quatro cores de dado são ouro, lilás, sage e rosa. **Ressalva medida na auditoria 2:** o
-sage fica a apenas 32° do ciano e com luminância quase igual (razão 1,05), e a paleta perde
-separação sob daltonismo — ver o P1 em `AUDITORIA_IMPECCABLE.md` antes de tratá-la como final.
+As quatro cores de segmento são ouro `#C08933`, lilás `#A183D4`, sage `#41A083` e rosa
+`#A24756`. Foram escolhidas por busca contra o validador da skill `dataviz` (modo escuro, todos os
+pares): distância ΔE ≥ 9,5 sob protanopia e deuteranopia, ≥ 16,6 em visão normal. Status (variação
+positiva, negativa, atenção) usa tintas próprias de texto (`#7FD3AE`, `#F0939F`, `#E5BD72`) e
+nunca reaproveita uma cor de segmento. Métricas que não são segmentos (sparklines, Lorenz, funil)
+usam o neutro teal `#8FB3B5`.
 
 ### Por que o chrome não anima?
 

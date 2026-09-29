@@ -33,7 +33,7 @@
       "description": "area de Gini entre a diagonal e a curva",
       "mark": {
         "type": "area",
-        "color": "#79C9A4",
+        "color": "#8FB3B5",
         "opacity": 0.16,
         "interpolate": "monotone",
         "clip": true
@@ -127,7 +127,7 @@
       "description": "curva de Lorenz",
       "mark": {
         "type": "line",
-        "color": "#A38ADB",
+        "color": "#CFE3E4",
         "strokeWidth": 2.5,
         "interpolate": "monotone",
         "tooltip": true,
@@ -209,7 +209,7 @@
       ],
       "mark": {
         "type": "text",
-        "color": "#79C9A4",
+        "color": "#EAF2F2",
         "fontSize": 11,
         "fontWeight": 600,
         "align": "right",

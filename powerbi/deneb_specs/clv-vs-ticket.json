@@ -114,8 +114,8 @@
               "CLV 12m"
             ],
             "range": [
-              "#A38ADB",
-              "#E0AB6A"
+              "#5E7D80",
+              "#CFE3E4"
             ]
           },
           "legend": {
@@ -212,7 +212,7 @@
           "as": "tag"
         },
         {
-          "calculate": "datum.mult >= 1 ? '#79C9A4' : '#79C9A4'",
+          "calculate": "datum.mult >= 1 ? '#7FD3AE' : '#E5BD72'",
           "as": "cor"
         }
       ],

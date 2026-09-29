@@ -139,23 +139,7 @@
         "height": {
           "band": 0.7
         },
-        "color": {
-          "x1": 0,
-          "y1": 0,
-          "x2": 1,
-          "y2": 0,
-          "gradient": "linear",
-          "stops": [
-            {
-              "offset": 0,
-              "color": "#E0AB6A"
-            },
-            {
-              "offset": 1,
-              "color": "#A38ADB"
-            }
-          ]
-        }
+        "color": "#8FB3B5"
       },
       "encoding": {
         "x": {

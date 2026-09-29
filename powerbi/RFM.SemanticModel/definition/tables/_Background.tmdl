@@ -13,28 +13,16 @@ table _Background
 			VAR vPed = FORMAT([Total Pedidos],"#,##0","pt-BR")
 			VAR clsPed = IF(ABS(mPed)<0.01,"flat",IF(mPed>=0,"up","down"))
 			VAR pillPed = IF(mPed>=0,"+","") & FORMAT(mPed,"0.0%","pt-BR") & " no m&#234;s"
-			VAR pRis = [% Em Risco]
-			VAR vRis = FORMAT(pRis,"0.0%","pt-BR")
-			VAR fCli = (MAX(0.85,MIN(1.15,1+mCli))-0.85)/0.30*100
-			VAR fRec = (MAX(0.85,MIN(1.15,1+mRec))-0.85)/0.30*100
-			VAR fTic = (MAX(0.85,MIN(1.15,1+mTic))-0.85)/0.30*100
-			VAR fRis = MIN(pRis,0.40)/0.40*100
 			VAR clsCli = IF(ABS(mCli)<0.01,"flat",IF(mCli>=0,"up","down"))
 			VAR clsRec = IF(ABS(mRec)<0.01,"flat",IF(mRec>=0,"up","down"))
 			VAR clsTic = IF(ABS(mTic)<0.01,"flat",IF(mTic>=0,"up","down"))
-			VAR clsRis = IF(pRis>0.2,"warn","up")
-			VAR colCli = IF(mCli>=0,"#79C9A4","#E8879A")
-			VAR colRec = IF(mRec>=0,"#79C9A4","#E8879A")
-			VAR colTic = IF(mTic>=0,"#79C9A4","#E8879A")
-			VAR colRis = IF(pRis>0.2,"#79C9A4","#79C9A4")
 			VAR pillCli = IF(mCli>=0,"+","") & FORMAT(mCli,"0.0%","pt-BR") & " no m&#234;s"
 			VAR pillRec = IF(mRec>=0,"+","") & FORMAT(mRec,"0.0%","pt-BR") & " no m&#234;s"
 			VAR pillTic = IF(mTic>=0,"+","") & FORMAT(mTic,"0.0%","pt-BR") & " no m&#234;s"
-			VAR pillRis = IF(pRis>0.2,"alto","saud&#225;vel")
-			VAR kpiCli = "<div class=""kpi champions""><div class=""top""><div class=""label-row""><span class=""dot""></span><span class=""label"">Receita total</span></div></div><div class=""value"">" & vRec & "</div><div class=""spark"">" & [_Spark Receita] & "</div></div>"
-			VAR kpiRec = "<div class=""kpi big-spenders""><div class=""top""><div class=""label-row""><span class=""dot""></span><span class=""label"">Pedidos</span></div></div><div class=""value"">" & vPed & "</div><div class=""spark"">" & [_Spark Pedidos] & "</div></div>"
-			VAR kpiTic = "<div class=""kpi novos""><div class=""top""><div class=""label-row""><span class=""dot""></span><span class=""label"">Ticket m&#233;dio</span></div></div><div class=""value"">" & vTic & "</div><div class=""spark"">" & [_Spark Ticket] & "</div></div>"
-			VAR kpiRis = "<div class=""kpi clientes""><div class=""top""><div class=""label-row""><span class=""dot""></span><span class=""label"">Clientes</span></div></div><div class=""value"">" & vCli & "</div><div class=""spark"">" & [_Spark Clientes] & "</div></div>"
+			VAR kpiCli = "<div class=""kpi""><div class=""top""><span class=""label"">Receita total</span><span class=""pill " & clsRec & """>" & pillRec & "</span></div><div class=""value"">" & vRec & "</div><div class=""spark"">" & [_Spark Receita] & "</div></div>"
+			VAR kpiRec = "<div class=""kpi""><div class=""top""><span class=""label"">Pedidos</span><span class=""pill " & clsPed & """>" & pillPed & "</span></div><div class=""value"">" & vPed & "</div><div class=""spark"">" & [_Spark Pedidos] & "</div></div>"
+			VAR kpiTic = "<div class=""kpi""><div class=""top""><span class=""label"">Ticket m&#233;dio</span><span class=""pill " & clsTic & """>" & pillTic & "</span></div><div class=""value"">" & vTic & "</div><div class=""spark"">" & [_Spark Ticket] & "</div></div>"
+			VAR kpiRis = "<div class=""kpi""><div class=""top""><span class=""label"">Clientes</span><span class=""pill " & clsCli & """>" & pillCli & "</span></div><div class=""value"">" & vCli & "</div><div class=""spark"">" & [_Spark Clientes] & "</div></div>"
 			RETURN
 			"<!DOCTYPE html>
 			<html lang=""pt-BR"">
@@ -56,20 +44,24 @@ table _Background
 			    /* Texto — derivado do hue da superficie, nunca cinza neutro */
 			    --text-1: #EAF2F2;
 			    --text-2: #A6BBBC;
-			    --text-3: #8AA0A2;
+			    --text-3: #93A9AB;
 			    /* Acao — a unica cor brilhante da tela, reservada para a IA */
 			    --action: #74CBD1;
 			    --action-ink: #04171A;
 			    --action-soft: rgba(116, 203, 209, 0.12);
 			    /* Categorias de dado — 4 segmentos RFM */
-			    --champions: #E0AB6A;
-			    --big-spenders: #A38ADB;
-			    --novos: #79C9A4;
-			    --em-risco: #E8879A;
-			    --champions-soft: rgba(224, 171, 106, 0.12);
-			    --big-spenders-soft: rgba(163, 138, 219, 0.12);
-			    --novos-soft: rgba(121, 201, 164, 0.12);
-			    --em-risco-soft: rgba(232, 135, 154, 0.12);
+			    --champions: #C08933;
+			    --big-spenders: #A183D4;
+			    --novos: #41A083;
+			    --em-risco: #A24756;
+			    /* Status: tintas de TEXTO. Nunca reusadas como cor de serie */
+			    --positivo: #7FD3AE;
+			    --negativo: #F0939F;
+			    --atencao: #E5BD72;
+			    --champions-soft: rgba(192, 137, 51, 0.12);
+			    --big-spenders-soft: rgba(161, 131, 212, 0.12);
+			    --novos-soft: rgba(65, 160, 131, 0.12);
+			    --em-risco-soft: rgba(162, 71, 86, 0.12);
 			  }
 			
 			  * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -131,7 +123,7 @@ table _Background
 			  }
 			  .tab {
 			    flex: 1; text-align: center; padding: 7px 0; border-radius: 8px;
-			    font: 500 14px inherit; color: var(--text-2);
+			    font-family: inherit; font-size: 14px; font-weight: 500; color: var(--text-2);
 			    background: transparent; border: none;
 			  }
 			  .tab.active {
@@ -155,29 +147,21 @@ table _Background
 			    border: 1px solid var(--border);
 			    border-radius: 14px;
 			    padding: 10px 14px;
-			    position: relative; height: 70px; overflow: hidden;
+			    position: relative; height: 85px; overflow: hidden;
 			  }
-			  .kpi .label-row { display: flex; align-items: center; gap: 8px; }
-			  .kpi .dot { width: 8px; height: 8px; border-radius: 50%; position: relative; }
-			  .kpi.champions .dot, .kpi.champions .dot::after { background: var(--champions); }
-			  .kpi.big-spenders .dot, .kpi.big-spenders .dot::after { background: var(--big-spenders); }
-			  .kpi.novos .dot, .kpi.novos .dot::after { background: var(--novos); }
-			  .kpi.em-risco .dot, .kpi.em-risco .dot::after { background: var(--em-risco); }
-			  .kpi.clientes .dot, .kpi.clientes .dot::after { background: var(--text-2); }
-			  .kpi .label { font-size: 14px; color: var(--text-2); font-weight: 400; }
-			  /* KPI value/MoM/bar &#8212; card autocontido (uma camada s&#243;, sem overlay SVG) */
 			  .kpi { display: flex; flex-direction: column; justify-content: space-between; padding: 9px 14px; }
-			  .kpi .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-			  .kpi .value { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; color: var(--text-1); font-variant-numeric: tabular-nums; line-height: 1; }
-			  .kpi .pill { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 9px; white-space: nowrap; line-height: 1.4; flex-shrink: 0; }
-			  .kpi .pill.up   { background: rgba(121, 201, 164, 0.12); color: #79C9A4; }
-			  .kpi .pill.down { background: rgba(232, 135, 154, 0.12); color: #E8879A; }
-			  .kpi .pill.warn { background: rgba(224, 171, 106, 0.12); color: #79C9A4; }
-				  .kpi .pill.flat { background: rgba(154, 200, 205, 0.10); color: #A6BBBC; }
-			  .kpi .bar { position: relative; height: 5px; border-radius: 3px; background: rgba(154, 200, 205, 0.16); }
-			  .kpi .bar-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; }
-			  .kpi .bar-tick { position: absolute; left: 50%; top: -3px; width: 2px; height: 11px; border-radius: 1px; background: rgba(234, 242, 242, 0.85); }
-				  .kpi .spark { margin-top: 4px; line-height: 0; }
+			  .kpi .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; height: 16px; }
+			  .kpi .label { font-size: 14px; line-height: 16px; color: var(--text-2); font-weight: 400; }
+			  .kpi .value { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; color: var(--text-1); font-variant-numeric: tabular-nums; line-height: 1; }
+			  /* Variacao no mes: tinta de status + sinal (+/-), nunca so a cor */
+			  .kpi .pill { font-size: 11px; line-height: 14px; font-weight: 600; padding: 0 7px; border: 1px solid; border-radius: 999px; white-space: nowrap; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+			  .kpi .pill.up   { color: var(--positivo); border-color: rgba(127, 211, 174, 0.35); background: rgba(127, 211, 174, 0.06); }
+			  .kpi .pill.down { color: var(--negativo); border-color: rgba(240, 147, 159, 0.35); background: rgba(240, 147, 159, 0.06); }
+			  .kpi .pill.warn { color: var(--atencao); border-color: rgba(229, 189, 114, 0.35); background: rgba(229, 189, 114, 0.06); }
+			  .kpi .pill.flat { color: var(--text-2); border-color: var(--border-strong); }
+			  /* A measure emite height:24px inline; 20px cabe nos 85px sem colar no valor */
+			  .kpi .spark { line-height: 0; }
+			  .kpi .spark svg { height: 20px !important; }
 			
 			  /* &#9472;&#9472;&#9472; Page 1 layout &#9472;&#9472;&#9472; */
 			  .content { display: grid; grid-template-columns: 74% 26%; gap: 8px; min-height: 0; }
@@ -196,16 +180,6 @@ table _Background
 			  }
 			  .panel-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; height: 16px; }
 			  .panel-title { font-size: 14px; font-weight: 600; letter-spacing: -0.2px; color: var(--text-1); }
-			  .panel-sub { font-size: 14px; color: var(--text-3); margin-top: 2px; line-height: 1.3; }
-			  .panel-badge {
-			    font-size: 11px; padding: 3px 10px; border-radius: 999px; font-weight: 600;
-			    letter-spacing: 0.7px; text-transform: uppercase;
-			    border: 1px solid var(--border-strong); flex-shrink: 0; align-self: flex-start;
-			  }
-			  .badge-green { background: var(--champions-soft); color: var(--champions); border-color: rgba(224, 171, 106, 0.28); }
-			  .badge-purple { background: var(--big-spenders-soft); color: var(--big-spenders); border-color: rgba(163, 138, 219, 0.28); }
-			  .badge-gold { background: var(--novos-soft); color: var(--novos); border-color: rgba(121, 201, 164, 0.28); }
-			  .badge-red { background: var(--em-risco-soft); color: var(--em-risco); border-color: rgba(232, 135, 154, 0.28); }
 			
 			  /* &#9472;&#9472;&#9472; AI panel &#8212; header s&#243; &#9472;&#9472;&#9472; */
 			  .ai-panel {
@@ -233,18 +207,17 @@ table _Background
 			  .ai-status { font-size: 14px; color: var(--text-3); display: flex; align-items: center; gap: 6px; margin-top: 2px; }
 			  .ai-status::before {
 			    content: ''; width: 6px; height: 6px; flex-shrink: 0;
-			    background: var(--novos); border-radius: 50%;
+			    background: var(--positivo); border-radius: 50%;
 			  }
 			  /* AI panel - card de produto (sem iframe) */
 			  .ai-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 11px; flex: 1; min-height: 0; }
 			  .ai-lead { font-size: 14px; line-height: 1.5; color: var(--text-2); }
 			  .ai-lead b { color: var(--text-1); font-weight: 600; }
-			  .ai-eg-label { font-size: 11px; letter-spacing: 0.2px; color: var(--text-3); font-weight: 600; }
-			  .ai-eg { display: flex; flex-direction: column; }
-			  .ai-eg .eg { font-size: 14px; color: var(--text-2); padding: 9px 0; border-bottom: 1px solid var(--border); }
-			  .ai-eg .eg:last-child { border-bottom: none; }
+			  .ai-eg-label { margin-top: auto; font-size: 11px; letter-spacing: 0.2px; color: var(--text-3); font-weight: 600; }
+			  .ai-eg { display: flex; flex-direction: column; gap: 8px; }
+			  .ai-eg .eg { font-size: 14px; line-height: 1.35; color: var(--text-2); }
 			  .ai-cta {
-			    margin-top: auto; height: 39px;
+			    margin-top: 6px; height: 39px;
 			    display: flex; align-items: center; justify-content: center; gap: 8px;
 			    font-size: 14px; font-weight: 600; letter-spacing: -0.1px;
 			    color: var(--action-ink); background: var(--action);
@@ -255,7 +228,7 @@ table _Background
 			
 			
 			  /* Luz superior sutil — cards lidos como superficie, nao como recorte */
-			.topbar, .kpi, .panel, .ai-panel, .diagnostic-bar {
+			.topbar, .kpi, .panel, .ai-panel {
 			  background-image: linear-gradient(180deg, rgba(126, 186, 190, 0.055), rgba(126, 186, 190, 0) 58%);
 			}
 			</style>
@@ -339,9 +312,9 @@ table _Background
 			          <div class=""ai-lead"">Converse com a base de <b>" & FORMAT(ROUND(CALCULATE([Total Clientes], ALL(fato_rfm_clientes))/1000, 0), "#,0", "pt-BR") & " mil clientes</b> em linguagem natural &#8212; clusters, risco de churn e a&#231;&#245;es de CRM, com n&#250;meros reais.</div>
 			          <div class=""ai-eg-label"">Experimente perguntar</div>
 			          <div class=""ai-eg"">
-			            <div class=""eg"">Quantos clientes em risco em SP?</div>
-			            <div class=""eg"">Plano de win-back para Big Spenders</div>
-			            <div class=""eg"">Como proteger os Campe&#245;es?</div>
+			            <div class=""eg"">&#8220;Quantos clientes em risco em SP?&#8221;</div>
+			            <div class=""eg"">&#8220;Plano de win-back para Big Spenders&#8221;</div>
+			            <div class=""eg"">&#8220;Como proteger os Campe&#245;es?&#8221;</div>
 			          </div>
 			          <div class=""ai-cta"">Abrir Analista (IA)<svg viewBox=""0 0 24 24"" fill=""none"" stroke=""currentColor"" stroke-width=""2"" stroke-linecap=""round"" stroke-linejoin=""round""><path d=""M5 12h13""/><path d=""M12.5 5.5L19 12l-6.5 6.5""/></svg></div>
 			          			        </div>
@@ -382,20 +355,24 @@ table _Background
 						    /* Texto — derivado do hue da superficie, nunca cinza neutro */
 						    --text-1: #EAF2F2;
 						    --text-2: #A6BBBC;
-						    --text-3: #8AA0A2;
+						    --text-3: #93A9AB;
 						    /* Acao — a unica cor brilhante da tela, reservada para a IA */
 						    --action: #74CBD1;
 						    --action-ink: #04171A;
 						    --action-soft: rgba(116, 203, 209, 0.12);
 						    /* Categorias de dado — 4 segmentos RFM */
-						    --champions: #E0AB6A;
-						    --big-spenders: #A38ADB;
-						    --novos: #79C9A4;
-						    --em-risco: #E8879A;
-						    --champions-soft: rgba(224, 171, 106, 0.12);
-						    --big-spenders-soft: rgba(163, 138, 219, 0.12);
-						    --novos-soft: rgba(121, 201, 164, 0.12);
-						    --em-risco-soft: rgba(232, 135, 154, 0.12);
+						    --champions: #C08933;
+						    --big-spenders: #A183D4;
+						    --novos: #41A083;
+						    --em-risco: #A24756;
+						    /* Status: tintas de TEXTO. Nunca reusadas como cor de serie */
+						    --positivo: #7FD3AE;
+						    --negativo: #F0939F;
+						    --atencao: #E5BD72;
+						    --champions-soft: rgba(192, 137, 51, 0.12);
+						    --big-spenders-soft: rgba(161, 131, 212, 0.12);
+						    --novos-soft: rgba(65, 160, 131, 0.12);
+						    --em-risco-soft: rgba(162, 71, 86, 0.12);
 						  }
 			
 						  * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -457,7 +434,7 @@ table _Background
 						  }
 						  .tab {
 						    flex: 1; text-align: center; padding: 7px 0; border-radius: 8px;
-						    font: 500 14px inherit; color: var(--text-2);
+						    font-family: inherit; font-size: 14px; font-weight: 500; color: var(--text-2);
 						    background: transparent; border: none;
 						  }
 						  .tab.active {
@@ -473,25 +450,8 @@ table _Background
 						  /* &#9472;&#9472;&#9472; Page &#9472;&#9472;&#9472; */
 						  .page { display: grid; grid-template-rows: auto 1fr; gap: 8px; min-height: 0; height: 100%; }
 			
-						  /* &#9472;&#9472;&#9472; KPIs &#8212; frames vazios &#9472;&#9472;&#9472; */
-						  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-						  .kpi {
-						    background: var(--bg-card);
 			
-						    border: 1px solid var(--border);
-						    border-radius: 14px;
-						    padding: 10px 14px;
-						    position: relative; height: 70px; overflow: hidden;
-						  }
-						  .kpi .label-row { display: flex; align-items: center; gap: 8px; }
-						  .kpi .dot { width: 8px; height: 8px; border-radius: 50%; position: relative; }
-						  .kpi.champions .dot, .kpi.champions .dot::after { background: var(--champions); }
-						  .kpi.big-spenders .dot, .kpi.big-spenders .dot::after { background: var(--big-spenders); }
-						  .kpi.novos .dot, .kpi.novos .dot::after { background: var(--novos); }
-						  .kpi.em-risco .dot, .kpi.em-risco .dot::after { background: var(--em-risco); }
-						  .kpi .label { font-size: 14px; color: var(--text-2); font-weight: 400; }
-			
-						  .diagnostic-bar { display: flex; align-items: center; gap: 14px; background: var(--bg-card);  border: 1px solid var(--border); border-radius: 14px; padding: 9px 18px; height: 70px; overflow: hidden; } .diag-icon { flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; background: var(--em-risco-soft); border: 1px solid rgba(232, 135, 154, 0.30); color: var(--em-risco); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; } .diag-text { display: flex; flex-direction: column; gap: 3px; } .diag-title { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--em-risco); } .diag-body { font-size: 14px; line-height: 1.3; color: var(--text-2); } .diag-body b { color: var(--text-1); font-weight: 700; } /* &#9472;&#9472;&#9472; Page 2 layout &#8212; 3 colunas &#215; 2 linhas &#9472;&#9472;&#9472; */
+						  .diagnostic-bar { display: flex; align-items: center; gap: 14px; background: var(--bg-card);  border: 1px solid var(--border); border-radius: 14px; padding: 9px 18px; height: 70px; overflow: hidden; } .diag-icon { flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; background: rgba(240, 147, 159, 0.10); border: 1px solid rgba(240, 147, 159, 0.30); color: var(--negativo); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; } .diag-icon svg { width: 17px; height: 17px; display: block; } .diag-text { display: flex; flex-direction: column; gap: 3px; } .diag-title { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--negativo); } .diag-body { font-size: 14px; line-height: 1.3; color: var(--text-2); } .diag-body b { color: var(--text-1); font-weight: 700; } /* &#9472;&#9472;&#9472; Page 2 layout &#8212; 3 colunas &#215; 2 linhas &#9472;&#9472;&#9472; */
 						  .content { display: grid; grid-template-rows: 1fr 1fr; gap: 8px; min-height: 0; }
 						  .visual-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; min-height: 0; }
 			
@@ -507,20 +467,10 @@ table _Background
 						  }
 						  .panel-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; height: 16px; }
 						  .panel-title { font-size: 14px; font-weight: 600; letter-spacing: -0.2px; color: var(--text-1); }
-						  .panel-sub { font-size: 14px; color: var(--text-3); margin-top: 2px; line-height: 1.3; }
-						  .panel-badge {
-						    font-size: 11px; padding: 3px 10px; border-radius: 999px; font-weight: 600;
-						    letter-spacing: 0.7px; text-transform: uppercase;
-						    border: 1px solid var(--border-strong); flex-shrink: 0; align-self: flex-start;
-						  }
-						  .badge-green { background: var(--champions-soft); color: var(--champions); border-color: rgba(224, 171, 106, 0.28); }
-						  .badge-purple { background: var(--big-spenders-soft); color: var(--big-spenders); border-color: rgba(163, 138, 219, 0.28); }
-						  .badge-gold { background: var(--novos-soft); color: var(--novos); border-color: rgba(121, 201, 164, 0.28); }
-						  .badge-red { background: var(--em-risco-soft); color: var(--em-risco); border-color: rgba(232, 135, 154, 0.28); }
 			
 			
 						  /* Luz superior sutil — cards lidos como superficie, nao como recorte */
-						.topbar, .kpi, .panel, .ai-panel, .diagnostic-bar {
+						.topbar, .panel, .diagnostic-bar {
 						  background-image: linear-gradient(180deg, rgba(126, 186, 190, 0.055), rgba(126, 186, 190, 0) 58%);
 						}
 						</style>
@@ -554,7 +504,7 @@ table _Background
 						  <!-- P&#193;GINA 2 -->
 						  <div class=""page"">
 			
-						    <section class=""diagnostic-bar""><div class=""diag-icon"">&#33;</div><div class=""diag-text""><span class=""diag-title"">Diagn&#243;stico gerencial</span><span class=""diag-body"">A base concentra receita e tem <b>baixa recorr&#234;ncia</b>: cerca de <b>" & FORMAT(CALCULATE([% Compra Unica], ALL(fato_rfm_clientes)), "0%", "pt-BR") & " dos clientes compram uma &#250;nica vez</b> e a reten&#231;&#227;o cai para <b>" & FORMAT(CALCULATE(DIVIDE(SUM(fato_cohort[Clientes_Retidos]), SUM(fato_cohort[Tamanho_Safra])), fato_cohort[MesIndice]=1, ALL(fato_cohort)), "0.0%", "pt-BR") & "</b> ap&#243;s a 1&#170; compra. H&#225; <b>" & "R$ " & FORMAT(DIVIDE(CALCULATE([Receita em Risco], ALL(fato_rfm_clientes)), 1000000), "0.0", "pt-BR") & " mi</b> de receita ligada a clientes hibernando (<b>" & FORMAT(CALCULATE([% Em Risco], ALL(fato_rfm_clientes)), "0.0%", "pt-BR") & " da base</b>). Maior alavanca: ativar a 2&#170; compra em <b>Novos / Ocasionais</b> e recuperar <b>Em Risco / Hibernando</b>.</span></div></section><!--
+						    <section class=""diagnostic-bar""><div class=""diag-icon""><svg viewBox=""0 0 24 24"" fill=""none"" stroke=""currentColor"" stroke-width=""1.8"" stroke-linecap=""round"" stroke-linejoin=""round""><path d=""M12 4.5 21 19.5H3z""/><path d=""M12 10v4.2""/><circle cx=""12"" cy=""16.9"" r=""0.9"" fill=""currentColor"" stroke=""none""/></svg></div><div class=""diag-text""><span class=""diag-title"">Diagn&#243;stico gerencial</span><span class=""diag-body"">A base concentra receita e tem <b>baixa recorr&#234;ncia</b>: cerca de <b>" & FORMAT(CALCULATE([% Compra Unica], ALL(fato_rfm_clientes)), "0%", "pt-BR") & " dos clientes compram uma &#250;nica vez</b> e a reten&#231;&#227;o cai para <b>" & FORMAT(CALCULATE(DIVIDE(SUM(fato_cohort[Clientes_Retidos]), SUM(fato_cohort[Tamanho_Safra])), fato_cohort[MesIndice]=1, ALL(fato_cohort)), "0.0%", "pt-BR") & "</b> ap&#243;s a 1&#170; compra. H&#225; <b>" & "R$ " & FORMAT(DIVIDE(CALCULATE([Receita em Risco], ALL(fato_rfm_clientes)), 1000000), "0.0", "pt-BR") & " mi</b> de receita ligada a clientes hibernando (<b>" & FORMAT(CALCULATE([% Em Risco], ALL(fato_rfm_clientes)), "0.0%", "pt-BR") & " da base</b>). Maior alavanca: ativar a 2&#170; compra em <b>Novos / Ocasionais</b> e recuperar <b>Em Risco / Hibernando</b>.</span></div></section><!--
 						    <section class=""kpis"">
 						      <div class=""kpi champions"">
 						        <div class=""label-row""><span class=""dot""></span><span class=""label"">Review m&#233;dio</span></div>
@@ -647,11 +597,11 @@ table _Background
 			VAR f2 = "R$ " & FORMAT(DIVIDE(recBig,1000000),"0.0","pt-BR") & " mi sem recompra"
 			VAR f3 = "R$ " & FORMAT(DIVIDE(recNovos,1000000),"0.0","pt-BR") & " mi &#183; " & FORMAT(CALCULATE([% Compra Unica], ALL(fato_rfm_clientes)), "0%", "pt-BR") & " compra &#250;nica"
 			VAR f4 = "R$ " & FORMAT(DIVIDE(recCamp,1000000),"0.0","pt-BR") & " mi recompra real"
-			VAR css = "*{box-sizing:border-box;margin:0;padding:0}html,body{width:100%;height:100%;background:transparent !important;overflow:hidden;font-family:Segoe UI,system-ui,sans-serif}.w{display:flex;flex-direction:column;gap:6px;height:100%;justify-content:center}.r{display:flex;align-items:center;gap:11px;background:rgba(13,22,25,0.90);border:1px solid rgba(154,200,205,0.10);border-radius:10px;padding:7px 11px}.pri{font-size:11px;font-weight:800;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#04171A}.tx{flex:1;min-width:0}.seg{font-size:14px;font-weight:700;color:#EAF2F2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ac{font-size:11px;color:#A6BBBC;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.val{font-size:11px;font-weight:700;text-align:right;flex-shrink:0;white-space:nowrap}"
-			VAR rowRisco = "<div class='r'><div class='pri' style='background:#E8879A'>1</div><div class='tx'><div class='seg'>Em Risco / Hibernando</div><div class='ac'>Win-back urgente: reativa&#231;&#227;o + desconto</div></div><div class='val' style='color:#E8879A'>" & f1 & "</div></div>"
-			VAR rowBig = "<div class='r'><div class='pri' style='background:#A38ADB'>2</div><div class='tx'><div class='seg'>Big Spenders</div><div class='ac'>Converter p/ recorr&#234;ncia: upsell p&#243;s-venda</div></div><div class='val' style='color:#A38ADB'>" & f2 & "</div></div>"
-			VAR rowNovos = "<div class='r'><div class='pri' style='background:#79C9A4'>3</div><div class='tx'><div class='seg'>Novos / Ocasionais</div><div class='ac'>Ativar 2&#170; compra: cupom volte logo</div></div><div class='val' style='color:#79C9A4'>" & f3 & "</div></div>"
-			VAR rowCamp = "<div class='r'><div class='pri' style='background:#E0AB6A'>4</div><div class='tx'><div class='seg'>Campe&#245;es</div><div class='ac'>Proteger e fidelizar: programa VIP</div></div><div class='val' style='color:#E0AB6A'>" & f4 & "</div></div>"
+			VAR css = "*{box-sizing:border-box;margin:0;padding:0}html,body{width:100%;height:100%;background:transparent !important;overflow:hidden;font-family:Segoe UI,system-ui,sans-serif}.w{display:flex;flex-direction:column;height:100%;justify-content:center}.r{display:flex;align-items:center;gap:12px;padding:9px 2px;border-bottom:1px solid rgba(154,200,205,0.15)}.r:last-child{border-bottom:none}.pri{font-size:11px;font-weight:700;width:20px;height:20px;border-radius:50%;border:1.5px solid;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#EAF2F2;font-variant-numeric:tabular-nums}.tx{flex:1;min-width:0}.seg{font-size:14px;font-weight:600;color:#EAF2F2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ac{font-size:11px;line-height:1.3;color:#A6BBBC;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:1px}.val{font-size:11px;font-weight:600;color:#EAF2F2;text-align:right;flex-shrink:0;white-space:nowrap;font-variant-numeric:tabular-nums}"
+			VAR rowRisco = "<div class='r'><div class='pri' style='border-color:#A24756'>1</div><div class='tx'><div class='seg'>Em Risco / Hibernando</div><div class='ac'>Win-back urgente: reativa&#231;&#227;o + desconto</div></div><div class='val'>" & f1 & "</div></div>"
+			VAR rowBig = "<div class='r'><div class='pri' style='border-color:#A183D4'>2</div><div class='tx'><div class='seg'>Big Spenders</div><div class='ac'>Recorr&#234;ncia via upsell p&#243;s-venda</div></div><div class='val'>" & f2 & "</div></div>"
+			VAR rowNovos = "<div class='r'><div class='pri' style='border-color:#41A083'>3</div><div class='tx'><div class='seg'>Novos / Ocasionais</div><div class='ac'>Ativar 2&#170; compra: cupom volte logo</div></div><div class='val'>" & f3 & "</div></div>"
+			VAR rowCamp = "<div class='r'><div class='pri' style='border-color:#C08933'>4</div><div class='tx'><div class='seg'>Campe&#245;es</div><div class='ac'>Proteger e fidelizar: programa VIP</div></div><div class='val'>" & f4 & "</div></div>"
 			RETURN
 			"<!DOCTYPE html><html><head><meta charset='UTF-8'><style>" & css & "</style></head><body><div class='w'>" & rowRisco & rowBig & rowNovos & rowCamp & "</div></body></html>"
 		displayFolder: Cards SVG
@@ -660,7 +610,7 @@ table _Background
 	/// Sparkline 12 meses - Clientes
 	measure '_Spark Clientes' =
 			VAR _N = 12
-			VAR _Color = "#A6BBBC"
+			VAR _Color = "#8FB3B5"
 			VAR _W = 120
 			VAR _H = 24
 			VAR _Pad = 3
@@ -683,7 +633,7 @@ table _Background
 	/// Sparkline 12 meses - Receita
 	measure '_Spark Receita' =
 			VAR _N = 12
-			VAR _Color = "#E0AB6A"
+			VAR _Color = "#8FB3B5"
 			VAR _W = 120
 			VAR _H = 24
 			VAR _Pad = 3
@@ -706,7 +656,7 @@ table _Background
 	/// Sparkline 12 meses - Ticket
 	measure '_Spark Ticket' =
 			VAR _N = 12
-			VAR _Color = "#79C9A4"
+			VAR _Color = "#8FB3B5"
 			VAR _W = 120
 			VAR _H = 24
 			VAR _Pad = 3
@@ -729,7 +679,7 @@ table _Background
 	/// Sparkline 12 meses - Pedidos
 	measure '_Spark Pedidos' =
 			VAR _N = 12
-			VAR _Color = "#A38ADB"
+			VAR _Color = "#8FB3B5"
 			VAR _W = 120
 			VAR _H = 24
 			VAR _Pad = 3

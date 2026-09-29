@@ -158,7 +158,7 @@ st.markdown(
     }
     .agent-status {
         font-size: 14px;
-        color: #E0AB6A;
+        color: #93A9AB;
         margin-top: 2px;
         display: flex;
         align-items: center;
@@ -167,7 +167,7 @@ st.markdown(
     .agent-status::before {
         content: '';
         width: 6px; height: 6px;
-        background: #79C9A4;
+        background: #7FD3AE;
         border-radius: 50%;
         flex-shrink: 0;
     }
@@ -449,7 +449,7 @@ st.markdown(
     f"""
     <div class="agent-footer">
         Claude Haiku 4.5 · Prompt caching + Tool use + DuckDB
-        <span style="margin-left: 12px; padding: 2px 8px; background: rgba(116,203,209,0.12); border-radius: 5px; color: #A38ADB;">
+        <span style="margin-left: 12px; padding: 2px 8px; background: rgba(116,203,209,0.12); border-radius: 5px; color: #74CBD1;">
             {n_msgs} perguntas · ${cost:.4f} (≈ R$ {cost_brl:.3f})
         </span>
     </div>

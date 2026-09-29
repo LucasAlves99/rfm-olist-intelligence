@@ -119,8 +119,8 @@
           "type": "quantitative",
           "scale": {
             "range": [
-              "#79C9A4",
-              "#E8879A"
+              "#2F4A4D",
+              "#F0939F"
             ]
           },
           "legend": null

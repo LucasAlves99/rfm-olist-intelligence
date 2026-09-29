@@ -1,7 +1,7 @@
 # Streamlit config — tema escuro de fallback (caso CSS não carregue)
 [theme]
 base = "dark"
-primaryColor = "#A38ADB"
+primaryColor = "#74CBD1"
 backgroundColor = "#05080A"
 secondaryBackgroundColor = "#101B1F"
 textColor = "#EAF2F2"

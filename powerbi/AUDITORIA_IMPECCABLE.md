@@ -436,3 +436,53 @@ dispara.
 5. **[P3] `/impeccable polish`** — ícone de alerta em SVG, limpeza do CSS morto, `--text-3` a AAA.
 
 Rode `/impeccable audit` de novo depois de qualquer mudança para conferir.
+
+---
+
+# Passada 3 — polish "premium"
+
+`/impeccable polish` + skill `dataviz` · 2026-09-29
+
+## Correções de afirmações anteriores
+
+- **"23 caixas com deslocamento zero" estava errado para a página 1.** O extrator descartava as
+  referências `[_Spark …]`, então os renders nunca tiveram sparkline. Com um sparkline do tamanho
+  real (24px, como a measure emite), o card de KPI original mede **85px**; o redesign o fixou em
+  70px, o que cortava os sparklines no dashboard real e subia a área de painéis em 15px. O
+  extrator agora injeta um sparkline sintético e a verificação passou a comparar contra o
+  **original com sparkline**. Página 2 não tem KPIs e estava correta.
+- **"~20 VARs mortas são avaliadas a cada refresh" estava errado.** VARs em DAX são avaliadas sob
+  demanda; as não referenciadas não custam nada. Eram ruído de manutenção, não custo.
+- **O remapeamento mecânico de cores da passada 1 criou três bugs de significado**, todos por
+  mapear duas cores antigas diferentes para o mesmo sage: `.pill.warn` ficou verde,
+  `colRis` virou verde nos dois ramos do `IF`, e em `clv-vs-ticket` a cor do multiplicador
+  (`mult >= 1`) ficou igual nos dois ramos.
+
+## O que mudou
+
+| Área | Antes | Agora |
+|---|---|---|
+| Paleta de segmentos | falha no validador `dataviz` (CVD ΔE 3,5) | `#C08933` `#A183D4` `#41A083` `#A24756` — 5/5 checks, ΔE ≥ 9,5 sob daltonismo |
+| Status | reusava cores de segmento | tintas próprias: positivo `#7FD3AE`, negativo `#F0939F`, atenção `#E5BD72` |
+| Cards de KPI | ponto colorido de segmento em métricas que não são segmento; sparkline cortado | variação no mês em pill (sinal + cor de status); sparkline neutro inteiro; card na altura original |
+| Abas | shorthand `font` inválido → Arial 13,33px/400 | Segoe/herdada, 14px/500 |
+| Painel de IA | exemplos pareciam uma lista clicável, longe do botão | exemplos entre aspas, agrupados logo acima do "Abrir Analista" |
+| Diagnóstico (p2) | `!` tipográfico, título em cor de série | ícone desenhado, título em tinta de status |
+| Plano de ação | card dentro de card; valores na cor da série; ação cortada | linhas com fio; anel de segmento; valores em tinta de texto; ação quebra em 2 linhas |
+| Deneb | Lorenz/funil/CLV em cores de segmento; escala de risco "Novos→Em Risco" | neutros para métricas; risco em escala sequencial única; `mult ≥ 1` volta a ser positivo × atenção |
+| `--text-3` | 6,9:1 | 7,7:1 (AAA) |
+| CSS morto | ~30 classes sem marcação | só `.pill.up/down/warn/flat` (aplicadas via DAX em tempo de execução) |
+
+## Verificação
+
+- Geometria: 19 + 17 caixas estruturais sem deslocamento contra o **original com sparkline**;
+  CTA em `[965.5, 626, 291.5, 39]`; aba 2 inteira sob o action button.
+- Detector Impeccable completo (parsers instalados): **0 achados** nas duas páginas e no `app.py`.
+- Validador `dataviz`: **5/5** na paleta final, pares `all`, superfície `#0A1213`.
+- DAX: nenhuma referência às 12 VARs removidas; toda VAR restante é usada.
+- Plano de ação a 416×224 com valores longos: nada cortado, 214,5px de 224.
+
+## Não verificado
+
+Nada disto foi aberto no Power BI Desktop: fontes reais do WebView, os visuais Deneb com dados e o
+resultado das `IF()` das pills só aparecem lá.

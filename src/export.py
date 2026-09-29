@@ -179,7 +179,7 @@ def build_dim_segmentos() -> pd.DataFrame:
                 "Compra única recente, valor baixo — maior parte da base Olist",
                 "Recência alta, sem comprar há muito — alto risco de churn",
             ],
-            "Cor_Hex": ["#E0AB6A", "#A38ADB", "#79C9A4", "#E8879A"],
+            "Cor_Hex": ["#C08933", "#A183D4", "#41A083", "#A24756"],
             "Acao_CRM": [
                 "Programa VIP, ofertas exclusivas, embaixadores da marca",
                 "Conversão para recorrência: ofertas categoria-aderentes, upsell pós-venda",

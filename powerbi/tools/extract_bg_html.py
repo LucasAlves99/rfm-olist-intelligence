@@ -22,6 +22,17 @@ for m in pat.finditer(text):
     measures[m.group(1)] = m.group(2)
 
 
+SPARK_STUB = (
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 24" preserveAspectRatio="none" '
+    'style="width:100%;height:24px;display:block">'
+    '<polygon points="0,24 0,15 20,17 40,11 60,13 80,8 100,10 120,5 120,24" '
+    'fill="#8FB3B5" fill-opacity="0.12"/>'
+    '<polyline points="0,15 20,17 40,11 60,13 80,8 100,10 120,5" fill="none" stroke="#8FB3B5" '
+    'stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>'
+    '<circle cx="120" cy="5" r="2.2" fill="#8FB3B5"/></svg>'
+)
+
+
 def tokenize(expr):
     """Devolve lista de ('lit', str) | ('id', str) | ('call', None)."""
     out, i, n = [], 0, len(expr)
@@ -36,6 +47,15 @@ def tokenize(expr):
                     i += 1; break
                 buf.append(expr[i]); i += 1
             out.append(("lit", "".join(buf)))
+            continue
+        if c == "[":
+            j = expr.find("]", i)
+            ref = expr[i + 1:j] if j != -1 else ""
+            if ref.startswith("_Spark"):
+                # Sparkline sintetica com a mesma caixa que a measure emite (120x24, height 24px):
+                # sem ela o card de KPI renderiza mais baixo que no Power BI e a geometria mente.
+                out.append(("lit", SPARK_STUB))
+            i = j + 1 if j != -1 else n
             continue
         if c == "/" and expr[i:i + 2] == "//":
             i = expr.find("\n", i)
