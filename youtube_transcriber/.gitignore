@@ -1,0 +1,10 @@
+# Saída padrão da ferramenta
+transcripts/
+
+# Build / cache
+*.egg-info/
+build/
+dist/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
