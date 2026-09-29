@@ -1,5 +1,0 @@
-# Plano B para vídeos SEM legenda: baixa o áudio e transcreve localmente.
-# Instale com: pip install -r requirements-whisper.txt
--r requirements.txt
-yt-dlp==2026.8.19
-faster-whisper==1.2.1
